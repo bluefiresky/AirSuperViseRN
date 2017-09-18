@@ -21,9 +21,14 @@ export const POST_USER_LOGOUT = 'post_user_logout';                           //
  */
 export const GET_USER_INFO = 'get_user_info';                                 // 用户信息
 export const POST_USER_ROLE_LIST = 'post_user_role_lsit';                     // 获取用户所属角色列表
+export const POST_GET_CERTIFICATE_USER_INFO = 'post_get_certificate_user_info';   // 证件管理-当前用户信息
+export const POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER = 'post_get_certificate_user_info_by_serialnumber';  // 通过证件编号，查询用户信息
+
+
 /*
  * Main 业务-相关接口
  */
+export const POST_GET_CERTIFICATE_CHECK_LIST = 'post_get_certificate_check_list'; // 证件管理-获取检查记录
 
 
 /*
@@ -31,4 +36,4 @@ export const POST_USER_ROLE_LIST = 'post_user_role_lsit';                     //
  */
 export const GET_PROJECT_VERSION = 'get_project_version';                    // 获取版本号
 export const POST_FORCED_UPDATE = 'post_forced_update';                      // 强制更新
-export const POST_GET_WEATHER = 'post_get_weather';                          // 获取天气      
+export const POST_GET_WEATHER = 'post_get_weather';                          // 获取天气
