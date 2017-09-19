@@ -33,7 +33,7 @@ export const POST_GET_CERTIFICATE_CHECK_DETAIL = 'post_get_certificate_check_det
 export const POST_GET_CERTIFICATE_DEDUCTION_LIST = 'post_get_certificate_deduction_list';     // 证件管理-记分管理
 export const POST_GET_CERTIFICATE_DEDUCTION_DETAIL = 'post_get_certificate_deduction_detail'; // 证件管理-记分管理详情
 export const POST_CERTIFICATE_RECONSIDER = 'post_certificate_reconsider';                     // 证件管理-申请复议
-
+export const POST_CERTIFICATE_REPORT_LOSS = 'post_certificate_report_loss';                   // 证件管理-临时证件挂失
 /*
  * Common 产品-相关接口-(获取版本号。。。)
  */

@@ -47,6 +47,12 @@ class CFTempCertificateLostView extends Component {
       reason: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
     }
+
+    this.currentPhotoIndex;
+    this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
+    this._rePickCallback = this._rePickCallback.bind(this);
+    this._onReasonTextChange = this._onReasonTextChange.bind(this);
+    this._submit = this._submit.bind(this);
   }
 
   render(){
@@ -79,7 +85,7 @@ class CFTempCertificateLostView extends Component {
           underlineColorAndroid={'transparent'}
           placeholder={'请输入挂失理由'}
           placeholderTextColor={placeholderColor}
-          onChangeText={this._onIntroductionTextChange}
+          onChangeText={this._onReasonTextChange}
           minHeight={AutoGrowingInputMinH}
         />
       </View>
@@ -99,10 +105,9 @@ class CFTempCertificateLostView extends Component {
     return(
       <View style={{flexDirection:'row', marginTop:10}}>
         {data.map((item, index) => {
-            console.log(' the _renderPhotoPickerItem item -->> ', item);
             return(
               <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
                     <Image source={item.photo} style={{width:PhotoW, height:PhotoW}} />
@@ -126,23 +131,54 @@ class CFTempCertificateLostView extends Component {
 
   /** Private **/
   _submit(){
-    Actions.success({successType:'certificateLost', modalCallback:()=>{
-      Actions.pop();
-    }});
+    if(!this.state.reason){
+      Toast.showShortCenter('请输入挂失理由')
+    }else{
+      this.setState({loading:true})
+      let { profile, reason, pickerPhotos } = this.state;
+      let photos = [];
+      for(let i=0; i<pickerPhotos.length; i++){
+        let p = pickerPhotos[i];
+        if(p.photo) photos.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
+      }
+      this.props.dispatch( create_service(Contract.POST_CERTIFICATE_REPORT_LOSS, {paperworkSerialNumber:profile.serialNumber, reportLossReason:reason, photos}))
+        .then( res => {
+          this.setState({loading:false})
+          if(res){
+            Actions.success({successType:'certificateLost', modalCallback:Actions.pop});
+          }
+        })
+    }
   }
 
-  _pickPhoto(item, index){
-    if(item.photo){
-      Actions.bigImage({source:item.photo})
+  _pickPhoto(item, index, rePick){
+    if(item.photo && !rePick){
+      this.currentPhotoIndex = index;
+      Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
     }else{
       ImagePicker.showImagePicker(PhotoOption, (response) => {
         if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
-          console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
+          // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
           item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
           this.forceUpdate();
         }
       });
     }
+  }
+
+  _deletePhotoCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    item.photo = null;
+    this.forceUpdate();
+  }
+
+  _rePickCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    this._pickPhoto(item, this.currentPhotoIndex, true);
+  }
+
+  _onReasonTextChange(text){
+    this.setState({reason:text})
   }
 
 }

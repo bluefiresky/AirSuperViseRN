@@ -29,3 +29,8 @@ export const post_get_certificate_deduction_detail = ({id, version}) => {
 export const post_certificate_reconsider = ({id, reconsiderReason, version}) => {
   return http_post( 'certificate.reconsider', {id, reconsiderReason}, {}, version )
 }
+
+/** 证件管理- 提交临时证件丢失信息 */
+export const post_certificate_report_loss = ({paperworkSerialNumber, reportLossReason, photos, version}) => {
+  return http_post( 'certificate.report.loss', {paperworkSerialNumber, reportLossReason, photos}, {}, version )
+}
