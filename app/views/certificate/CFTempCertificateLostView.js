@@ -9,6 +9,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, mainTextColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton, Input } from '../../components/index.js';  /** 自定义组件 */
@@ -24,6 +25,17 @@ const PhotoW = ((W - PaddingHorizontal*2)/3) - 20;
 const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
 
 const CameraIcon = require('./image/camera.png');
+const PhotoOption = {
+  title: '选择照片', //选择器的标题，可以设置为空来不显示标题
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍照', //调取摄像头的按钮，可以设置为空使用户不可选择拍照
+  chooseFromLibraryButtonTitle: '从手机相册选择', //调取相册的按钮，可以设置为空使用户不可选择相册照片
+  mediaType: 'photo',
+  maxWidth: 750,
+  maxHeight: 1000,
+  quality: 0.5,
+  storageOptions: { cameraRoll:true, skipBackup: true, path: 'images' }
+}
 
 class CFTempCertificateLostView extends Component {
 
@@ -31,20 +43,21 @@ class CFTempCertificateLostView extends Component {
     super(props);
     this.state = {
       loading: false,
+      profile: {realname:global.certificateProfile.realname, serialNumber:global.certificateProfile.serialNumber},
       reason: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
     }
   }
 
   render(){
-    let { loading, reason, pickerPhotos } = this.state;
+    let { loading, reason, pickerPhotos, profile } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Input label={'姓名：'} value={'张三'} labelWidth={LabelW} placeholder={'请输入姓名'} noBorder={true} style={{height:InputH}}/>
+          <Input label={'姓名：'} value={profile.realname} labelWidth={LabelW} placeholder={'请输入姓名'} noBorder={true} style={{height:InputH}} editable={false}/>
           <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
-          <Input label={'证件编号：'} value={'010-674786257'} labelWidth={LabelW} placeholder={'请输入证件编号'} noBorder={true} style={{height:InputH}}/>
+          <Input label={'证件编号：'} value={profile.serialNumber} labelWidth={LabelW} placeholder={'请输入证件编号'} noBorder={true} style={{height:InputH}} editable={false}/>
           <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
           {this.renderAutoGrowing(reason)}
           <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
@@ -59,7 +72,7 @@ class CFTempCertificateLostView extends Component {
   renderAutoGrowing(reason){
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
-        <Text style={{width: 150, color: inputLeftColor, fontSize: 16 }}>被检查简介：</Text>
+        <Text style={{width: 150, color: inputLeftColor, fontSize: 16 }}><Text style={{color:'red', fontSize:16}}>*</Text>被检查简介：</Text>
         <AutoGrowingTextInput
           style={styles.autoTextInput}
           value={reason}
@@ -86,12 +99,13 @@ class CFTempCertificateLostView extends Component {
     return(
       <View style={{flexDirection:'row', marginTop:10}}>
         {data.map((item, index) => {
+            console.log(' the _renderPhotoPickerItem item -->> ', item);
             return(
               <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW}} />
                   }
 
                 </TouchableOpacity>
@@ -115,6 +129,20 @@ class CFTempCertificateLostView extends Component {
     Actions.success({successType:'certificateLost', modalCallback:()=>{
       Actions.pop();
     }});
+  }
+
+  _pickPhoto(item, index){
+    if(item.photo){
+      Actions.bigImage({source:item.photo})
+    }else{
+      ImagePicker.showImagePicker(PhotoOption, (response) => {
+        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+          console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
+          item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
+          this.forceUpdate();
+        }
+      });
+    }
   }
 
 }

@@ -12,6 +12,7 @@ import track from './track.js'
 
 // reducers
 import { auth } from '../reducers/auth.js';
+import { certificateProfile } from '../reducers/certificateProfile.js';
 
 /**
  * configure store params
@@ -24,7 +25,7 @@ const createStoreWithMiddleware = applyMiddleware(
 )(createStore);
 // 合并 reducers
 const reducer = combineReducers({
-  auth
+  auth, certificateProfile
 });
 
 

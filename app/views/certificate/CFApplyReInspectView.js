@@ -25,8 +25,11 @@ class CFApplyReInspectView extends Component {
     super(props);
     this.state = {
       loading: false,
+      recoreID: props.record.id,
       reason: null
     }
+
+    this._submit = this._submit.bind(this);
   }
 
   componentWillUnmount(){
@@ -74,9 +77,19 @@ class CFApplyReInspectView extends Component {
 
   /** Private **/
   _submit(){
-    Actions.success({successType:'applyReInspect', modalCallback:()=>{
-      Actions.popTo('cfScoreManager');
-    }})
+    if(!this.state.reason){
+      Toast.showShortCenter('申请理由不能为空')
+    }else{
+      let { recordID, reason } = this.state;
+      this.props.dispatch( create_service(Contract.POST_CERTIFICATE_RECONSIDER, {id:recordID, reconsiderReason:reason}))
+        .then( res => {
+          if(res){
+            Actions.success({successType:'applyReInspect', modalCallback:()=>{
+              Actions.popTo('cfScoreManager');
+            }})
+          }
+        })
+    }
   }
 
 }

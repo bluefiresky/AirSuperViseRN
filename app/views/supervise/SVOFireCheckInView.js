@@ -338,7 +338,7 @@ class SVOFireCheckInView extends Component {
   }
 
   _goSelectTemplet(){
-    Actions.commonWeb({url:'https://test.zhongchebaolian.com/app_test/test.html'})
+    Actions.svoFireCheckInTempletWeb({url:'https://test.zhongchebaolian.com/app_test/test.html'})
     // this.setState({templet:'模板一'})
   }
 

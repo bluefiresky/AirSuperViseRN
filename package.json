@@ -25,7 +25,8 @@
     "redux": "3.7.1",
     "redux-persist": "4.6.0",
     "redux-thunk": "2.2.0",
-    "sha1": "1.1.1"
+    "sha1": "1.1.1",
+    "react-native-image-picker": "git+https://github.com/bluefiresky/react-native-image-picker.git#mine"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",

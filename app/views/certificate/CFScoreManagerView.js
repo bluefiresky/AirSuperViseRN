@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 首页
+* 证件管理-记分管理
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, FlatList } from "react-native";
@@ -20,12 +20,19 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExampleList = [
-  {status:'已扣分', statusColor:'grey', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
-  {status:'复议审核中', statusColor:'rgb(255, 176, 91)', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
-  {status:'复议成功', statusColor:'green', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
-  {status:'复议失败', statusColor:'red', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
-];
+// const ExampleList = [
+//   {status:'已扣分', statusColor:'grey', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
+//   {status:'复议审核中', statusColor:'rgb(255, 176, 91)', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
+//   {status:'复议成功', statusColor:'green', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
+//   {status:'复议失败', statusColor:'red', content:'跨区违规执勤', score:'-3', date:'2012年12月21 06:06:06'},
+// ];
+
+const CheckStatusName = {
+  '1':{label:'已扣分', color:'grey'},
+  '2':{label:'复议审核中', color:'rgb(255, 176, 91)'},
+  '3':{label:'复议成功', color:'green'},
+  '9':{label:'复议失败', color:'red'}
+}
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
@@ -41,12 +48,24 @@ class CFScoreManagerView extends Component {
 
   componentDidMount(){
     let self = this;
-    self.setState({loading: true})
+    self.setState({loading:true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList})
-      }, 100);
+      self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_DEDUCTION_LIST, {}))
+        .then( res => {
+          if(res){
+            let data = [];
+            let list = res.entity;
+            for(let i=0; i<list.length; i++){
+              let { deductionScore, checkStatus, createdTime, id, legalProvisionContents } = list[i];
+              data.push({deductionScore:`-${deductionScore}分`, checkStatus:CheckStatusName[checkStatus], createdTime, id, legalProvisionContents:legalProvisionContents[0].content})
+            }
+            data.push({deductionScore:`-${11}分`, checkStatus:{label:'你猜', color:'red'}, createdTime:'2012-12-21', id:'112536', legalProvisionContents:'我勒个去'})
+            self.setState({loading:false, data})
+          }else{
+            self.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -83,16 +102,16 @@ class CFScoreManagerView extends Component {
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
           <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.date}</Text>
-          <Text style={{fontSize:16, color:'red', flex:1, marginLeft:20}}>{item.score}分</Text>
-          <View style={{marginRight:10, backgroundColor:item.statusColor, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.status}</Text>
+          <Text style={{fontSize:16, color:'red', flex:1, marginLeft:20}}>{item.deductionScore}</Text>
+          <View style={{marginRight:10, backgroundColor:item.checkStatus.color, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
+            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.checkStatus.label}</Text>
           </View>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:14, color:mainTextGreyColor, flex:1}}>{item.content}</Text>
+          <Text style={{fontSize:14, color:mainTextGreyColor, flex:1}}>{item.legalProvisionContents}</Text>
           <Image source={ArrowRight} style={{width:25, height:25, resizeMode:'contain'}} />
         </View>
       </TouchableOpacity>
@@ -103,8 +122,7 @@ class CFScoreManagerView extends Component {
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }
@@ -112,7 +130,7 @@ class CFScoreManagerView extends Component {
 
   /** private **/
   _goDetail(item, index){
-    Actions.cfScoreDetail();
+    Actions.cfScoreDetail({record:item});
   }
 
 }

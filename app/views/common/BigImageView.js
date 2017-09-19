@@ -15,7 +15,7 @@ class BigImageView extends React.Component {
     super (props);
     this.state = {
         offset: new Animated.Value(H),
-        source: props.url? {uri:props.url} : null,
+        source: props.source ,
     };
 
     this._closeCallback = this._closeCallback.bind(this);

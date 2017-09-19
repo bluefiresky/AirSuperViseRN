@@ -29,6 +29,7 @@ export { SVOSearchView } from './supervise/SVOSearchView.js';
 export { SVOAirCheckInView } from './supervise/SVOAirCheckInView.js';
 export { SVOFireCheckInView } from './supervise/SVOFireCheckInView.js';
 export { SVOFireCheckInTempletView } from './supervise/SVOFireCheckInTempletView.js';
+export { SVOFireCheckInTempletWebView } from './supervise/SVOFireCheckInTempletWebView.js';
 export { SVOHistoryCheckInView } from './supervise/SVOHistoryCheckInView.js';
 export { SVOCheckInDetailView } from './supervise/SVOCheckInDetailView.js';
 export { SVMHomeView } from './supervise/SVMHomeView.js';

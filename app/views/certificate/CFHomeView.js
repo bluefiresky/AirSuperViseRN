@@ -46,15 +46,18 @@ class CFHomeView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
-        .then( res => {
-          if(res){
-            let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline } = res.entity;
-            self.setState({loading:false, profile:{occupation, paperworkStatus:PaperWorkStatusName[paperworkStatus], realname, serialNumber, organizationName, score, passArea, deadline}})
-          }else {
-            self.setState({loading:false})
-          }
-        })
+      if(global.certificateProfile){
+        this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
+      }else{
+        this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
+          .then( res => {
+            if(res){
+              self.setState({loading:false, profile:this._convertData(res.entity)})
+            }else {
+              self.setState({loading:false})
+            }
+          })
+      }
     })
   }
 
@@ -160,6 +163,10 @@ class CFHomeView extends Component {
     }
   }
 
+  _convertData(data){
+    let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline } = data;
+    return {occupation, paperworkStatus:PaperWorkStatusName[paperworkStatus], realname, serialNumber, organizationName, score, passArea, deadline};
+  }
 
 }
 

@@ -28,9 +28,11 @@ export const POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER = 'post_get_certifica
 /*
  * Main 业务-相关接口
  */
-export const POST_GET_CERTIFICATE_CHECK_LIST = 'post_get_certificate_check_list'; // 证件管理-获取检查记录
-export const POST_GET_CERTIFICATE_CHECK_DETAIL = 'post_get_certificate_check_detail'; // 证件管理-获取检查记录详情
-
+export const POST_GET_CERTIFICATE_CHECK_LIST = 'post_get_certificate_check_list';             // 证件管理-获取检查记录
+export const POST_GET_CERTIFICATE_CHECK_DETAIL = 'post_get_certificate_check_detail';         // 证件管理-获取检查记录详情
+export const POST_GET_CERTIFICATE_DEDUCTION_LIST = 'post_get_certificate_deduction_list';     // 证件管理-记分管理
+export const POST_GET_CERTIFICATE_DEDUCTION_DETAIL = 'post_get_certificate_deduction_detail'; // 证件管理-记分管理详情
+export const POST_CERTIFICATE_RECONSIDER = 'post_certificate_reconsider';                     // 证件管理-申请复议
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)
