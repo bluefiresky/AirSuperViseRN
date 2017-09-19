@@ -60,3 +60,4 @@ export { CommonWebView } from './common/CommonWebView.js';
 export { SuccessView } from './common/SuccessView.js';
 export { TipView } from './common/TipView.js';
 export { NetTipView } from './common/NetTipView.js';
+export { BigImageView } from './common/BigImageView.js';

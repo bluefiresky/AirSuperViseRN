@@ -20,7 +20,7 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExampleList = [{name:'张三', code:'010-1223344', content:'违规违规违规违规违规违规违规违规违规违规违规违规', score:'-3', date:'2012年12月21 06:06:06'},{name:'李四', code:'010-345234', content:'违规违规违规违规违规违规', score:'-15', date:'2012年12月21 06:06:06'}];
+// const ExampleList = [{name:'张三', code:'010-1223344', content:'违规违规违规违规违规违规违规违规违规违规违规违规', score:'-3', date:'2012年12月21 06:06:06'},{name:'李四', code:'010-345234', content:'违规违规违规违规违规违规', score:'-15', date:'2012年12月21 06:06:06'}];
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
@@ -46,7 +46,6 @@ class CFInspectedRecordsView extends Component {
             if(res.entity && res.entity.length > 0){
               let list = res.entity;
               for(let i=0; i<list.length; i++){
-                console.log(' list -->> i -->> ', i);
                 let { deductionScore, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents } = list[i];
                 data.push({deductionScore:`-${deductionScore}分`, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents:legalProvisionContents[0].content})
               }
@@ -120,7 +119,7 @@ class CFInspectedRecordsView extends Component {
 
   /** Private **/
   _goDetail(item, index){
-    Actions.cfInspectedRecordDetail();
+    Actions.cfInspectedRecordDetail({record:item});
   }
 
 }

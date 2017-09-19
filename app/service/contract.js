@@ -29,6 +29,7 @@ export const POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER = 'post_get_certifica
  * Main 业务-相关接口
  */
 export const POST_GET_CERTIFICATE_CHECK_LIST = 'post_get_certificate_check_list'; // 证件管理-获取检查记录
+export const POST_GET_CERTIFICATE_CHECK_DETAIL = 'post_get_certificate_check_detail'; // 证件管理-获取检查记录详情
 
 
 /*

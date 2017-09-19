@@ -88,6 +88,7 @@ class RootView extends Component {
             <Scene key="success" component={Scenes.SuccessView} />
             <Scene key="tip" component={Scenes.TipView} />
             <Scene key="netTip" component={Scenes.NetTipView} />
+            <Scene key="bigImage" component={Scenes.BigImageView} />
 
           </Scene>
         </Router>

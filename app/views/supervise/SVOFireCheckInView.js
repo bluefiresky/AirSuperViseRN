@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 安全监管首页-官方(Official)
+* 安全监管首页-消防登记记录
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -338,7 +338,8 @@ class SVOFireCheckInView extends Component {
   }
 
   _goSelectTemplet(){
-    this.setState({templet:'模板一'})
+    Actions.commonWeb({url:'https://test.zhongchebaolian.com/app_test/test.html'})
+    // this.setState({templet:'模板一'})
   }
 
   _sendCopySearch(){
