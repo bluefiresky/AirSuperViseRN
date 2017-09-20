@@ -20,6 +20,13 @@ const PhotoWT = (W - PaddingHorizontal*4 - 20)/3;
 const PhotoW = PhotoWT > 100? 100 : PhotoWT;
 const SubmitButtonW = W - (30 * 2);
 
+const CheckStatusName = {
+  '1':{label:'已扣分', color:'grey'},
+  '2':{label:'复议审核中', color:'rgb(255, 176, 91)'},
+  '3':{label:'复议成功', color:'green'},
+  '9':{label:'复议失败', color:'red'}
+}
+
 class CFScoreDetailView extends Component {
 
   constructor(props){
@@ -90,9 +97,9 @@ class CFScoreDetailView extends Component {
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('联系方式：', data.contactWay)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('扣分内容：', data.legalProvisionContents)}
+          {this.renderHeightResultItem('扣分内容：', data.legalProvisionContents)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('状态：', data.checkStatus)}
+          {this.renderResultItem('状态：', data.checkStatus.label)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderPhotoItem(data.livePhotos)}
         </View>
@@ -103,6 +110,15 @@ class CFScoreDetailView extends Component {
   renderResultItem(label, content){
     return(
       <View style={{height:ItemH, flexDirection:'row', alignItems:'center'}}>
+        <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
+      </View>
+    )
+  }
+
+  renderHeightResultItem(label, content){
+    return(
+      <View style={{paddingVertical:15, flexDirection:'row'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
         <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
       </View>
@@ -130,18 +146,19 @@ class CFScoreDetailView extends Component {
 
   renderSubmitButton(data){
     if(!data) return null;
-
-    return(
-      <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
-        <XButton onPress={this._submit} title='申请复议' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
-        <Text style={{color:'red', fontSize:14, marginTop:30}}>注：申请复议时，申请信息将同步发送给直属相关领导</Text>
-      </View>
-    )
+    else if(data.checkStatus.label === CheckStatusName['1'].label){
+      return(
+        <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
+          <XButton onPress={this._submit} title='申请复议' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+          <Text style={{color:'red', fontSize:14, marginTop:30}}>注：申请复议时，申请信息将同步发送给直属相关领导</Text>
+        </View>
+      )
+    }
   }
 
   /** Private **/
   _submit(){
-    Actions.cfApplyReInspect({record:this.state.data});
+    Actions.cfApplyReInspect({record:this.state.data, refreshScoreList:this.props.refreshScoreList});
   }
 
   _convertLawToText(contents){

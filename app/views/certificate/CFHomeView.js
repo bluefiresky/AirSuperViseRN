@@ -153,7 +153,7 @@ class CFHomeView extends Component {
     if(type === 0){
       Actions.cfInspect()
     }else if(type === 1){
-
+      Toast.showShortCenter('暂未开通')
     }else if(type === 2){
       Actions.cfInspectedRecords()
     }else if(type === 3){

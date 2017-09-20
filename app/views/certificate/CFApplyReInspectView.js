@@ -25,11 +25,12 @@ class CFApplyReInspectView extends Component {
     super(props);
     this.state = {
       loading: false,
-      recoreID: props.record.id,
+      recordID: props.record.id,
       reason: null
     }
 
     this._submit = this._submit.bind(this);
+    this._onReasonTextChange = this._onReasonTextChange.bind(this);
   }
 
   componentWillUnmount(){
@@ -60,7 +61,7 @@ class CFApplyReInspectView extends Component {
           underlineColorAndroid={'transparent'}
           placeholder={''}
           placeholderTextColor={placeholderColor}
-          onChangeText={this._onIntroductionTextChange}
+          onChangeText={this._onReasonTextChange}
           minHeight={120}
         />
       </View>
@@ -80,16 +81,23 @@ class CFApplyReInspectView extends Component {
     if(!this.state.reason){
       Toast.showShortCenter('申请理由不能为空')
     }else{
+      this.setState({loading:true})
       let { recordID, reason } = this.state;
       this.props.dispatch( create_service(Contract.POST_CERTIFICATE_RECONSIDER, {id:recordID, reconsiderReason:reason}))
         .then( res => {
+          this.setState({loading:false})
           if(res){
             Actions.success({successType:'applyReInspect', modalCallback:()=>{
               Actions.popTo('cfScoreManager');
+              this.props.refreshScoreList();
             }})
           }
         })
     }
+  }
+
+  _onReasonTextChange(text){
+    this.setState({reason:text})
   }
 
 }

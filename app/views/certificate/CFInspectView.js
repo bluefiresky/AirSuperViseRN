@@ -136,7 +136,7 @@ class CFInspectView extends Component {
   _search(content){
     if(content) {
       this.setState({loading:true});
-      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER, {serialNumber:content}))
+      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER, {paperworkNumber:content}))
         .then( res => {
           if(res){
             let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline, phone, headImgUrl } = res.entity;

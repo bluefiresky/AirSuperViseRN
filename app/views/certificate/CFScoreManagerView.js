@@ -44,28 +44,14 @@ class CFScoreManagerView extends Component {
       loading: false,
       data: null,
     }
+
+    this._refresh = this._refresh.bind(this);
   }
 
   componentDidMount(){
-    let self = this;
-    self.setState({loading:true})
-
+    this.setState({loading:true})
     InteractionManager.runAfterInteractions(() => {
-      self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_DEDUCTION_LIST, {}))
-        .then( res => {
-          if(res){
-            let data = [];
-            let list = res.entity;
-            for(let i=0; i<list.length; i++){
-              let { deductionScore, checkStatus, createdTime, id, legalProvisionContents } = list[i];
-              data.push({deductionScore:`-${deductionScore}分`, checkStatus:CheckStatusName[checkStatus], createdTime, id, legalProvisionContents:legalProvisionContents[0].content})
-            }
-            data.push({deductionScore:`-${11}分`, checkStatus:{label:'你猜', color:'red'}, createdTime:'2012-12-21', id:'112536', legalProvisionContents:'我勒个去'})
-            self.setState({loading:false, data})
-          }else{
-            self.setState({loading:false})
-          }
-        })
+      this._refresh(true);
     })
   }
 
@@ -91,6 +77,8 @@ class CFScoreManagerView extends Component {
           showsVerticalScrollIndicator={false}
           getItemLayout={(data, index) => ( {length: ItemH, offset: ItemH * index, index} )}
           ItemSeparatorComponent={()=>  <View style={{height:10}} /> }
+          onRefresh={this._refresh.bind(this, false)}
+          refreshing={this.state.loading}
           renderItem={this._renderListItem.bind(this)}
         />
       );
@@ -101,7 +89,7 @@ class CFScoreManagerView extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.date}</Text>
+          <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.createdTime}</Text>
           <Text style={{fontSize:16, color:'red', flex:1, marginLeft:20}}>{item.deductionScore}</Text>
           <View style={{marginRight:10, backgroundColor:item.checkStatus.color, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
             <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.checkStatus.label}</Text>
@@ -130,7 +118,26 @@ class CFScoreManagerView extends Component {
 
   /** private **/
   _goDetail(item, index){
-    Actions.cfScoreDetail({record:item});
+    Actions.cfScoreDetail({record:item, refreshScoreList:this._refresh.bind(this, false)});
+  }
+
+  _refresh(init){
+    if(!init) this.setState({loading:true})
+    let self = this;
+    self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_DEDUCTION_LIST, {}))
+      .then( res => {
+        if(res){
+          let data = [];
+          let list = res.entity;
+          for(let i=0; i<list.length; i++){
+            let { deductionScore, checkStatus, createdTime, id, legalProvisionContents } = list[i];
+            data.push({deductionScore:`-${deductionScore}分`, checkStatus:CheckStatusName[checkStatus], createdTime, id, legalProvisionContents:legalProvisionContents[0].content})
+          }
+          self.setState({loading:false, data})
+        }else{
+          self.setState({loading:false})
+        }
+      })
   }
 
 }

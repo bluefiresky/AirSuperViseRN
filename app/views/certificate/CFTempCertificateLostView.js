@@ -141,7 +141,7 @@ class CFTempCertificateLostView extends Component {
         let p = pickerPhotos[i];
         if(p.photo) photos.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
       }
-      this.props.dispatch( create_service(Contract.POST_CERTIFICATE_REPORT_LOSS, {paperworkSerialNumber:profile.serialNumber, reportLossReason:reason, photos}))
+      this.props.dispatch( create_service(Contract.POST_CERTIFICATE_REPORT_LOSS, {paperworkSerialNumber:profile.serialNumber, reportLossReason:reason, photos:JSON.stringify(photos)}))
         .then( res => {
           this.setState({loading:false})
           if(res){

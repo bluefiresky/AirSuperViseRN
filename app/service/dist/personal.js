@@ -21,6 +21,6 @@ export const post_get_certificate_user_info = ({version}) => {
 }
 
 /** 证件管理-当前用户信息 */
-export const post_get_certificate_user_info_by_serialnumber = ({serialNumber, version}) => {
-  return http_post( 'certificate.user.get', {serialNumber}, {}, version )
+export const post_get_certificate_user_info_by_serialnumber = ({paperworkNumber, version}) => {
+  return http_post( 'certificate.paperwork.get', {paperworkNumber}, {}, version )
 }
