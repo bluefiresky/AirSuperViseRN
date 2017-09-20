@@ -62,3 +62,4 @@ export { SuccessView } from './common/SuccessView.js';
 export { TipView } from './common/TipView.js';
 export { NetTipView } from './common/NetTipView.js';
 export { BigImageView } from './common/BigImageView.js';
+export { SignatureView } from './common/SignatureView.js';

@@ -60,6 +60,7 @@ class CFInspectRegisterView extends Component {
     this._goSelectLaw = this._goSelectLaw.bind(this);
     this._convertPhotosUri = this._convertPhotosUri.bind(this);
     this._convertToSubmitParams = this._convertToSubmitParams.bind(this);
+    this._goSign = this._goSign.bind(this);
   }
 
   componentDidMount(){
@@ -156,7 +157,7 @@ class CFInspectRegisterView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
             {
               !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
               <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
@@ -262,6 +263,14 @@ class CFInspectRegisterView extends Component {
 
   _convertLaw(law){
     return JSON.stringify(law);
+  }
+
+  _goSign(){
+    Actions.signature({
+      callback:(signData) => {
+        this.setState({signImage:{uri:`data:image/jpeg;base64,${signData}`, isStatic:true}})
+      }
+    })
   }
 
 }
