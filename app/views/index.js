@@ -34,6 +34,7 @@ export { SVOHistoryCheckInView } from './supervise/SVOHistoryCheckInView.js';
 export { SVOCheckInDetailView } from './supervise/SVOCheckInDetailView.js';
 export { SVMHomeView } from './supervise/SVMHomeView.js';
 export { SVMCheckedInView } from './supervise/SVMCheckedInView.js';
+export { SVMCheckedInDetailView } from './supervise/SVMCheckedInDetailView.js';
 
 export { CFHomeView } from './certificate/CFHomeView.js';
 export { CFInspectView } from './certificate/CFInspectView.js';

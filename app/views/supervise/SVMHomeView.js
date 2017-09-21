@@ -9,12 +9,21 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const ComponentW = (W - 30);
+const HeaderH = H/3;
+const PaddingHorizontal = 10;
+const HeaderIconW = W/3 - 60;
+const EntryItemIconW = 40;
+const EntryItemH = 80;
+
+const Icon1 = require('./image/icon-to-feedback.png')
+const Icon2 = require('./image/icon-generate-check-record.png')
+const Icon3 = require('./image/icon-done.png')
+const Icon4 = require('./image/icon-sending.png')
 
 class SVMHomeView extends Component {
 
@@ -26,18 +35,12 @@ class SVMHomeView extends Component {
   }
 
   componentDidMount(){
-    // 保证动画加载完成，在进行其他耗时操作
     let self = this;
+    self.setState({loading:true})
+
     InteractionManager.runAfterInteractions(() => {
-      self.setState({loading: true})
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
+      self.setState({loading:false})
     })
-  }
-
-  componentWillUnmount(){
-
   }
 
   render(){
@@ -45,10 +48,75 @@ class SVMHomeView extends Component {
 
     return(
       <View style={styles.container}>
-        <Text style={{fontSize: 20, color: 'black'}} onPress={()=> Actions.login()}>Home</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {this.renderHeader()}
+          {this.renderEntry()}
+        </ScrollView>
         <ProgressView show={loading} />
       </View>
     )
+  }
+
+  renderHeader(){
+    return(
+      <View style={{backgroundColor:mainColor, height:HeaderH}}>
+        <View style={{flex:1, flexDirection:'row'}}>
+          <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+            <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
+          </View>
+          <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
+            <Text style={styles.headerTextMain}>商户名称：{'张三'}</Text>
+            <View style={{marginTop:10, flexDirection:'row'}}>
+              <Text style={[styles.headerTextMain]}>警员编号：</Text>
+              <Text style={[styles.headerTextMain, {flex:1}]}>警员编号警员编号警员编号警员编号警员编号警</Text>
+            </View>
+          </View>
+        </View>
+        <View style={{flexDirection:'row', paddingVertical:15}}>
+          <Text style={styles.headerTextSub}>{'20\n'}<Text style={styles.headerTextSubTitle}>本月被检查</Text></Text>
+          <View style={{width:1, backgroundColor:'white'}} />
+          <Text style={styles.headerTextSub}>{'126\n'}<Text style={styles.headerTextSubTitle}>年度被检查</Text></Text>
+          <View style={{width:1, backgroundColor:'white'}} />
+          <Text style={styles.headerTextSub}>{'3\n'}<Text style={styles.headerTextSubTitle}>待反馈</Text></Text>
+          <View style={{width:1, backgroundColor:'white'}} />
+          <Text style={styles.headerTextSub}>{'2\n'}<Text style={styles.headerTextSubTitle}>待复查</Text></Text>
+          <View style={{width:1, backgroundColor:'white'}} />
+          <Text style={styles.headerTextSub}>{'2\n'}<Text style={styles.headerTextSubTitle}>审核不通过</Text></Text>
+        </View>
+      </View>
+    )
+  }
+
+  renderEntry(){
+    return (
+      <View style={{backgroundColor:'white', marginTop:10}}>
+        <View style={{flexDirection:'row'}}>
+          {this.renderEntryItem(Icon1, '待反馈')}
+          <View style={{width:1, backgroundColor:borderColor}} />
+          {this.renderEntryItem(Icon2, '待复查')}
+        </View>
+        <View style={{height:1, backgroundColor:borderColor}} />
+        <View style={{flexDirection:'row'}}>
+          {this.renderEntryItem(Icon3, '已完结')}
+          <View style={{width:1, backgroundColor:borderColor}} />
+          {this.renderEntryItem(Icon4, '抄送')}
+        </View>
+      </View>
+    );
+  }
+
+  renderEntryItem(icon, label, type){
+    return (
+      <TouchableOpacity onPress={this._onPress.bind(this, type)} activeOpacity={0.8} style={{flex:1, height:EntryItemH, alignItems:'center', justifyContent:'center', flexDirection:'row'}}>
+        <Image source={icon} style={{width:EntryItemIconW, height:EntryItemIconW, resizeMode:'contain'}}/>
+        <Text style={{marginLeft:20, fontSize:18, color:mainTextGreyColor}}>{label}</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  /** Private **/
+  _onPress(type){
+    Actions.svmCheckedIn({dataType:type})
   }
 
 }
@@ -58,8 +126,20 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: mainBackColor,
-    alignItems: 'center',
-    justifyContent: 'center'
+  },
+  headerTextMain:{
+    color:'white',
+    fontSize:18
+  },
+  headerTextSub:{
+    flex:1,
+    color:'white',
+    fontSize:16,
+    textAlign:'center',
+    lineHeight:20
+  },
+  headerTextSubTitle:{
+    fontSize:13
   }
 });
 
