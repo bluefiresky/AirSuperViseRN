@@ -23,7 +23,7 @@ export const GET_USER_INFO = 'get_user_info';                                 //
 export const POST_USER_ROLE_LIST = 'post_user_role_lsit';                     // 获取用户所属角色列表
 export const POST_GET_CERTIFICATE_USER_INFO = 'post_get_certificate_user_info';   // 证件管理-当前用户信息
 export const POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER = 'post_get_certificate_user_info_by_serialnumber';  // 通过证件编号，查询用户信息
-
+export const POST_GET_SUPERVISE_USER_INFO = 'post_get_supervise_user_info';   // 安全监管-获取用户信息
 
 /*
  * Main 业务-相关接口
@@ -35,6 +35,9 @@ export const POST_GET_CERTIFICATE_DEDUCTION_DETAIL = 'post_get_certificate_deduc
 export const POST_CERTIFICATE_RECONSIDER = 'post_certificate_reconsider';                     // 证件管理-申请复议
 export const POST_CERTIFICATE_REPORT_LOSS = 'post_certificate_report_loss';                   // 证件管理-临时证件挂失
 export const POST_CERTIFICATE_CHECK = 'post_certificate_check';                               // 证件管理-违规登记
+export const POST_GET_SUPERVISE_COMPANY_CHECK_HISTORY = 'post_get_supervise_company_check_history';  // 安全监管-获取单位人员历史检查单
+export const POST_GET_SUPERVISE_COMPANY_CHAOSONG_HISTORY = 'post_get_supervise_company_chaosong_history';  // 安全监管-获取单位人员历史检查单
+
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)

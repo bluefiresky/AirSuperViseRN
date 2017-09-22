@@ -42,28 +42,29 @@ class SVMCheckedInDetailView extends Component {
     super(props);
     this.state = {
       loading: false,
-      data: null,
+      data: props.record,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       measure: null
     }
 
     this._onMeasureTextChange = this._onMeasureTextChange.bind(this);
+    this._submit = this._submit.bind(this);
   }
 
-  componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading:false, data:{}})
-      }, 500);
-    })
-  }
-
-  componentWillUnmount(){
-
-  }
+  // componentDidMount(){
+  //   let self = this;
+  //   self.setState({loading: true})
+  //
+  //   InteractionManager.runAfterInteractions(() => {
+  //     self.timer = setTimeout(function () {
+  //       self.setState({loading:false, data:{}})
+  //     }, 500);
+  //   })
+  // }
+  //
+  // componentWillUnmount(){
+  //
+  // }
 
   render(){
     let { loading, data, measure, pickerPhotos } = this.state;
@@ -88,21 +89,21 @@ class SVMCheckedInDetailView extends Component {
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>检查情况</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultTypeItem('检查类型：', data.createdTime, '待整改')}
+          {this.renderResultTypeItem('检查类型：', data.listTypeName, data.checkListStatusName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('创建时间：', data.holderName)}
+          {this.renderResultItem('创建时间：', data.createTime)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('创建民警：', data.checkerName)}
+          {this.renderResultItem('创建民警：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('警员编号：', data.contactWay)}
+          {this.renderResultItem('警员编号：','')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('被检查商户：', data.contactWay)}
+          {this.renderResultItem('被检查商户：', data.companyName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('商户联系人：', data.contactWay)}
+          {this.renderResultItem('商户联系人：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', data.contactWay)}
+          {this.renderResultItem('联系方式：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderHeightResultItem('情况描述：', data.legalProvisionContents)}
+          {this.renderHeightResultItem('情况描述：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderPhotoItem(data.livePhotos)}
         </View>
@@ -118,9 +119,9 @@ class SVMCheckedInDetailView extends Component {
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>商户反馈</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultItem('创建时间：', data.holderName)}
+          {this.renderResultItem('提交人：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('创建民警：', data.checkerName)}
+          {this.renderResultItem('联系方式：', '')}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderAutoGrowing(measure)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -255,6 +256,41 @@ class SVMCheckedInDetailView extends Component {
 
   _onMeasureTextChange(text){
     this.setState({measure:text})
+  }
+
+  _submit(){
+    let params = this._convertToSubmitParams();
+    if(params){
+      this.props.dispatch( create_service('', params))
+        .then( res => {
+          if(res) Actions.success({successType:'submit1'});
+        })
+    }
+  }
+
+  _convertToSubmitParams(){
+    let params = null;
+    if(!this.state.measure){
+      Toast.showShortCenter('整改措施不能为空');
+    }else {
+      let { pickerPhotos, measure } = this.state;
+      params = {
+        livePhotos:this._convertPhotosUri(pickerPhotos),
+        measure
+      }
+    }
+
+    console.log( ' the submit params -->> ', params);
+    return params;
+  }
+
+  _convertPhotosUri(photos){
+    let submit = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      if(p.photo) submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
+    }
+    return JSON.stringify(submit);
   }
 
 

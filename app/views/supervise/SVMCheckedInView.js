@@ -27,6 +27,7 @@ const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
+const UrgentTypeColor = {'1':'red', '2':'rgb(255, 176, 91)', '3':'rgb(101, 211, 149)'}
 
 class SVMCheckedInView extends Component {
 
@@ -34,6 +35,7 @@ class SVMCheckedInView extends Component {
     super(props);
     this.state = {
       loading: false,
+      checkListStatus: props.checkListStatus,
       data:null,
       data1:null,
       data2:null,
@@ -46,9 +48,16 @@ class SVMCheckedInView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList, data1:ExampleList1, data2:ExampleList2, data3:ExampleList3})
-      }, 1000);
+      let methodName = this.state.checkListStatus == -1? Contract.POST_GET_SUPERVISE_COMPANY_CHAOSONG_HISTORY : Contract.POST_GET_SUPERVISE_COMPANY_CHECK_HISTORY;
+      this.props.dispatch( create_service(methodName, {checkListStatus:this.state.checkListStatus, urgentType:0}))
+        .then( res => {
+          if(res){
+            let { data, data1, data2, data3 } = this._converData(res.entity.checkList, this.state.chaosong);
+            this.setState({loading:false, data, data1, data2, data3})
+          }else{
+            this.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -68,6 +77,26 @@ class SVMCheckedInView extends Component {
         <ProgressView show={loading} />
       </View>
     )
+  }
+
+  /** Private **/
+  _converData(allList){
+    let data = [], data1 = [], data2 = [], data3 = [];
+
+    for(let i=0; i<allList.length; i++){
+      let item = allList[i];
+      let show = this._converDataToShow(item);
+      data.push(show);
+      if(item.urgentType == '1') data1.push(show);
+      else if(item.urgentType == '2') data2.push(show);
+      else if(item.urgentType == '3') data3.push(show);
+    }
+
+    return { data, data1, data2, data3 };
+  }
+
+  _converDataToShow(item){
+    return {...item, urgentTypeColor:UrgentTypeColor[item.urgentType]};
   }
 
 }
@@ -105,22 +134,22 @@ class SubView extends Component{
     return(
       <TouchableOpacity onPress={this._onItemPress.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:40, flexDirection:'row', alignItems:'center'}}>
-          <TouchableOpacity activeOpacity={0.8} style={{alignItems:'center', justifyContent:'center', marginRight:10}}>
+          <TouchableOpacity onPress={this._onCheckNotice.bind(this, item.paperPath)} activeOpacity={0.8} style={{alignItems:'center', justifyContent:'center', marginRight:10}}>
             <Text style={{fontSize:16, color:mainColor}}>处理通知单</Text>
           </TouchableOpacity>
-          <Text style={{fontSize:16, color:mainTextGreyColor, flex:1}}>{item.type}</Text>
-          <View style={{marginRight:10, backgroundColor:item.levelColor, height:18, borderRadius:9, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.level}</Text>
+          <Text style={{fontSize:16, color:mainTextGreyColor, flex:1}}>{item.listTypeName}</Text>
+          <View style={{marginRight:10, backgroundColor:item.urgentTypeColor, height:18, borderRadius:9, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
+            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
           </View>
-          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.status}</Text>
+          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.checkListStatusName}</Text>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <View style={{flex:1}}>
-            <Text style={{fontSize:14, color:placeholderColor}}>创建时间：{item.date}</Text>
-            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:6}}>商户名称：{item.name}</Text>
+            <Text style={{fontSize:14, color:placeholderColor}}>创建时间：{item.createTime}</Text>
+            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:6}}>商户名称：{item.companyName}</Text>
           </View>
           <Image source={ArrowRight} style={{width:25, height:25, resizeMode:'contain'}} />
         </View>
@@ -132,15 +161,18 @@ class SubView extends Component{
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }
   }
 
   _onItemPress(item, index){
-    Actions.svmCheckedInDetail();
+    Actions.svmCheckedInDetail({record:item});
+  }
+
+  _onCheckNotice(url){
+    Actions.commonWeb({url});
   }
 }
 

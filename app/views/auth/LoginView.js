@@ -113,7 +113,7 @@ class LoginView extends Component {
   /** 私有方法 */
   _onSubmit(){
     if (!this.props.form.validate()) {
-      Toast.show(this.props.form.getErrors()[0]);
+      Toast.showShortCenter(this.props.form.getErrors()[0]);
     }else {
       this.setState({loading:true})
       let { mobile, code } = this.props.form.getData();

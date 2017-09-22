@@ -31,7 +31,10 @@ class SVMHomeView extends Component {
     super(props);
     this.state = {
       loading: false,
+      data: {}
     }
+
+    this._getProfile = this._getProfile.bind(this);
   }
 
   componentDidMount(){
@@ -39,17 +42,17 @@ class SVMHomeView extends Component {
     self.setState({loading:true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.setState({loading:false})
+      this._getProfile();
     })
   }
 
   render(){
-    let { loading } = this.state;
+    let { loading, data } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderHeader()}
+          {this.renderHeader(data)}
           {this.renderEntry()}
         </ScrollView>
         <ProgressView show={loading} />
@@ -57,7 +60,7 @@ class SVMHomeView extends Component {
     )
   }
 
-  renderHeader(){
+  renderHeader(data){
     return(
       <View style={{backgroundColor:mainColor, height:HeaderH}}>
         <View style={{flex:1, flexDirection:'row'}}>
@@ -65,23 +68,20 @@ class SVMHomeView extends Component {
             <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
-            <Text style={styles.headerTextMain}>商户名称：{'张三'}</Text>
-            <View style={{marginTop:10, flexDirection:'row'}}>
-              <Text style={[styles.headerTextMain]}>警员编号：</Text>
-              <Text style={[styles.headerTextMain, {flex:1}]}>警员编号警员编号警员编号警员编号警员编号警</Text>
-            </View>
+            <Text style={styles.headerTextMain}>姓名：{data.userName}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:5}]}>商户名称：{data.userCompanyName}</Text>
           </View>
         </View>
         <View style={{flexDirection:'row', paddingVertical:15}}>
-          <Text style={styles.headerTextSub}>{'20\n'}<Text style={styles.headerTextSubTitle}>本月被检查</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userMonthCounts}<Text style={styles.headerTextSubTitle}>{'\n'}本月被检查</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'126\n'}<Text style={styles.headerTextSubTitle}>年度被检查</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userYearCounts}<Text style={styles.headerTextSubTitle}>{'\n'}年度被检查</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'3\n'}<Text style={styles.headerTextSubTitle}>待反馈</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userModifyCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待反馈</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'2\n'}<Text style={styles.headerTextSubTitle}>待复查</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userReviewCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待复查</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'2\n'}<Text style={styles.headerTextSubTitle}>审核不通过</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userNotPassCounts}<Text style={styles.headerTextSubTitle}>{'\n'}审核不通过</Text></Text>
         </View>
       </View>
     )
@@ -91,15 +91,15 @@ class SVMHomeView extends Component {
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
         <View style={{flexDirection:'row'}}>
-          {this.renderEntryItem(Icon1, '待反馈')}
+          {this.renderEntryItem(Icon1, '待反馈', 1)}
           <View style={{width:1, backgroundColor:borderColor}} />
-          {this.renderEntryItem(Icon2, '待复查')}
+          {this.renderEntryItem(Icon2, '待复查', 2)}
         </View>
         <View style={{height:1, backgroundColor:borderColor}} />
         <View style={{flexDirection:'row'}}>
-          {this.renderEntryItem(Icon3, '已完结')}
+          {this.renderEntryItem(Icon3, '已完结', 3)}
           <View style={{width:1, backgroundColor:borderColor}} />
-          {this.renderEntryItem(Icon4, '抄送')}
+          {this.renderEntryItem(Icon4, '抄送', -1)}
         </View>
       </View>
     );
@@ -107,7 +107,7 @@ class SVMHomeView extends Component {
 
   renderEntryItem(icon, label, type){
     return (
-      <TouchableOpacity onPress={this._onPress.bind(this, type)} activeOpacity={0.8} style={{flex:1, height:EntryItemH, alignItems:'center', justifyContent:'center', flexDirection:'row'}}>
+      <TouchableOpacity onPress={this._onPress.bind(this, type, label)} activeOpacity={0.8} style={{flex:1, height:EntryItemH, alignItems:'center', justifyContent:'center', flexDirection:'row'}}>
         <Image source={icon} style={{width:EntryItemIconW, height:EntryItemIconW, resizeMode:'contain'}}/>
         <Text style={{marginLeft:20, fontSize:18, color:mainTextGreyColor}}>{label}</Text>
       </TouchableOpacity>
@@ -115,8 +115,19 @@ class SVMHomeView extends Component {
   }
 
   /** Private **/
-  _onPress(type){
-    Actions.svmCheckedIn({dataType:type})
+  _onPress(checkListStatus, title){
+    Actions.svmCheckedIn({checkListStatus, title})
+  }
+
+  _getProfile(){
+    this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_USER_INFO, {}))
+      .then( res => {
+        if(res){
+          this.setState({loading:false, data:res.entity})
+        }else{
+          this.setState({loading:false})
+        }
+      })
   }
 
 }

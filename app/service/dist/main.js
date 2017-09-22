@@ -39,3 +39,13 @@ export const post_certificate_report_loss = ({paperworkSerialNumber, reportLossR
 export const post_certificate_check = ({paperworkSerialNumber, signFlag, totalDeductionScore, signImg, legalProvisionNumbers, livePhotos, version}) => {
   return http_post( 'certificate.check', {paperworkSerialNumber, signFlag, totalDeductionScore, legalProvisionNumbers}, {signImg, livePhotos}, version )
 }
+
+/** 安全监管-单位人员历史检查单 */
+export const post_get_supervise_company_check_history = ({checkListStatus, urgentType, version}) => {
+  return http_post( 'supervision.getCompanyCheckHistory', {checkListStatus, urgentType}, {}, version )
+}
+
+/** 安全监管-单位人员历史检查单 */
+export const post_get_supervise_company_chaosong_history = ({urgentType, version}) => {
+  return http_post( 'supervision.getCcCheckHistory', {urgentType}, {}, version )
+}
