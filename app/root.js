@@ -52,7 +52,7 @@ class RootView extends Component {
               <Scene key="apAirMerchantCheckHistory" component={Scenes.APAirMerchantCheckHistoryView} title='空防单位审核历史' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apAirMerchantCheckDetail" component={Scenes.APAirMerchantCheckDetailView} title='空防单位审核详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
-              <Scene key="svoHome" component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoHome" initial={true} component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoInspectedMerchant" component={Scenes.SVOInspectedMerchantView} title='选择被检查单位' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoSearch" component={Scenes.SVOSearchView} title='单位搜索' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoAirCheckIn" component={Scenes.SVOAirCheckInView} title='空防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
@@ -62,7 +62,7 @@ class RootView extends Component {
               <Scene key="svoHistoryCheckIn" component={Scenes.SVOHistoryCheckInView} title='历史检查记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoCheckInDetail" component={Scenes.SVOCheckInDetailView} title='历史检查记录详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
-              <Scene key="svmHome" initial={true} component={Scenes.SVMHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svmHome" component={Scenes.SVMHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svmCheckedIn" component={Scenes.SVMCheckedInView} title='被检查列表' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svmCheckedInDetail" component={Scenes.SVMCheckedInDetailView} title='被检查详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 

@@ -2,7 +2,7 @@
  *
  * wuran on 17/1/10.
  */
-import { POST_GET_CERTIFICATE_USER_INFO } from '../../service/contract.js';
+import { POST_GET_CERTIFICATE_USER_INFO, POST_USER_LOGOUT } from '../../service/contract.js';
 
 
 const CLEAR_CERTIFICATEPROFILE = 'CLEAR_CERTIFICATEPROFILE';
@@ -22,6 +22,9 @@ export const certificateProfile = (state = initial, action) => {
     case POST_GET_CERTIFICATE_USER_INFO :
       return getProfile(action.data.data.entity);
     case CLEAR_CERTIFICATEPROFILE :
+      global.certificateProfile = null;
+      return {...initial};
+    case POST_USER_LOGOUT :
       global.certificateProfile = null;
       return {...initial};
   }

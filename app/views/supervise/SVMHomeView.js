@@ -120,14 +120,18 @@ class SVMHomeView extends Component {
   }
 
   _getProfile(){
-    this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_USER_INFO, {}))
-      .then( res => {
-        if(res){
-          this.setState({loading:false, data:res.entity})
-        }else{
-          this.setState({loading:false})
-        }
-      })
+    if(global.superviseProfile){
+      this.setState({loading:false, data:global.superviseProfile})
+    }else{
+      this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_USER_INFO, {}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, data:res.entity})
+          }else{
+            this.setState({loading:false})
+          }
+        })
+    }
   }
 
 }

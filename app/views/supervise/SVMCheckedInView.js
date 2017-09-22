@@ -15,10 +15,10 @@ import { ProgressView } from '../../components/index.js';  /** 自定义组件 *
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const ExampleList = [{name:'肯德基1', status:'待复查', level:'紧急', levelColor:'red', type:'消防', date:'2012年12月21 06:06:06'},{name:'麦当劳', status:'待整改', level:'重要', levelColor:'rgb(255, 176, 91)', type:'空防', date:'2012年12月21 06:06:06'},{name:'吉野家', status:'检查合格', level:'一般', levelColor:'rgb(101, 211, 149)', type:'消防', date:'2012年12月21 06:06:06'}];
-const ExampleList1 = [{name:'肯德基1', status:'待复查', level:'紧急', levelColor:'red', type:'消防', date:'2012年12月21 06:06:06'}];
-const ExampleList2 = [];
-const ExampleList3 = [{name:'麦当劳', status:'待整改', level:'重要', levelColor:'rgb(255, 176, 91)', type:'空防', date:'2012年12月21 06:06:06'},{name:'吉野家', status:'检查合格', level:'一般', levelColor:'rgb(101, 211, 149)', type:'消防', date:'2012年12月21 06:06:06'}];
+// const ExampleList = [{name:'肯德基1', status:'待复查', level:'紧急', levelColor:'red', type:'消防', date:'2012年12月21 06:06:06'},{name:'麦当劳', status:'待整改', level:'重要', levelColor:'rgb(255, 176, 91)', type:'空防', date:'2012年12月21 06:06:06'},{name:'吉野家', status:'检查合格', level:'一般', levelColor:'rgb(101, 211, 149)', type:'消防', date:'2012年12月21 06:06:06'}];
+// const ExampleList1 = [{name:'肯德基1', status:'待复查', level:'紧急', levelColor:'red', type:'消防', date:'2012年12月21 06:06:06'}];
+// const ExampleList2 = [];
+// const ExampleList3 = [{name:'麦当劳', status:'待整改', level:'重要', levelColor:'rgb(255, 176, 91)', type:'空防', date:'2012年12月21 06:06:06'},{name:'吉野家', status:'检查合格', level:'一般', levelColor:'rgb(101, 211, 149)', type:'消防', date:'2012年12月21 06:06:06'}];
 
 const PaddingHorizontal = 15;
 const ItemH = 100;
@@ -167,6 +167,7 @@ class SubView extends Component{
     }
   }
 
+  /** Private **/
   _onItemPress(item, index){
     Actions.svmCheckedInDetail({record:item});
   }

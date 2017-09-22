@@ -120,7 +120,7 @@ class PersonalTab extends Component {
   _logout(){
     this.setState({loading:true})
     this.props.dispatch( create_service(Contract.POST_USER_LOGOUT, {}))
-      .then( res => {
+      .then( res => {        
         this.setState({loading:false});
         Actions.login({type:'reset'});
       })

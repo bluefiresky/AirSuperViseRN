@@ -30,26 +30,26 @@ class SVOHomeView extends Component {
     super(props);
     this.state = {
       loading: false,
+      data: {}
     }
   }
 
   componentDidMount(){
     let self = this;
     self.setState({loading: true})
+
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 100);
+      this._getProfile();
     })
   }
 
   render(){
-    let { loading } = this.state;
+    let { loading, data } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderHeader()}
+          {this.renderHeader(data)}
           {this.renderEntry()}
         </ScrollView>
         <ProgressView show={loading} />
@@ -57,7 +57,7 @@ class SVOHomeView extends Component {
     )
   }
 
-  renderHeader(){
+  renderHeader(data){
     return(
       <View style={{backgroundColor:mainColor, height:HeaderH}}>
         <View style={{flex:1, flexDirection:'row'}}>
@@ -68,19 +68,19 @@ class SVOHomeView extends Component {
             </View>
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
-            <Text style={styles.headerTextMain}>警员姓名：{'张三'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:10}]}>警员编号：{'010-27789370'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:10}]}>所属部门：{'消防处'}</Text>
+            <Text style={styles.headerTextMain}>警员姓名：{data.policeName}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:10}]}>警员编号：{data.phoneNum}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:10}]}>所属部门：{data.policeDeptName}</Text>
           </View>
         </View>
         <View style={{flexDirection:'row', paddingVertical:15}}>
-          <Text style={styles.headerTextSub}>{'20\n'}<Text style={styles.headerTextSubTitle}>本月提交总数</Text></Text>
+          <Text style={styles.headerTextSub}>{data.policeMonthCounts}<Text style={styles.headerTextSubTitle}>{'\n'}本月提交总数</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'126\n'}<Text style={styles.headerTextSubTitle}>年度提交总数</Text></Text>
+          <Text style={styles.headerTextSub}>{data.policeYearCounts}<Text style={styles.headerTextSubTitle}>{'\n'}年度提交总数</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'3\n'}<Text style={styles.headerTextSubTitle}>待复查数</Text></Text>
+          <Text style={styles.headerTextSub}>{data.policeReviewCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待复查数</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{'2\n'}<Text style={styles.headerTextSubTitle}>待整改数</Text></Text>
+          <Text style={styles.headerTextSub}>{data.policeModifyCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待整改数</Text></Text>
         </View>
       </View>
     )
@@ -110,13 +110,29 @@ class SVOHomeView extends Component {
   /** Private **/
   _onPress(type){
     if(type === 0){
-
+      Toast.showShortCenter('待开发')
     }else if(type === 1){
       Actions.svoInspectedMerchant()
     }else if(type === 2){
       Actions.svoHistoryCheckIn()
     }
   }
+
+  _getProfile(){
+    if(global.superviseProfile){
+      this.setState({loading:false, data:global.superviseProfile})
+    }else{
+      this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_USER_INFO, {}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, data:res.entity})
+          }else{
+            this.setState({loading:false})
+          }
+        })
+    }
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -137,7 +153,7 @@ const styles = StyleSheet.create({
     lineHeight:20
   },
   headerTextSubTitle:{
-    fontSize:14
+    fontSize:12
   }
 });
 

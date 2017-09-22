@@ -37,6 +37,7 @@ export const POST_CERTIFICATE_REPORT_LOSS = 'post_certificate_report_loss';     
 export const POST_CERTIFICATE_CHECK = 'post_certificate_check';                               // 证件管理-违规登记
 export const POST_GET_SUPERVISE_COMPANY_CHECK_HISTORY = 'post_get_supervise_company_check_history';  // 安全监管-获取单位人员历史检查单
 export const POST_GET_SUPERVISE_COMPANY_CHAOSONG_HISTORY = 'post_get_supervise_company_chaosong_history';  // 安全监管-获取单位人员历史检查单
+export const POST_GET_SUPERVISE_POLICE_CHECK_HISTORY = 'post_get_supervise_police_check_history';     // 安全监管-民警-历史检查记录
 
 
 /*
