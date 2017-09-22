@@ -38,7 +38,7 @@ export const POST_CERTIFICATE_CHECK = 'post_certificate_check';                 
 export const POST_GET_SUPERVISE_COMPANY_CHECK_HISTORY = 'post_get_supervise_company_check_history';  // 安全监管-获取单位人员历史检查单
 export const POST_GET_SUPERVISE_COMPANY_CHAOSONG_HISTORY = 'post_get_supervise_company_chaosong_history';  // 安全监管-获取单位人员历史检查单
 export const POST_GET_SUPERVISE_POLICE_CHECK_HISTORY = 'post_get_supervise_police_check_history';     // 安全监管-民警-历史检查记录
-
+export const POST_GET_SUPERVISE_CHECK_COMPANY = 'post_get_supervise_check_company';           // 安全监管-搜索单位
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)

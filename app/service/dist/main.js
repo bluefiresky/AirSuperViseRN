@@ -54,3 +54,8 @@ export const post_get_supervise_company_chaosong_history = ({urgentType, version
 export const post_get_supervise_police_check_history = ({checkListStatus, version}) => {
   return http_post( 'supervision.getPoliceCheckHistory', {checkListStatus}, {}, version )
 }
+
+/** 安全监管-民警-搜索单位 */
+export const post_get_supervise_check_company = ({keyword, version}) => {
+  return http_post( 'supervision.getCheckCompany', {keyword}, {}, version )
+}

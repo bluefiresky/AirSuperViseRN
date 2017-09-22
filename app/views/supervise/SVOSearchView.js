@@ -12,7 +12,7 @@ import Toast from '@remobile/react-native-toast';
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, placeholderColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, InputWithIcon } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
-import { create_service } from '../../redux/index.js'; /** 调用api的Action */
+import { create_service, getStore } from '../../redux/index.js'; /** 调用api的Action */
 
 const HistorySearchIcon = require('./image/icon-history-search.png');
 const DeleteIcon = require('./image/icon-search-delete.png');
@@ -33,22 +33,14 @@ class SVOSearchView extends Component {
     }
 
     this._onSearchTextChanged = this._onSearchTextChanged.bind(this);
+    this._saveAsHistory = this._saveAsHistory.bind(this);
   }
 
   componentDidMount(){
-    // 保证动画加载完成，在进行其他耗时操作
-    let self = this;
-    self.setState({loading: true})
-
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, history:['肯德基', '麦当劳', '吉野家']})
-      }, 1000);
+      let history = getStore().getState().merchantSearchHistory.list;
+      if(history) this.setState({history})
     })
-  }
-
-  componentWillUnmount(){
-
   }
 
   render(){
@@ -57,7 +49,7 @@ class SVOSearchView extends Component {
     return(
       <View style={styles.container}>
         {this.renderSearchInput()}
-        {this.renderHistorySearchList(history)}
+        {this.renderHistorySearchList(history, searchData)}
         {this.renderSearchList(searchContent, searchData)}
         <ProgressView show={loading} />
       </View>
@@ -75,8 +67,9 @@ class SVOSearchView extends Component {
     )
   }
 
-  renderHistorySearchList(data){
-    if(!data) return null;
+  renderHistorySearchList(data, searchData){
+    if(searchData) return null;
+    if(!(data && data.length > 0)) return null;
 
     return(
       <View style={{padding:20, marginTop:20}}>
@@ -100,7 +93,7 @@ class SVOSearchView extends Component {
     return(
       <TouchableOpacity onPress={this._search.bind(this, item, index)} activeOpacity={0.8} style={{flexDirection:'row', height:ItemH, alignItems:'center'}}>
         <Text style={{color:placeholderColor, fontSize:16, flex:1}}>{item}</Text>
-        <TouchableOpacity activeOpacity={0.8} style={{width:ItemH, height:ItemH, alignItems:'center', justifyContent:'center'}}>
+        <TouchableOpacity onPress={this._deleteAsHistory.bind(this, item, index)} activeOpacity={0.8} style={{width:ItemH, height:ItemH, alignItems:'center', justifyContent:'center'}}>
           <Image source={DeleteIcon} style={{width:18, height:18, resizeMode:'contain'}} />
         </TouchableOpacity>
       </TouchableOpacity>
@@ -108,7 +101,7 @@ class SVOSearchView extends Component {
   }
 
   renderSearchList(searchContent, data){
-    if(!(searchContent && data)) return null;
+    if(!data) return null;
 
     return(
       <View style={{paddingTop:20, paddingHorizontal:20, marginTop:20, backgroundColor:'white'}}>
@@ -132,8 +125,7 @@ class SVOSearchView extends Component {
   _renderSearchListItem({item, index}){
     return(
       <TouchableOpacity onPress={this._onItemPress.bind(this, item, index)} activeOpacity={0.8} style={{flexDirection:'row', height:ItemH, alignItems:'center'}}>
-        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{item.name}</Text>
-        <Text style={{color:placeholderColor, fontSize:14}}>{item.distance}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{item.companyName}</Text>
       </TouchableOpacity>
     )
   }
@@ -145,11 +137,37 @@ class SVOSearchView extends Component {
   }
 
   _search(content){
-    this.setState({searchContent:content, history:null, searchData:[{name:'肯德基1', distance:'100m'}, {name:'肯德基2', distance:'200m'}]})
+    if(content){
+      this.setState({loading:true})
+      content = content.trim();
+      this._saveAsHistory(content);
+
+      this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_CHECK_COMPANY , {keyword:content}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, searchData:res.entity.companyList, searchContent:content})
+          }else{
+            this.setState({loading:false})
+          }
+        })
+    }
   }
 
   _onSearchTextChanged(text){
     this.setState({searchContent:text})
+  }
+
+  _saveAsHistory(content){
+    let { history } = this.state;
+    if(history.indexOf(content) == -1) history.push(content);
+    this.props.dispatch({type:'SAVE_MERCHANT_LIST', data:history})
+  }
+
+  _deleteAsHistory(content, index){
+    let { history } = this.state;
+    history.splice(index, 1)
+    this.props.dispatch({type:'SAVE_MERCHANT_LIST', data:history})
+    this.setState({history})
   }
 }
 

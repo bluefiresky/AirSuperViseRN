@@ -33,7 +33,7 @@ class SVOInspectedMerchantView extends Component {
     this.state = {
       loading: false,
       CurrentPointTypeCode:0,
-      name:null,
+      merchant:{},
       introduction:null,
       point:null
     }
@@ -59,13 +59,13 @@ class SVOInspectedMerchantView extends Component {
   }
 
   render(){
-    let { loading, name, introduction, point } = this.state;
+    let { loading, merchant, introduction, point } = this.state;
 
     return(
       <View style={styles.container}>
         <View style={{flex:1, margin:PaddingHorizontal, backgroundColor:'white'}}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {this.renderMerchantInput(name)}
+            {this.renderMerchantInput(merchant.companyName)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderLocationInput()}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -169,7 +169,7 @@ class SVOInspectedMerchantView extends Component {
   /** Private **/
   _search(){
     Actions.svoSearch({searchResult:(merchant) => {
-      this.setState({name:merchant.name})
+      this.setState({merchant})
     }});
   }
 
