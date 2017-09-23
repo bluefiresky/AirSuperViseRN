@@ -3,6 +3,7 @@ package com.airsupervisern;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.zyu.ReactNativeWheelPickerPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.rssignaturecapture.RSSignatureCapturePackage;
 import com.imagepicker.ImagePickerPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeWheelPickerPackage(),
             new OrientationPackage(),
             new RSSignatureCapturePackage(),
             new ImagePickerPackage(),

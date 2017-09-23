@@ -11,7 +11,7 @@ import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, formLeftText, commonText, placeholderColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, Input, XButton } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, Input, XButton, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -21,10 +21,11 @@ const CodeButtonW = 80;
 const MobileInputW = W - CodeButtonW - PaddingHorizontal*2 - InputPaddingHorizontal;
 const LocationInputW = W - PaddingHorizontal*2 - 20 - InputPaddingHorizontal;
 const InputH = 50;
-const PointType = [{name:'消防', code:0}, {name:'空防', code:1}, {name:'其他', code:2}];
 const ButtonW = (W - PaddingHorizontal*2 - 20*3)/2;
 const NavIcon = require('./image/icon-nav.png');
 const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
+
+const PointName = {'1':'消防', '2':'空防', '3':'其他'}
 
 class SVOInspectedMerchantView extends Component {
 
@@ -34,32 +35,18 @@ class SVOInspectedMerchantView extends Component {
       loading: false,
       CurrentPointTypeCode:0,
       merchant:{},
-      introduction:null,
-      point:null
+      location:props.location,
     }
 
     this._search = this._search.bind(this);
-    this._onPointTextChange = this._onPointTextChange.bind(this);
-    this._onIntroductionTextChange = this._onIntroductionTextChange.bind(this);
-  }
-
-  componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 100);
-    })
-  }
-
-  componentWillUnmount(){
-
+    this._airCheckIn = this._airCheckIn.bind(this);
+    this._fireCheckIn = this._fireCheckIn.bind(this);
+    this._checkSubmitData = this._checkSubmitData.bind(this);
   }
 
   render(){
-    let { loading, merchant, introduction, point } = this.state;
+    let { loading, merchant, location } = this.state;
+    let { address } = this.props.fields;
 
     return(
       <View style={styles.container}>
@@ -67,14 +54,14 @@ class SVOInspectedMerchantView extends Component {
           <ScrollView showsVerticalScrollIndicator={false}>
             {this.renderMerchantInput(merchant.companyName)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            {this.renderLocationInput()}
+            {this.renderLocationInput(location)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            <Input label={'详细地址'} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} style={{height:InputH}}/>
+            <Input label={'详细地址'} {...address} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} style={{height:InputH}}/>
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            {this.renderIntroduction(introduction)}
-            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            {this.renderPoint(point)}
-            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+            {this.renderIntroduction(merchant.introduction)}
+            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:merchant.introduction?borderColor:'transparent'}} />
+            {this.renderPoint(merchant.companyCheckList)}
+            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:merchant.companyCheckList?borderColor:'transparent'}} />
           </ScrollView>
           <View style={{flex:1}} />
           {this.renderSubmitButton()}
@@ -105,6 +92,8 @@ class SVOInspectedMerchantView extends Component {
   }
 
   renderIntroduction(introduction){
+    if(!introduction) return null;
+
     return(
       <View style={{paddingHorizontal:InputPaddingHorizontal, paddingVertical:15}}>
         <Text style={{width: 100, color: formLeftText, fontSize: 16 }}>被检查简介</Text>
@@ -114,41 +103,44 @@ class SVOInspectedMerchantView extends Component {
           underlineColorAndroid={'transparent'}
           placeholder={'请输入被检查代为简介'}
           placeholderTextColor={placeholderColor}
-          onChangeText={this._onIntroductionTextChange}
           minHeight={AutoGrowingInputMinH}
+          editable={false}
         />
       </View>
     )
   }
 
-  renderPoint(point){
+  renderPoint(points){
+    if(!points) return null;
+    let point = points[this.state.CurrentPointTypeCode];
+
     return(
       <View style={{paddingHorizontal:InputPaddingHorizontal, paddingVertical:15}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{width: 100, color: formLeftText, fontSize: 16, marginTop:5 }}>检查要点</Text>
-          {this.renderPointType()}
+          {this.renderPointType(points)}
         </View>
         <AutoGrowingTextInput
           style={styles.autoTextInput}
-          value={point}
+          value={point.checkDescribe}
           underlineColorAndroid={'transparent'}
           placeholder={'请输入检查要点'}
           placeholderTextColor={placeholderColor}
-          onChangeText={this._onPointTextChange}
           minHeight={AutoGrowingInputMinH}
+          editable={false}
         />
       </View>
     )
   }
 
-  renderPointType(){
+  renderPointType(points){
     return(
       <View style={{flexDirection:'row', flex:1}}>
-        {PointType.map((pt, index) => {
-          let show = this.state.CurrentPointTypeCode === pt.code?{back:mainColor, text:'white'}:{back:mainBackColor, text:mainTextGreyColor}
+        {points.map((pt, index) => {
+          let show = this.state.CurrentPointTypeCode === index?{back:mainColor, text:'white'}:{back:mainBackColor, text:mainTextGreyColor}
           return(
             <TouchableOpacity key={index} onPress={this._changePointType.bind(this, pt, index)} activeOpacity={0.8} style={{height:30, width:60, backgroundColor:show.back, borderRadius:15, alignItems:'center', justifyContent:'center', marginRight:10}}>
-              <Text style={{fontSize:14, color:show.text}}>{pt.name}</Text>
+              <Text style={{fontSize:14, color:show.text}}>{PointName[pt.checkType]}</Text>
             </TouchableOpacity>
           )
         })}
@@ -174,28 +166,27 @@ class SVOInspectedMerchantView extends Component {
   }
 
   _airCheckIn(){
-    Actions.svoAirCheckIn();
+    let params = this._checkSubmitData();
+    if(params) Actions.svoAirCheckIn(params);
   }
 
   _fireCheckIn(){
-    Actions.svoFireCheckIn();
+    let params = this._checkSubmitData();
+    if(params) Actions.svoFireCheckIn(params);
   }
 
-  _resetTextInput() {
-   this._textInput.clear();
-   this._textInput.resetHeightToMin();
- }
-
  _changePointType(item, index){
-   this.setState({CurrentPointTypeCode:item.code})
+   this.setState({CurrentPointTypeCode:index})
  }
 
- _onIntroductionTextChange(text){
-   this.setState({introduction:text})
- }
-
- _onPointTextChange(text){
-   this.setState({point:text})
+ _checkSubmitData(){
+   let { merchant, location } = this.state;
+   if(merchant.companyName){
+     let { address } = this.props.form.getData();
+     return {merchant, address, location};
+   }else{
+     Toast.showShortCenter('检查单位未选取');
+   }
  }
 
 }
@@ -227,6 +218,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const ExportView = connect()(SVOInspectedMerchantView);
+/** post-提交所需数据配置 */
+const fields = ['address']
+const validate = (assert, fields) => {
+  assert("address", ValidateMethods.required(), '请输入详细地址')
+}
+
+const ExportView = connect()(form_connector(SVOInspectedMerchantView, fields, validate));
 
 module.exports.SVOInspectedMerchantView = ExportView

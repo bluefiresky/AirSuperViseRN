@@ -43,6 +43,7 @@ class RootView extends Component {
               <Scene key="login" component={Scenes.LoginView} title='登录' direction="vertical" hideNavBar={true} initial={!isAuth} panHandlers={null}/>
               <Scene key="commonWeb" component={Scenes.CommonWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="signature" component={Scenes.SignatureView} hideNavBar={true} backTitle='返回' panHandlers={null}/>
+              <Scene key="lawWeb" component={Scenes.LawWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
               <Scene key="apHome" component={Scenes.APHomeView} title='网上办公大厅' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apFireControlTypes" component={Scenes.APFireControlTypesView} title='消防网上预约办理' hideNavBar={false} backTitle='返回' panHandlers={null}/>
@@ -52,7 +53,7 @@ class RootView extends Component {
               <Scene key="apAirMerchantCheckHistory" component={Scenes.APAirMerchantCheckHistoryView} title='空防单位审核历史' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apAirMerchantCheckDetail" component={Scenes.APAirMerchantCheckDetailView} title='空防单位审核详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
-              <Scene key="svoHome" initial={true} component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoHome" component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoInspectedMerchant" component={Scenes.SVOInspectedMerchantView} title='选择被检查单位' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoSearch" component={Scenes.SVOSearchView} title='单位搜索' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoAirCheckIn" component={Scenes.SVOAirCheckInView} title='空防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
@@ -61,6 +62,7 @@ class RootView extends Component {
               <Scene key="svoFireCheckInTempletWeb" component={Scenes.SVOFireCheckInTempletWebView} title='消防检查模板Web' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoHistoryCheckIn" component={Scenes.SVOHistoryCheckInView} title='历史检查记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoCheckInDetail" component={Scenes.SVOCheckInDetailView} title='历史检查记录详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoSearchPolice" component={Scenes.SVOSearchPoliceView} title='选择民警' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
               <Scene key="svmHome" component={Scenes.SVMHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svmCheckedIn" component={Scenes.SVMCheckedInView} title='被检查列表' hideNavBar={false} backTitle='返回' panHandlers={null}/>
@@ -92,6 +94,7 @@ class RootView extends Component {
             <Scene key="tip" component={Scenes.TipView} />
             <Scene key="netTip" component={Scenes.NetTipView} />
             <Scene key="bigImage" component={Scenes.BigImageView} />
+            <Scene key="policeList" component={Scenes.PoliceListView} />
 
           </Scene>
         </Router>

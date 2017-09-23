@@ -112,7 +112,7 @@ class SVOHomeView extends Component {
     if(type === 0){
       Toast.showShortCenter('待开发')
     }else if(type === 1){
-      Actions.svoInspectedMerchant()
+      Actions.svoInspectedMerchant({location:{address:'你猜', latitude:'111.11', longitude:'222.22'}})
     }else if(type === 2){
       Actions.svoHistoryCheckIn()
     }

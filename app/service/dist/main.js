@@ -59,3 +59,21 @@ export const post_get_supervise_police_check_history = ({checkListStatus, versio
 export const post_get_supervise_check_company = ({keyword, version}) => {
   return http_post( 'supervision.getCheckCompany', {keyword}, {}, version )
 }
+
+/** 安全监管-民警-获取民警列表 */
+export const post_get_supervise_check_police = ({version}) => {
+  return http_post( 'supervision.getCheckPolice', {}, {}, version )
+}
+
+/** 安全监管-民警-提交登记记录 */
+export const post_supervise_submit_check = ({
+  companyNum, companyName, listType, checkResult, signType, circulationType, templateType, appVersion,
+  locationAddress, inputAddress, longitude, latitude, signData, checkPhoneNum, checkDetails, urgentType, timeLimit, templateData, ccCompanyList, lawList, photoList, policeUserList,
+  version}) => {
+  return http_post(
+    'supervision.submitChecklist',
+    {companyNum, companyName, listType, checkResult, signType, circulationType, templateType, appVersion},
+    {policeUserList, locationAddress, inputAddress, longitude, latitude, signData, checkPhoneNum, checkDetails, urgentType, timeLimit, templateData, ccCompanyList, lawList, photoList},
+    version
+  )
+}

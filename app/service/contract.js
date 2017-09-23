@@ -39,6 +39,10 @@ export const POST_GET_SUPERVISE_COMPANY_CHECK_HISTORY = 'post_get_supervise_comp
 export const POST_GET_SUPERVISE_COMPANY_CHAOSONG_HISTORY = 'post_get_supervise_company_chaosong_history';  // 安全监管-获取单位人员历史检查单
 export const POST_GET_SUPERVISE_POLICE_CHECK_HISTORY = 'post_get_supervise_police_check_history';     // 安全监管-民警-历史检查记录
 export const POST_GET_SUPERVISE_CHECK_COMPANY = 'post_get_supervise_check_company';           // 安全监管-搜索单位
+export const POST_GET_SUPERVISE_CHECK_POLICE = 'post_get_supervise_check_police';             // 安全监管-民警列表
+export const POST_SUPERVISE_SUBMIT_CHECK = 'post_supervise_submit_check';                     // 安全监管-提交登记记录
+
+
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)

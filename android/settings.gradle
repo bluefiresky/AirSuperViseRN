@@ -1,4 +1,6 @@
 rootProject.name = 'AirSuperViseRN'
+include ':react-native-wheel-picker'
+project(':react-native-wheel-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-picker/android')
 include ':react-native-orientation'
 project(':react-native-orientation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation/android')
 include ':react-native-signature-capture'

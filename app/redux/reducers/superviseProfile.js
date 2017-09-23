@@ -6,6 +6,7 @@ import { POST_GET_SUPERVISE_USER_INFO, POST_USER_LOGOUT } from '../../service/co
 
 const initial = {
   /** police */
+  userid:null,
   phoneNum:null,
   policeDeptName:null,
   policeJob:null,
