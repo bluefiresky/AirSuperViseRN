@@ -56,6 +56,7 @@ class RootView extends Component {
               <Scene key="svoHome" component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoInspectedMerchant" component={Scenes.SVOInspectedMerchantView} title='选择被检查单位' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoSearch" component={Scenes.SVOSearchView} title='单位搜索' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoCopySearch" component={Scenes.SVOCopySearchView} title='抄送单位搜索' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoAirCheckIn" component={Scenes.SVOAirCheckInView} title='空防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoFireCheckIn" component={Scenes.SVOFireCheckInView} title='消防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoFireCheckInTemplet" component={Scenes.SVOFireCheckInTempletView} title='消防检查模板' hideNavBar={false} backTitle='返回' panHandlers={null}/>

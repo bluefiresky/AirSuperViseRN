@@ -26,6 +26,7 @@ export { APAirMerchantCheckDetailView } from './appointment/APAirMerchantCheckDe
 export { SVOHomeView } from './supervise/SVOHomeView.js';
 export { SVOInspectedMerchantView } from './supervise/SVOInspectedMerchantView.js';
 export { SVOSearchView } from './supervise/SVOSearchView.js';
+export { SVOCopySearchView } from './supervise/SVOCopySearchView.js';
 export { SVOAirCheckInView } from './supervise/SVOAirCheckInView.js';
 export { SVOFireCheckInView } from './supervise/SVOFireCheckInView.js';
 export { SVOFireCheckInTempletView } from './supervise/SVOFireCheckInTempletView.js';

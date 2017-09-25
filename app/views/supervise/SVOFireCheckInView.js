@@ -85,17 +85,6 @@ class SVOFireCheckInView extends Component {
 
   }
 
-  componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
-  }
-
   render(){
     let { loading, checkPolices, pickerPhotos, currentCheckResult, refuse, currentSending, currentEmergentLevel, changedDate, templet, sendCopyMerchant, signImage  } = this.state;
     let { merchantPhone } = this.props.fields;
@@ -403,8 +392,6 @@ class SVOFireCheckInView extends Component {
   }
 
   _goSelectTemplet(){
-    // Actions.svoFireCheckInTempletWeb({url:'https://test.zhongchebaolian.com/app_test/test.html'})
-    // this.setState({templet:'模板一'})
     Actions.svoFireCheckInTemplet({callback:(templateType, templeteName, content) => {
       this.setState({templet:{templateType, templeteName, content}})
     }});
@@ -445,14 +432,14 @@ class SVOFireCheckInView extends Component {
   }
 
   _sendCopySearch(){
-    Actions.svoSearch({searchResult:(merchant) => {
+    Actions.svoCopySearch({searchResult:(merchant) => {
       let { sendCopyMerchant } = this.state;
       if(sendCopyMerchant){
         let { nameArray, entity } = sendCopyMerchant;
-        entity.push({ccCompanyNum:merchant.companyNum, ccCompanyName:merchant.companyName})
-        nameArray.push(merchant.companyName)
+        entity.push({ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName})
+        nameArray.push(merchant.ccCompanyName)
       }else{
-        sendCopyMerchant = {nameArray:[merchant.companyName], entity:[{ccCompanyNum:merchant.companyNum, ccCompanyName:merchant.companyName}]}
+        sendCopyMerchant = {nameArray:[merchant.ccCompanyName], entity:[{ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName}]}
       }
       this.setState({sendCopyMerchant})
     }});

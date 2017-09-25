@@ -60,6 +60,11 @@ export const post_get_supervise_check_company = ({keyword, version}) => {
   return http_post( 'supervision.getCheckCompany', {keyword}, {}, version )
 }
 
+/** 安全监管-民警-搜索抄送单位 */
+export const post_get_supervise_copy_company = ({keyword, version}) => {
+  return http_post( 'supervision.getCcCompany', {keyword}, {}, version )
+}
+
 /** 安全监管-民警-获取民警列表 */
 export const post_get_supervise_check_police = ({version}) => {
   return http_post( 'supervision.getCheckPolice', {}, {}, version )

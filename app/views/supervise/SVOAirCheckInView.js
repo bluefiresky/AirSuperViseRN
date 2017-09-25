@@ -466,14 +466,14 @@ class SVOAirCheckInView extends Component {
   }
 
   _sendCopySearch(){
-    Actions.svoSearch({searchResult:(merchant) => {
+    Actions.svoCopySearch({searchResult:(merchant) => {
       let { sendCopyMerchant } = this.state;
       if(sendCopyMerchant){
         let { nameArray, entity } = sendCopyMerchant;
-        entity.push({ccCompanyNum:merchant.companyNum, ccCompanyName:merchant.companyName})
-        nameArray.push(merchant.companyName)
+        entity.push({ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName})
+        nameArray.push(merchant.ccCompanyName)
       }else{
-        sendCopyMerchant = {nameArray:[merchant.companyName], entity:[{ccCompanyNum:merchant.companyNum, ccCompanyName:merchant.companyName}]}
+        sendCopyMerchant = {nameArray:[merchant.ccCompanyName], entity:[{ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName}]}
       }
       this.setState({sendCopyMerchant})
     }});
