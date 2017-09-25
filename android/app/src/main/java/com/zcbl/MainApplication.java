@@ -1,7 +1,8 @@
-package com.airsupervisern;
+package com.zcbl;
 
 import android.app.Application;
 
+import com.airsupervisern.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.github.yamill.orientation.OrientationPackage;
@@ -30,10 +31,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new ReactNativeWheelPickerPackage(),
-            new OrientationPackage(),
-            new RSSignatureCapturePackage(),
-            new ImagePickerPackage(),
+          new ReactNativeWheelPickerPackage(),
+          new OrientationPackage(),
+          new RSSignatureCapturePackage(),
+          new ImagePickerPackage(),
           new VectorIconsPackage(),
           new PickerViewPackage(),
           new RCTToastPackage()
