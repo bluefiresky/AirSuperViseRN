@@ -9,12 +9,12 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const ComponentW = (W - 30);
+const ItemH = 120;
 
 class SVOFireCheckInTempletView extends Component {
 
@@ -23,21 +23,8 @@ class SVOFireCheckInTempletView extends Component {
     this.state = {
       loading: false,
     }
-  }
 
-  componentDidMount(){
-    // 保证动画加载完成，在进行其他耗时操作
-    let self = this;
-    InteractionManager.runAfterInteractions(() => {
-      self.setState({loading: true})
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
-  }
-
-  componentWillUnmount(){
-
+    this._goSelectTemplet = this._goSelectTemplet.bind(this);
   }
 
   render(){
@@ -45,10 +32,34 @@ class SVOFireCheckInTempletView extends Component {
 
     return(
       <View style={styles.container}>
-        <Text style={{fontSize: 20, color: 'black'}} onPress={()=> Actions.login()}>SVOSearchView</Text>
+        <View style={{flexDirection:'row'}}>
+          {this.renderItem('2', '模板一', '消防监督检查记录', 'https://www.baidu.com')}
+          {this.renderItem('3', '模板二', '消防监督检查记录', 'https://test.zhongchebaolian.com/airport-web-api/fire-report.html', '(其他形式消防监督检查适用)')}
+        </View>
         <ProgressView show={loading} />
       </View>
     )
+  }
+
+  renderItem(type, name, label, url, subLabel){
+    return (
+      <TouchableOpacity onPress={this._goSelectTemplet.bind(this, type, name, url)} activeOpacity={0.8} style={{flex:1, height:ItemH, paddingVertical:15, paddingHorizontal:10}}>
+        <View style={{flex:1, backgroundColor:'white', borderColor:borderColor, borderWidth:StyleSheet.hairlineWidth, borderRadius:5, alignItems:'center', justifyContent:'center', paddingHorizontal:15}}>
+          <Text style={{color:mainTextGreyColor, fontSize:18}}>{label}</Text>
+          {
+            !subLabel? null:
+            <Text style={{color:placeholderColor, fontSize:12, marginTop:5}}>{subLabel}</Text>
+          }
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  /** Private **/
+  _goSelectTemplet(type, name, url){
+    // Actions.svoFireCheckInTempletWeb({url, moduleName:name, callback:this.props.callback})
+    Actions.pop();
+    if(this.props.callback) this.props.callback(type, name, JSON.stringify({name:'nicai', age:'woqu'}))
   }
 
 }
@@ -58,8 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: mainBackColor,
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 

@@ -36,7 +36,7 @@ const ArrowRight = require('./image/icon-arrow-right.png');
 
 const CheckResults = [{label:'合格', code:'1'},{label:'不合格', code:'2'},{label:'未检查', code:'3'},{label:'不适用', code:'4'}];
 const Sendings = [{label:'不流转', code:'1'},{label:'流转', code:'2'}];
-const EmergentLevels = [{label:'紧急', code:'0'},{label:'重要', code:'1'},{label:'一般', code:'2'}];
+const EmergentLevels = [{label:'紧急', code:'1'},{label:'重要', code:'2'},{label:'一般', code:'3'}];
 
 const PhotoOption = {
   title: '选择照片', //选择器的标题，可以设置为空来不显示标题
@@ -82,7 +82,6 @@ class SVOAirCheckInView extends Component {
     this._goSign = this._goSign.bind(this);
     this._convertStandardParams = this._convertStandardParams.bind(this);
     this._submit = this._submit.bind(this);
-    this._convertStandardParams = this._convertStandardParams.bind(this);
     this._sendCopySearch = this._sendCopySearch.bind(this);
   }
 

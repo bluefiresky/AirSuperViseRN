@@ -74,7 +74,7 @@ class SVOInspectedMerchantView extends Component {
   renderMerchantInput(name){
     return(
       <View style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal}}>
-        <Input value={name} label={'被检查单位'} labelWidth={100} placeholder={'请输入被检查单位'} noBorder={true} style={{width:MobileInputW, height:InputH}}/>
+        <Input value={name} label={'被检查单位'} labelWidth={100} placeholder={'请选择被检查单位'} noBorder={true} style={{width:MobileInputW, height:InputH}} editable={false}/>
         <TouchableOpacity onPress={this._search} activeOpacity={0.8} style={{height:30, width:CodeButtonW, backgroundColor:'rgb(255, 166, 77)', borderRadius:15, alignItems:'center', justifyContent:'center'}}>
           <Text style={{fontSize:14, color:'white'}}>{name?'重新选择':'选择'}</Text>
         </TouchableOpacity>
