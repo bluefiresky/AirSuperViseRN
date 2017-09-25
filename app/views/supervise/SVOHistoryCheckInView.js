@@ -168,7 +168,7 @@ class SubView extends Component{
 
   /** Private **/
   _onItemPress(item, index){
-    Actions.svmCheckedInDetail({record:item});
+    Actions.svoHistoryCheckInDetail({record:item});
   }
 
   _onCheckNotice(url){

@@ -42,7 +42,8 @@ export const POST_GET_SUPERVISE_CHECK_COMPANY = 'post_get_supervise_check_compan
 export const POST_GET_SUPERVISE_COPY_COMPANY = 'post_get_supervise_copy_company';             // 安全监管-搜索抄送单位
 export const POST_GET_SUPERVISE_CHECK_POLICE = 'post_get_supervise_check_police';             // 安全监管-民警列表
 export const POST_SUPERVISE_SUBMIT_CHECK = 'post_supervise_submit_check';                     // 安全监管-提交登记记录
-
+export const POST_GET_SUPERVISE_CHECK_DETAIL = 'post_get_supervise_check_detail';             // 安全监管-获取检查单详情
+export const POST_GET_SUPERVISE_SUBMIT_FEEDBACK = 'post_supervise_submit_feedback';           // 安全监管-提交检查单反馈
 
 
 /*

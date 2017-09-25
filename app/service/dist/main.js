@@ -82,3 +82,13 @@ export const post_supervise_submit_check = ({
     version
   )
 }
+
+/** 安全监管-民警-获取民警列表 */
+export const post_get_supervise_check_detail = ({checkListNum, version}) => {
+  return http_post( 'supervision.getCheckDetails', {checkListNum}, {}, version )
+}
+
+/** 安全监管-民警-获取民警列表 */
+export const post_supervise_submit_feedback = ({checkListNum, modifyDetails, photoList, version}) => {
+  return http_post( 'supervision.submitFeedback', {checkListNum}, {modifyDetails, photoList}, version )
+}
