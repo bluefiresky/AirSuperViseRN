@@ -27,6 +27,8 @@ const EntryImage4 = require('./image/icon-certificate-entry4.png');
 const EntryImage5 = require('./image/icon-certificate-entry5.png');
 
 const CheckRoleNum = '04';
+const InitProfile = {occupation:'', paperworkStatus:'', realname:'', serialNumber:'', organizationName:'', score:'', passArea:'', deadline:''}
+const PaperWorkStatusName = {'1':'有效', '2':'挂失', '9':'过期'};
 
 class CFHomeView extends Component {
 
@@ -35,6 +37,7 @@ class CFHomeView extends Component {
     this.state = {
       loading: false,
       role: props.role,
+      profile: InitProfile,
     }
   }
 
@@ -43,19 +46,28 @@ class CFHomeView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 100);
+      if(global.certificateProfile){
+        this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
+      }else{
+        this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
+          .then( res => {
+            if(res){
+              self.setState({loading:false, profile:this._convertData(res.entity)})
+            }else {
+              self.setState({loading:false})
+            }
+          })
+      }
     })
   }
 
   render(){
-    let { loading } = this.state;
+    let { loading, profile } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderHeader()}
+          {this.renderHeader(profile)}
           {this.renderCheckEntry()}
           {this.renderMineEntry()}
           <View style={{height:100}} />
@@ -65,26 +77,26 @@ class CFHomeView extends Component {
     )
   }
 
-  renderHeader(){
+  renderHeader(data){
     return(
       <View style={{backgroundColor:mainColor, paddingVertical:20}}>
         <View style={{flexDirection:'row'}}>
           <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
             <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
             <View style={{marginTop:-5, height:16, backgroundColor:'rgb(255, 166, 77)', borderRadius:8, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>民警</Text>
+              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{data.occupation}</Text>
             </View>
             <View style={{marginTop:5, height:16, backgroundColor:'rgb(0, 215, 149)', borderRadius:8, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>有效</Text>
+              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{data.paperworkStatus}</Text>
             </View>
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
-            <Text style={styles.headerTextMain}>持证人姓名：{'张三'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:7}]}>证件编号：{'010-27789370'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:7}]}>所属单位：{'机场公安分局'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:7}]}>剩余记分：{'8分'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:7}]}>通行区域：{'A/B/区'}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:7}]}>证件有效期：{'2018年1月1日到期'}</Text>
+            <Text style={styles.headerTextMain}>持证人姓名：{data.realname}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:7}]}>证件编号：{data.serialNumber}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:7}]}>所属单位：{data.organizationName}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:7}]}>剩余记分：{data.score}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:7}]}>通行区域：{data.passArea}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:7}]}>证件有效期：{data.deadline}</Text>
           </View>
         </View>
       </View>
@@ -93,7 +105,7 @@ class CFHomeView extends Component {
 
   renderCheckEntry(){
     if(!(this.state.role && this.state.role.roleNum == CheckRoleNum)) return null;
-    
+
     return(
       <View style={{paddingVertical:15, marginTop:10, backgroundColor:'white'}}>
         <Text style={{color:mainTextColor, fontSize:16, marginLeft:PaddingHorizontal}}>证件查询</Text>
@@ -141,7 +153,7 @@ class CFHomeView extends Component {
     if(type === 0){
       Actions.cfInspect()
     }else if(type === 1){
-
+      Toast.showShortCenter('暂未开通')
     }else if(type === 2){
       Actions.cfInspectedRecords()
     }else if(type === 3){
@@ -149,6 +161,11 @@ class CFHomeView extends Component {
     }else if(type === 4){
       Actions.cfScoreManager()
     }
+  }
+
+  _convertData(data){
+    let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline } = data;
+    return {occupation, paperworkStatus:PaperWorkStatusName[paperworkStatus], realname, serialNumber, organizationName, score, passArea, deadline};
   }
 
 }

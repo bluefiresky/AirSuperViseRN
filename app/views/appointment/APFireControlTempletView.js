@@ -38,9 +38,7 @@ class APFireControlTempletView extends Component {
     this.setState({loading:true});
     let self = this;
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, url:'https://www.baidu.com'})
-      }, 1000);
+      self.setState({url:'https://www.baidu.com'})
     })
   }
 

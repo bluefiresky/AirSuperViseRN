@@ -1,4 +1,4 @@
-package com.airsupervisern;
+package com.zcbl;
 
 import com.facebook.react.ReactActivity;
 

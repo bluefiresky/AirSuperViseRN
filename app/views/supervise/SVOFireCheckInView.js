@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 安全监管首页-官方(Official)
+* 安全监管首页-消防登记记录
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -10,9 +10,10 @@ import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { CheckBox } from 'react-native-elements';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import ImagePicker from 'react-native-image-picker';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, XButton, Input } from '../../components/index.js';  /** 自定义组件 */
+import { Version, W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { ProgressView, XButton, Input, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -33,9 +34,21 @@ const CameraIcon = require('./image/camera.png');
 const DeleteIcon = require('./image/icon-search-delete.png');
 const ArrowRight = require('./image/icon-arrow-right.png');
 
-const CheckResults = [{label:'合格', code:'0'},{label:'不合格', code:'1'}];
-const Sendings = [{label:'不流转', code:'0'},{label:'流转', code:'1'}];
-const EmergentLevels = [{label:'非常紧急', code:'0'},{label:'紧急', code:'1'},{label:'一般', code:'2'}];
+const CheckResults = [{label:'合格', code:'1'},{label:'不合格', code:'2'}];
+const Sendings = [{label:'不流转', code:'1'},{label:'流转', code:'2'}];
+const EmergentLevels = [{label:'紧急', code:'1'},{label:'重要', code:'2'},{label:'一般', code:'3'}];
+
+const PhotoOption = {
+  title: '选择照片', //选择器的标题，可以设置为空来不显示标题
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍照', //调取摄像头的按钮，可以设置为空使用户不可选择拍照
+  chooseFromLibraryButtonTitle: '从手机相册选择', //调取相册的按钮，可以设置为空使用户不可选择相册照片
+  mediaType: 'photo',
+  maxWidth: 750,
+  maxHeight: 1000,
+  quality: 0.5,
+  storageOptions: { cameraRoll:true, skipBackup: true, path: 'images' }
+}
 
 class SVOFireCheckInView extends Component {
 
@@ -43,37 +56,38 @@ class SVOFireCheckInView extends Component {
     super(props);
     this.state = {
       loading: false,
-      checkPolices: [1,2,3,4],
+      merchant: props.merchant,
+      address: props.address,
+      location: props.location,
+      checkPolices: [{userid:global.superviseProfile.userid, name:global.superviseProfile.policeName}],
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
-      currentCheckResult: CheckResults[0],
+      currentCheckResult: {},
       refuse: false,
-      currentSending: Sendings[0],
-      notStandStardDetail: null,
-      currentEmergentLevel: EmergentLevels[2],
+      currentSending: {},
+      currentEmergentLevel: {},
       changedDate: null,
       templet: null,
-      sendCopyMerchant: null
+      sendCopyMerchant: null,
+      signImage: null,
     }
 
     this._onRefuseCheck = this._onRefuseCheck.bind(this);
     this._goSelectTemplet = this._goSelectTemplet.bind(this);
-    this._onNotStandardDetailTextChange = this._onNotStandardDetailTextChange.bind(this);
     this._sendCopySearch = this._sendCopySearch.bind(this);
-  }
+    this._goSelectPolice = this._goSelectPolice.bind(this);
+    this._onDeletePolice = this._onDeletePolice.bind(this);
+    this.currentPhotoIndex;
+    this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
+    this._rePickCallback = this._rePickCallback.bind(this);
+    this._goSign = this._goSign.bind(this);
+    this._convertStandardParams = this._convertStandardParams.bind(this);
+    this._submit = this._submit.bind(this);
 
-  componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
   }
 
   render(){
-    let { loading, checkPolices, pickerPhotos, currentCheckResult, refuse, currentSending, notStandStardDetail, currentEmergentLevel, changedDate, templet, sendCopyMerchant  } = this.state;
+    let { loading, checkPolices, pickerPhotos, currentCheckResult, refuse, currentSending, currentEmergentLevel, changedDate, templet, sendCopyMerchant, signImage  } = this.state;
+    let { merchantPhone } = this.props.fields;
 
     return(
       <View style={styles.container}>
@@ -86,13 +100,11 @@ class SVOFireCheckInView extends Component {
             {this.renderTempletSelect(templet)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderCheckResult(currentCheckResult)}
-            {this.renderCheckResultNotStandard(notStandStardDetail, currentEmergentLevel, changedDate)}
+            {this.renderCheckResultNotStandard(null, currentEmergentLevel, changedDate, sendCopyMerchant)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            {this.renderSign(null, refuse)}
+            {this.renderSign(signImage, refuse)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            <Input label={'被检查人联系电话'} labelWidth={150} placeholder={'请输入被检查人身份电话'} noBorder={true} style={{height:InputH, paddingLeft:16}}/>
-            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            {this.renderSendingCopySelect(sendCopyMerchant)}
+            <Input label={'被检查人联系电话'} {...merchantPhone} labelWidth={150} maxLength={11}  placeholder={'请输入被检查人身份电话'} noBorder={true} style={{height:InputH, paddingLeft:16}}/>
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderSending(currentSending)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -113,19 +125,22 @@ class SVOFireCheckInView extends Component {
           {
             data.map((item, index) => {
               return(
-                <View key={index} style={{flexDirection:'row', height:30, width:NameW, alignItems:'center', justifyContent:'center'}}>
-                  <View style={{width:NameTextW, height:20, borderRadius:10, alignItems:'center', justifyContent:'center', backgroundColor:mainBackColor}}>
-                    <Text style={{fontSize:14, color:inputRightColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}>{'张三风'}</Text>
+                <View key={index} style={{flexDirection:'row', height:30, alignItems:'center', justifyContent:'center'}}>
+                  <View style={{paddingHorizontal:5, height:20, borderRadius:10, alignItems:'center', justifyContent:'center', backgroundColor:mainBackColor}}>
+                    <Text style={{fontSize:14, color:inputRightColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}>{item.name}</Text>
                   </View>
-                  <TouchableOpacity style={{width:20, height:25}} >
-                    <Image source={DeleteIcon} style={{width:10, height:10, resizeMode:'contain'}} />
-                  </TouchableOpacity>
+                  {
+                    index == 0? <View style={{width:20, height:25}} /> :
+                    <TouchableOpacity onPress={this._onDeletePolice.bind(this, item, index)} style={{width:20, height:25}} >
+                      <Image source={DeleteIcon} style={{width:10, height:10, resizeMode:'contain'}} />
+                    </TouchableOpacity>
+                  }
                 </View>
               )
             })
           }
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={{width:AddPoliceButtonW, height:AddPoliceButtonW, alignItems:'center', justifyContent:'center'}}>
+        <TouchableOpacity onPress={this._goSelectPolice} activeOpacity={0.8} style={{width:AddPoliceButtonW, height:AddPoliceButtonW, alignItems:'center', justifyContent:'center'}}>
           <Image style={{height:25, width:25, backgroundColor:'lightskyblue'}} />
         </TouchableOpacity>
       </View>
@@ -147,10 +162,10 @@ class SVOFireCheckInView extends Component {
         {data.map((item, index) => {
             return(
               <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW}} />
                   }
 
                 </TouchableOpacity>
@@ -167,7 +182,7 @@ class SVOFireCheckInView extends Component {
         <View style={{flexDirection:'row', height:InputH, alignItems:'center'}}>
           <Text style={styles.starStyle}>*<Text style={styles.labelStyle}>检查内容</Text></Text>
           <TouchableOpacity onPress={this._goSelectTemplet} activeOpacity={0.8} style={{flex:1, justifyContent:'center'}}>
-            <Text style={{color:'red', fontSize:16}}>{content?'模板一：消防检查单':'选择'}</Text>
+            <Text style={{color:'red', fontSize:16}}>{content?content.templeteName:'请选择检查模板'}</Text>
           </TouchableOpacity>
           {
             !content? null :
@@ -210,7 +225,7 @@ class SVOFireCheckInView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity onPress={this._goSign}  activeOpacity={0.8}>
             {
               !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
               <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
@@ -225,7 +240,7 @@ class SVOFireCheckInView extends Component {
   renderSubmitButton(){
     return(
       <View style={{flexDirection:'row', height:80, alignItems:'center', justifyContent:'center'}}>
-        <XButton title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+        <XButton title='提交' onPress={this._submit} style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
       </View>
     )
   }
@@ -254,14 +269,16 @@ class SVOFireCheckInView extends Component {
     )
   }
 
-  renderCheckResultNotStandard(notStandStardDetail, currentEmergentLevel, changedDate){
-    if(this.state.currentCheckResult.code == '1'){
+  renderCheckResultNotStandard(notStandStardDetail, currentEmergentLevel, changedDate, sendCopyMerchant){
+    if(this.state.currentCheckResult.code == '2'){
       return(
         <View>
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this._renderEmergentLevel(currentEmergentLevel)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this._renderChangedDate(changedDate)}
+          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+          {this._renderSendingCopySelect(sendCopyMerchant)}
         </View>
       )
     }
@@ -302,21 +319,62 @@ class SVOFireCheckInView extends Component {
     )
   }
 
-  renderSendingCopySelect(content){
+  _renderSendingCopySelect(content){
+    let show = content? {color:mainTextGreyColor, text:content.nameArray.toString()} : {color:'red', text:'请选择抄送单位'};
     return(
-      <View style={{paddingHorizontal:PaddingHorizontal}}>
-        <View style={{flexDirection:'row', height:InputH, alignItems:'center'}}>
-          <Text style={[styles.starStyle, {color:'transparent'}]}>*<Text style={styles.labelStyle}>抄送单位</Text></Text>
-          <TouchableOpacity onPress={this._sendCopySearch} activeOpacity={0.8} style={{flex:1, justifyContent:'center'}}>
-            <Text style={{color:'red', fontSize:16}}>{content?content:'请选择抄送单位'}</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{flexDirection:'row', paddingVertical:15, alignItems:'center', paddingHorizontal:PaddingHorizontal}}>
+        <Text style={[styles.starStyle, {color:'transparent'}]}>*<Text style={styles.labelStyle}>抄送单位</Text></Text>
+        <TouchableOpacity onPress={this._sendCopySearch} activeOpacity={0.8} style={{flex:1, justifyContent:'center'}}>
+          <Text style={{color:show.color, fontSize:16}}>{show.text}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
 
 
   /** Private **/
+  _submit(){
+    let params;
+    if(this.state.currentCheckResult.code != '2'){
+      params = this._convertStandardParams();
+    }else{
+      params = this._convertNotStandardParams();
+    }
+
+    if(params){
+      this.setState({loading:true})
+      this.props.dispatch( create_service(Contract.POST_SUPERVISE_SUBMIT_CHECK, params))
+        .then( res => {
+          this.setState({loading:false})
+          if(res) {
+            Actions.success({
+              successType:'superviseSubmit',
+              modalCallback:()=>{
+                if(this._verifyEntryRole(global.myRoles, ['02'])) Actions.popTo('svoHome');
+                else Actions.popTo('svmHome');
+              }
+            });
+          }
+        })
+    }
+  }
+
+  _goSelectPolice(){
+    let self = this;
+    Actions.svoSearchPolice({callback:(data) => {
+      let { checkPolices } = self.state;
+      checkPolices.push(data);
+      this.setState({checkPolices})
+    }});
+  }
+
+  _onDeletePolice(item, index){
+    let { checkPolices } = this.state;
+    checkPolices.splice(index, 1);
+    this.setState({checkPolices})
+  }
+
+
   _onRefuseCheck(){
     this.setState({refuse:!this.state.refuse});
   }
@@ -333,17 +391,131 @@ class SVOFireCheckInView extends Component {
     this.setState({currentEmergentLevel:item})
   }
 
-  _onNotStandardDetailTextChange(text){
-    this.setState({notStandStardDetail:text})
+  _goSelectTemplet(){
+    Actions.svoFireCheckInTemplet({callback:(templateType, templeteName, content) => {
+      this.setState({templet:{templateType, templeteName, content}})
+    }});
   }
 
-  _goSelectTemplet(){
-    this.setState({templet:'模板一'})
+  _pickPhoto(item, index, rePick){
+    if(item.photo && !rePick){
+      this.currentPhotoIndex = index;
+      Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
+    }else{
+      ImagePicker.showImagePicker(PhotoOption, (response) => {
+        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+          // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
+          item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
+          this.forceUpdate();
+        }
+      });
+    }
+  }
+
+  _deletePhotoCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    item.photo = null;
+    this.forceUpdate();
+  }
+
+  _rePickCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    this._pickPhoto(item, this.currentPhotoIndex, true);
+  }
+
+  _goSign(){
+    Actions.signature({
+      callback:(signData) => {
+        this.setState({signImage:{uri:`data:image/jpeg;base64,${signData}`, isStatic:true}})
+      }
+    })
   }
 
   _sendCopySearch(){
-    this.setState({sendCopyMerchant:'肯德基222'})
+    Actions.svoCopySearch({searchResult:(merchant) => {
+      let { sendCopyMerchant } = this.state;
+      if(sendCopyMerchant){
+        let { nameArray, entity } = sendCopyMerchant;
+        entity.push({ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName})
+        nameArray.push(merchant.ccCompanyName)
+      }else{
+        sendCopyMerchant = {nameArray:[merchant.ccCompanyName], entity:[{ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName}]}
+      }
+      this.setState({sendCopyMerchant})
+    }});
   }
+
+  _convertStandardParams(){
+    let { checkPolices, pickerPhotos, templet, currentCheckResult, refuse, signImage, currentSending, address, location } = this.state;
+    if(!templet){
+      Toast.showShortCenter('请选择检查模板');
+    }else if(!currentCheckResult.code){
+      Toast.showShortCenter('请选择检查结果');
+    }else if(!refuse && !signImage){
+      Toast.showShortCenter('请签字');
+    }else if(!currentSending.code){
+      Toast.showShortCenter('请选择是否流转')
+    }else{
+      let { companyNum, companyName } = this.state.merchant;
+      let { merchantPhone } = this.props.form.getData();
+
+      return {
+        companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
+        listType:'2', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
+        checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:templet.templateType, templateData:templet.content, appVersion:Version,
+        policeUserList:JSON.stringify(checkPolices), photoList:this._convertPhotosUri(pickerPhotos), timeLimit:'2012-12-21'
+      };
+    }
+  }
+
+  _convertNotStandardParams(){
+    let { checkPolices, templet, pickerPhotos, currentCheckResult, refuse, signImage, currentSending, address, location, currentEmergentLevel, changedDate, sendCopyMerchant } = this.state;
+    if(!templet){
+      Toast.showShortCenter('请选择检查模板');
+    }else if(!currentCheckResult.code){
+      Toast.showShortCenter('请选择检查结果');
+    }else if(!currentEmergentLevel.code){
+      Toast.showShortCenter('请选择紧急程度');
+    }else if(!refuse && !signImage){
+      Toast.showShortCenter('请签字');
+    }else if(!currentSending.code){
+      Toast.showShortCenter('请选择是否流转')
+    }else{
+      let { companyNum, companyName } = this.state.merchant;
+      let { merchantPhone } = this.props.form.getData();
+
+      return {
+        companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
+        listType:'1', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
+        checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:'1', appVersion:Version, policeUserList:JSON.stringify(checkPolices),
+        photoList:this._convertPhotosUri(pickerPhotos), urgentType:currentEmergentLevel.code, timeLimit:changedDate,
+        ccCompanyList:sendCopyMerchant?JSON.stringify(sendCopyMerchant.entity):null
+      };
+    }
+  }
+
+  _convertPhotosUri(photos){
+    let submit = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      if(p.photo) submit.push({photoData:p.photo.uri.replace('data:image/jpeg;base64,',''), photoType:'1'})
+    }
+    return JSON.stringify(submit);
+  }
+
+  _verifyEntryRole(source, targetList){
+    if(source && source.length > 0){
+      for(let i=0; i<source.length; i++){
+        let r = global.myRoles[i];
+        if(targetList.indexOf(r.roleNum) != -1) return r;
+      }
+
+      return false;
+    }else{
+      return false;
+    }
+  }
+
 
 }
 
@@ -389,6 +561,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const ExportView = connect()(SVOFireCheckInView);
+/** post-提交所需数据配置 */
+const fields = ['merchantPhone']
+const validate = (assert, fields) => {
+}
+
+const ExportView = connect()(form_connector(SVOFireCheckInView, fields, validate));
 
 module.exports.SVOFireCheckInView = ExportView;

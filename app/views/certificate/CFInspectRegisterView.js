@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { CheckBox } from 'react-native-elements';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
@@ -25,6 +26,17 @@ const SignW = W - PaddingHorizontal*2 - 60 - 20;
 const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
 
 const CameraIcon = require('./image/camera.png');
+const PhotoOption = {
+  title: '选择照片', //选择器的标题，可以设置为空来不显示标题
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍照', //调取摄像头的按钮，可以设置为空使用户不可选择拍照
+  chooseFromLibraryButtonTitle: '从手机相册选择', //调取相册的按钮，可以设置为空使用户不可选择相册照片
+  mediaType: 'photo',
+  maxWidth: 750,
+  maxHeight: 1000,
+  quality: 0.5,
+  storageOptions: { cameraRoll:true, skipBackup: true, path: 'images' }
+}
 
 class CFInspectRegisterView extends Component {
 
@@ -35,26 +47,27 @@ class CFInspectRegisterView extends Component {
       law: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       refuse: false,
-      scroe: null
+      signImage: null,
+      scroe: null,
+      searchProfile: props.searchProfile,
     }
 
+    this.currentPhotoIndex;
+    this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
+    this._rePickCallback = this._rePickCallback.bind(this);
+    this._submit = this._submit.bind(this);
     this._onRefuseCheck = this._onRefuseCheck.bind(this);
     this._goSelectLaw = this._goSelectLaw.bind(this);
+    this._convertPhotosUri = this._convertPhotosUri.bind(this);
+    this._convertToSubmitParams = this._convertToSubmitParams.bind(this);
+    this._goSign = this._goSign.bind(this);
   }
 
   componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 100);
-    })
   }
 
   render(){
-    let { loading, law, pickerPhotos, refuse, score } = this.state;
+    let { loading, law, pickerPhotos, refuse, score, signImage } = this.state;
 
     return(
       <View style={styles.container}>
@@ -64,7 +77,7 @@ class CFInspectRegisterView extends Component {
           <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
           {this.renderPhotoPicker(pickerPhotos)}
           <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
-          {this.renderSign(null, refuse)}
+          {this.renderSign(signImage, refuse)}
           {this.renderSubmitButton()}
         </ScrollView>
         <ProgressView show={loading} />
@@ -85,7 +98,7 @@ class CFInspectRegisterView extends Component {
           !law? null :
           <AutoGrowingTextInput
             style={[styles.autoTextInput, {color:placeholderColor}]}
-            value={law}
+            value={law.toString()}
             underlineColorAndroid={'transparent'}
             placeholder={''}
             placeholderTextColor={placeholderColor}
@@ -125,10 +138,10 @@ class CFInspectRegisterView extends Component {
         {data.map((item, index) => {
             return(
               <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW}} />
                   }
 
                 </TouchableOpacity>
@@ -144,7 +157,7 @@ class CFInspectRegisterView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
             {
               !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
               <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
@@ -168,7 +181,7 @@ class CFInspectRegisterView extends Component {
   /** Private **/
   _goSelectLaw(){
     // Actions.cfLawRecordsView();
-    this.setState({law:'123', score:'15'})
+    this.setState({law:['01','02','03'], score:15})
   }
 
   _onRefuseCheck(){
@@ -176,9 +189,88 @@ class CFInspectRegisterView extends Component {
   }
 
   _submit(){
-    Actions.success({modalCallback:()=>{
-      Actions.popTo('cfHome')
-    }});
+    let params = this._convertToSubmitParams();
+    if(params){
+      this.setState({loading:true})
+      this.props.dispatch( create_service(Contract.POST_CERTIFICATE_CHECK, params))
+        .then( res => {
+          this.setState({loading:false})
+          if(res){
+            Actions.success({successType:'submit1', modalCallback:Actions.pop});
+          }
+        })
+    }
+  }
+
+  _pickPhoto(item, index, rePick){
+    if(item.photo && !rePick){
+      this.currentPhotoIndex = index;
+      Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
+    }else{
+      ImagePicker.showImagePicker(PhotoOption, (response) => {
+        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+          // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
+          item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
+          this.forceUpdate();
+        }
+      });
+    }
+  }
+
+  _deletePhotoCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    item.photo = null;
+    this.forceUpdate();
+  }
+
+  _rePickCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    this._pickPhoto(item, this.currentPhotoIndex, true);
+  }
+
+  _convertToSubmitParams(){
+    let params = null;
+    if(!this.state.law){
+      Toast.showShortCenter('请选择法律条文');
+    }else if (!this.state.score) {
+      Toast.showShortCenter('总扣分数不能为空');
+    }else if (!this.state.refuse && !this.state.signImage) {
+      Toast.showShortCenter('请签名')
+    }else {
+      let { searchProfile, refuse, score, pickerPhotos, law, signImage } = this.state;
+      params = {
+        paperworkSerialNumber:searchProfile.serialNumber,
+        signFlag:refuse? 0 : 1,
+        totalDeductionScore:score,
+        signImage:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):'',
+        legalProvisionNumbers:this._convertLaw(law),
+        livePhotos:this._convertPhotosUri(pickerPhotos)
+      }
+    }
+
+    console.log( ' the submit params -->> ', params);
+    return params;
+  }
+
+  _convertPhotosUri(photos){
+    let submit = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      if(p.photo) submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
+    }
+    return JSON.stringify(submit);
+  }
+
+  _convertLaw(law){
+    return JSON.stringify(law);
+  }
+
+  _goSign(){
+    Actions.signature({
+      callback:(signData) => {
+        this.setState({signImage:{uri:`data:image/jpeg;base64,${signData}`, isStatic:true}})
+      }
+    })
   }
 
 }

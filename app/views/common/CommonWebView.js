@@ -14,10 +14,6 @@ import { ProgressView } from '../../components/index.js';  /** 自定义组件 *
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const Headers = {
-  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-  'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G9008W Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36'
-}
 
 class CommonWebView extends Component {
 
@@ -62,7 +58,7 @@ class CommonWebView extends Component {
       <WebView
         scalesPageToFit={true}
         javaScriptEnabled={true}
-        source={{uri:url, headers:Headers}}
+        source={{uri:url}}
         style={{flex: 1}}
         onNavigationStateChange={this._onNavigationStateChange}
         startInLoadingState={true}

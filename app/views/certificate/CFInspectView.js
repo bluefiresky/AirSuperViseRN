@@ -32,6 +32,8 @@ class CFInspectView extends Component {
     }
 
     this._search = this._search.bind(this);
+    this._onSearchTextChanged = this._onSearchTextChanged.bind(this);
+    this._submit = this._submit.bind(this);
   }
 
   render(){
@@ -72,19 +74,19 @@ class CFInspectView extends Component {
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>查询结果</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultItem('证件编号：', '758293740527340857')}
+          {this.renderResultItem('证件编号：', data.serialNumber)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('持证人员：', '张三')}
+          {this.renderResultItem('持证人员：', data.realname)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', '123509809850')}
+          {this.renderResultItem('联系方式：', data.phone)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('所属单位：', '公安分局')}
+          {this.renderResultItem('所属单位：', data.organizationName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('可执勤区域：', 'A/B')}
+          {this.renderResultItem('可执勤区域：', data.passArea)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('证件积分：', '8分')}
+          {this.renderResultItem('证件积分：', data.score)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderPhotoItem(null)}
+          {this.renderPhotoItem(data.headImgUrl)}
         </View>
       </View>
     )
@@ -103,8 +105,8 @@ class CFInspectView extends Component {
     return(
       <View style={{flexDirection:'row', paddingVertical:15}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>证件照片</Text>
-        <TouchableOpacity activeOpacity={0.8} >
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+        <TouchableOpacity activeOpacity={0.8} enabled={false}>
+          <Image source={photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain'}} />
         </TouchableOpacity>
       </View>
     )
@@ -120,7 +122,11 @@ class CFInspectView extends Component {
 
   /** Private **/
   _submit(){
-    Actions.cfInspectRegister()
+    if(this.state.result){
+      Actions.cfInspectRegister({searchProfile:this.state.result})
+    }else{
+      Toast.showShortCenter('请先查询获取被检查人信息')
+    }
   }
 
   _onSearchTextChanged(text){
@@ -128,7 +134,21 @@ class CFInspectView extends Component {
   }
 
   _search(content){
-    this.setState({result:'123'})
+    if(content) {
+      this.setState({loading:true});
+      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO_BY_SERIANUMBER, {paperworkNumber:content}))
+        .then( res => {
+          if(res){
+            let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline, phone, headImgUrl } = res.entity;
+            let image = headImgUrl? {uri:headImgUrl}:null;
+            this.setState({loading:false, result:{serialNumber, realname, phone, organizationName, passArea, score, headImgUrl:image}})
+          }else{
+            this.setState({loading:false})
+          }
+        })
+    }else {
+      Toast.showShortCenter('证件编号不能为空')
+    }
   }
 
 }

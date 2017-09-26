@@ -33,6 +33,8 @@ const SecondaryIcon4 = require('./image/icon-advise.png');
 
 const AppType = Platform.select({android:1, ios:2});
 
+const RoleList = ['01'/** 普通用户 */, '02'/** 警员 */, '03'/** 商户管理员 */, '04'/** 证件监察员 */, '05'/** 持证人员 */, '06'/** 新机场证件审核人员 */];
+
 class HomeTab extends Component {
 
   constructor(props){
@@ -154,7 +156,8 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.reportHome();
     }else if(type === 2){
-      Actions.svoHome();
+      if(this._verifyEntryRole(global.myRoles, ['02'])) Actions.svoHome();
+      else if(this._verifyEntryRole(global.myRoles, ['03'])) Actions.svmHome();
     }
   }
 
@@ -167,9 +170,9 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.policeNews();
     }else if(type === 2){
-
+      Toast.showShortCenter('待开发');
     }else if(type === 3){
-
+      Toast.showShortCenter('待开发');
     }
   }
 
@@ -223,6 +226,19 @@ class HomeTab extends Component {
       return false;
     }else{
       Toast.showShortCenter('暂无进入权限')
+      return false;
+    }
+  }
+
+  _verifyEntryRole(source, targetList){
+    if(source && source.length > 0){
+      for(let i=0; i<source.length; i++){
+        let r = global.myRoles[i];
+        if(targetList.indexOf(r.roleNum) != -1) return r;
+      }
+
+      return false;
+    }else{
       return false;
     }
   }

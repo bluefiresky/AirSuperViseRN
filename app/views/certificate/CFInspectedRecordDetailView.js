@@ -19,13 +19,16 @@ const ItemH = 50;
 const PhotoWT = (W - PaddingHorizontal*4 - 20)/3;
 const PhotoW = PhotoWT > 100? 100 : PhotoWT;
 
+const CheckStatusName = {'1':'已扣分', '2':'复议审核中', '3':'复议成功', '9':'复议失败'}
+
 class CFInspectedRecordDetailView extends Component {
 
   constructor(props){
     super(props);
     this.state = {
       loading: false,
-      data: null
+      recordID: props.record.id,
+      data: null,
     }
   }
 
@@ -34,9 +37,23 @@ class CFInspectedRecordDetailView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:'abc'})
-      }, 100);
+      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_CHECK_DETAIL, {id:self.state.recordID}))
+        .then( res => {
+          if(res){
+            let { checkStatus, checkerName, contactWay, createdTime, holderName, legalProvisionContents, livePhotos, resultImgUrl } = res.entity;
+            this.setState({
+              loading:false,
+              data:{...res.entity,
+                    checkStatus:CheckStatusName[checkStatus],
+                    legalProvisionContents:this._convertLawToText(legalProvisionContents),
+                    livePhotos:this._convertPhotos(livePhotos),
+                    resultImgUrl:'http://2t.5068.com/uploads/allimg/161205/68-1612051H503.jpg'
+                  }
+            })
+          }else{
+            this.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -63,22 +80,22 @@ class CFInspectedRecordDetailView extends Component {
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>查看扣分详情</Text>
-        <Text style={{position:'absolute', top:17, right:40, color:mainColor}} >处理通知单</Text>
+        <Text style={{position:'absolute', top:17, right:40, color:mainColor}} onPress={this._goCheckResult.bind(this, data.resultImgUrl)} >处理通知单</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultItem('创建时间：', '2012年12月21 06:06:06')}
+          {this.renderResultItem('创建时间：', data.createdTime)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('监察员：', '张三')}
+          {this.renderResultItem('监察员：', data.holderName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('被检查人：', '李四')}
+          {this.renderResultItem('被检查人：', data.checkerName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', '187937987592')}
+          {this.renderResultItem('联系方式：', data.contactWay)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('扣分内容：', '你猜猜吧')}
+          {this.renderHeightResultItem('扣分内容：', data.legalProvisionContents)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('状态：', '已扣分')}
+          {this.renderResultItem('状态：', data.checkStatus)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderPhotoItem(null)}
+          {this.renderPhotoItem(data.livePhotos)}
         </View>
       </View>
     )
@@ -93,19 +110,59 @@ class CFInspectedRecordDetailView extends Component {
     )
   }
 
-  renderPhotoItem(photo){
+  renderHeightResultItem(label, content){
     return(
-      <View style={{paddingVertical:15}}>
-        <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
-        <View style={{flexDirection:'row', marginTop:15}} >
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-          <View style={{width:10}} />
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-          <View style={{width:10}} />
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-        </View>
+      <View style={{paddingVertical:15, flexDirection:'row'}}>
+        <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
       </View>
     )
+  }
+
+  renderPhotoItem(photos){
+    if(photos){
+      return(
+        <View style={{paddingVertical:15}}>
+          <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
+          <View style={{flexDirection:'row', flexWrap:'wrap'}} >
+            {
+              photos.map((item, index) => {
+                return(
+                  <Image key={index} source={item.source} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue', marginRight:10, marginTop:10}} />
+                )
+              })
+            }
+          </View>
+        </View>
+      )
+    }
+  }
+
+  /** Private **/
+  _convertLawToText(contents){
+    let content = '';
+    for(let i=0; i<contents.length; i++){
+      let c = contents[i];
+      content+=`${c.content}\n`;
+    }
+    return content.trim();
+  }
+
+  _convertPhotos(photos){
+    let r = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      r.push({source:{uri:p}})
+    }
+    return r;
+  }
+
+  _goCheckResult(url){
+    if(url){
+      Actions.bigImage({source:{uri:url, isStatic:true}})
+    }else{
+      Toast.showShortCenter('未生成处理通知单')
+    }
   }
 
 

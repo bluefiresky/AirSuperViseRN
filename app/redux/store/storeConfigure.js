@@ -12,6 +12,9 @@ import track from './track.js'
 
 // reducers
 import { auth } from '../reducers/auth.js';
+import { certificateProfile } from '../reducers/certificateProfile.js';
+import { superviseProfile } from '../reducers/superviseProfile.js';
+import { merchantSearchHistory } from '../reducers/merchantSearchHistory.js';
 
 /**
  * configure store params
@@ -24,7 +27,7 @@ const createStoreWithMiddleware = applyMiddleware(
 )(createStore);
 // 合并 reducers
 const reducer = combineReducers({
-  auth
+  auth, certificateProfile, superviseProfile, merchantSearchHistory
 });
 
 

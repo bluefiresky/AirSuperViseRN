@@ -4,3 +4,96 @@
  */
 
 import { http_get, http_post, service_url } from "../service_helpers";
+
+/** 证件管理-检查记录 */
+export const post_get_certificate_check_list = ({version}) => {
+  return http_post( 'certificate.check.list', {}, {}, version )
+}
+
+/** 证件管理-检查记录详情 */
+export const post_get_certificate_check_detail = ({id, version}) => {
+  return http_post( 'certificate.check.detail', {id}, {}, version )
+}
+
+/** 证件管理- 记分管理*/
+export const post_get_certificate_deduction_list = ({version}) => {
+  return http_post( 'certificate.deduction.list', {}, {}, version )
+}
+
+/** 证件管理- 记分管理详情*/
+export const post_get_certificate_deduction_detail = ({id, version}) => {
+  return http_post( 'certificate.deduction.detail', {id}, {}, version )
+}
+
+/** 证件管理- 申请复议*/
+export const post_certificate_reconsider = ({id, reconsiderReason, version}) => {
+  return http_post( 'certificate.reconsider', {id}, {reconsiderReason}, version )
+}
+
+/** 证件管理- 提交临时证件丢失信息 */
+export const post_certificate_report_loss = ({paperworkSerialNumber, reportLossReason, photos, version}) => {
+  return http_post( 'certificate.report.loss', {paperworkSerialNumber}, {reportLossReason, photos}, version )
+}
+
+/** 证件管理- 违规登记 */
+export const post_certificate_check = ({paperworkSerialNumber, signFlag, totalDeductionScore, signImg, legalProvisionNumbers, livePhotos, version}) => {
+  return http_post( 'certificate.check', {paperworkSerialNumber, signFlag, totalDeductionScore, legalProvisionNumbers}, {signImg, livePhotos}, version )
+}
+
+/** 安全监管-单位人员历史检查单 */
+export const post_get_supervise_company_check_history = ({checkListStatus, urgentType, version}) => {
+  return http_post( 'supervision.getCompanyCheckHistory', {checkListStatus, urgentType}, {}, version )
+}
+
+/** 安全监管-单位人员历史检查单 */
+export const post_get_supervise_company_chaosong_history = ({urgentType, version}) => {
+  return http_post( 'supervision.getCcCheckHistory', {urgentType}, {}, version )
+}
+
+/** 安全监管-民警-历史检查记录 */
+export const post_get_supervise_police_check_history = ({checkListStatus, version}) => {
+  return http_post( 'supervision.getPoliceCheckHistory', {checkListStatus}, {}, version )
+}
+
+/** 安全监管-民警-搜索单位 */
+export const post_get_supervise_check_company = ({keyword, version}) => {
+  return http_post( 'supervision.getCheckCompany', {keyword}, {}, version )
+}
+
+/** 安全监管-民警-搜索抄送单位 */
+export const post_get_supervise_copy_company = ({keyword, version}) => {
+  return http_post( 'supervision.getCcCompany', {keyword}, {}, version )
+}
+
+/** 安全监管-民警-获取民警列表 */
+export const post_get_supervise_check_police = ({version}) => {
+  return http_post( 'supervision.getCheckPolice', {}, {}, version )
+}
+
+/** 安全监管-民警-提交登记记录 */
+export const post_supervise_submit_check = ({
+  companyNum, companyName, listType, checkResult, signType, circulationType, templateType, appVersion,
+  locationAddress, inputAddress, longitude, latitude, signData, checkPhoneNum, checkDetails, urgentType, timeLimit, templateData, ccCompanyList, lawList, photoList, policeUserList,
+  version}) => {
+  return http_post(
+    'supervision.submitChecklist',
+    {companyNum, companyName, listType, checkResult, signType, circulationType, templateType, appVersion},
+    {policeUserList, locationAddress, inputAddress, longitude, latitude, signData, checkPhoneNum, checkDetails, urgentType, timeLimit, templateData, ccCompanyList, lawList, photoList},
+    version
+  )
+}
+
+/** 安全监管-民警-获取民警列表 */
+export const post_get_supervise_check_detail = ({checkListNum, version}) => {
+  return http_post( 'supervision.getCheckDetails', {checkListNum}, {}, version )
+}
+
+/** 安全监管-民警-获取民警列表 */
+export const post_supervise_submit_feedback = ({checkListNum, modifyDetails, photoList, version}) => {
+  return http_post( 'supervision.submitFeedback', {checkListNum}, {modifyDetails, photoList}, version )
+}
+
+/** 安全监管-民警-提交审核状态 */
+export const post_supervise_submit_audit = ({checkListNum, auditStatus, auditDetails, version}) => {
+  return http_post( 'supervision.submitAudit', {checkListNum, auditStatus}, {auditDetails}, version )
+}

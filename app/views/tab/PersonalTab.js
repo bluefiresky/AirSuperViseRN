@@ -46,7 +46,7 @@ class PersonalTab extends Component {
     InteractionManager.runAfterInteractions(() => {
       self.timer = setTimeout(function () {
         self.setState({loading:false, data:{name:'你猜'}})
-      }, 1000);
+      }, 100);
     })
   }
 

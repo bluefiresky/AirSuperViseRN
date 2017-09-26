@@ -26,13 +26,19 @@ export { APAirMerchantCheckDetailView } from './appointment/APAirMerchantCheckDe
 export { SVOHomeView } from './supervise/SVOHomeView.js';
 export { SVOInspectedMerchantView } from './supervise/SVOInspectedMerchantView.js';
 export { SVOSearchView } from './supervise/SVOSearchView.js';
+export { SVOCopySearchView } from './supervise/SVOCopySearchView.js';
 export { SVOAirCheckInView } from './supervise/SVOAirCheckInView.js';
 export { SVOFireCheckInView } from './supervise/SVOFireCheckInView.js';
 export { SVOFireCheckInTempletView } from './supervise/SVOFireCheckInTempletView.js';
+export { SVOFireCheckInTempletWebView } from './supervise/SVOFireCheckInTempletWebView.js';
 export { SVOHistoryCheckInView } from './supervise/SVOHistoryCheckInView.js';
-export { SVOCheckInDetailView } from './supervise/SVOCheckInDetailView.js';
+export { SVOHistoryCheckedInDetailView } from './supervise/SVOHistoryCheckedInDetailView.js';
+export { SVOSearchPoliceView } from './supervise/SVOSearchPoliceView.js';
+export { SVOCheckReasonView } from './supervise/SVOCheckReasonView.js';
+
 export { SVMHomeView } from './supervise/SVMHomeView.js';
 export { SVMCheckedInView } from './supervise/SVMCheckedInView.js';
+export { SVMCheckedInDetailView } from './supervise/SVMCheckedInDetailView.js';
 
 export { CFHomeView } from './certificate/CFHomeView.js';
 export { CFInspectView } from './certificate/CFInspectView.js';
@@ -60,3 +66,7 @@ export { CommonWebView } from './common/CommonWebView.js';
 export { SuccessView } from './common/SuccessView.js';
 export { TipView } from './common/TipView.js';
 export { NetTipView } from './common/NetTipView.js';
+export { BigImageView } from './common/BigImageView.js';
+export { SignatureView } from './common/SignatureView.js';
+export { PoliceListView } from './common/PoliceListView.js';
+export { LawWebView } from './common/LawWebView.js';

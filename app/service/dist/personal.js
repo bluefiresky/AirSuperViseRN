@@ -14,3 +14,18 @@ export const get_user_info = ({userID, version}) => {
 export const post_user_role_lsit = ({version}) => {
   return http_post( 'getCurrentUserInfo', {}, {}, version )
 }
+
+/** 证件管理-当前用户信息 */
+export const post_get_certificate_user_info = ({version}) => {
+  return http_post( 'certificate.user.get', {}, {}, version )
+}
+
+/** 证件管理-证件编号-当前用户信息 */
+export const post_get_certificate_user_info_by_serialnumber = ({paperworkNumber, version}) => {
+  return http_post( 'certificate.paperwork.get', {paperworkNumber}, {}, version )
+}
+
+/** 安全监管-当前用户信息 */
+export const post_get_supervise_user_info = ({version}) => {
+  return http_post( 'supervision.getUserInfo', {}, {}, version )
+}

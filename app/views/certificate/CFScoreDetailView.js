@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 首页
+* 证件管理-扣分详情
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -20,14 +20,24 @@ const PhotoWT = (W - PaddingHorizontal*4 - 20)/3;
 const PhotoW = PhotoWT > 100? 100 : PhotoWT;
 const SubmitButtonW = W - (30 * 2);
 
+const CheckStatusName = {
+  '1':{label:'已扣分', color:'grey'},
+  '2':{label:'复议审核中', color:'rgb(255, 176, 91)'},
+  '3':{label:'复议成功', color:'green'},
+  '9':{label:'复议失败', color:'red'}
+}
+
 class CFScoreDetailView extends Component {
 
   constructor(props){
     super(props);
     this.state = {
       loading: false,
+      recordID: props.record.id,
       data: null,
     }
+
+    this._submit = this._submit.bind(this);
   }
 
   componentDidMount(){
@@ -35,9 +45,23 @@ class CFScoreDetailView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:'abc'})
-      }, 100);
+      self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_DEDUCTION_DETAIL, {id:self.state.recordID}))
+        .then( res => {
+          if(res){
+            let { holderName, checkStatus, resultImgUrl, createdTime, contactWay, checkerName, id, livePhotos, legalProvisionContents } = res.entity;
+            this.setState({
+              loading:false,
+              data:{...res.entity,
+                    checkStatus:CheckStatusName[checkStatus],
+                    legalProvisionContents:this._convertLawToText(legalProvisionContents),
+                    livePhotos:this._convertPhotos(livePhotos),
+                    resultImgUrl:'http://2t.5068.com/uploads/allimg/161205/68-1612051H503.jpg'
+                  }
+            })
+          }else {
+            self.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -62,22 +86,22 @@ class CFScoreDetailView extends Component {
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>查看扣分详情</Text>
-        <Text style={{position:'absolute', top:17, right:40, color:mainColor}} >处理通知单</Text>
+        <Text style={{position:'absolute', top:17, right:40, color:mainColor}} onPress={this._goCheckResult.bind(this, data.resultImgUrl)}>处理通知单</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultItem('创建时间：', '2012年12月21 06:06:06')}
+          {this.renderResultItem('创建时间：', data.createdTime)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('监察员：', '张三')}
+          {this.renderResultItem('监察员：', data.holderName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('被检查人：', '李四')}
+          {this.renderResultItem('被检查人：', data.checkerName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', '187937987592')}
+          {this.renderResultItem('联系方式：', data.contactWay)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('扣分内容：', '你猜猜吧')}
+          {this.renderHeightResultItem('扣分内容：', data.legalProvisionContents)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('状态：', '已扣分')}
+          {this.renderResultItem('状态：', data.checkStatus.label)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderPhotoItem(null)}
+          {this.renderPhotoItem(data.livePhotos)}
         </View>
       </View>
     )
@@ -92,36 +116,77 @@ class CFScoreDetailView extends Component {
     )
   }
 
-  renderPhotoItem(photo){
+  renderHeightResultItem(label, content){
     return(
-      <View style={{paddingVertical:15}}>
-        <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
-        <View style={{flexDirection:'row', marginTop:15}} >
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-          <View style={{width:10}} />
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-          <View style={{width:10}} />
-          <Image style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-        </View>
+      <View style={{paddingVertical:15, flexDirection:'row'}}>
+        <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
       </View>
     )
+  }
+
+  renderPhotoItem(photos){
+    if(photos){
+      return(
+        <View style={{paddingVertical:15}}>
+          <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
+          <View style={{flexDirection:'row', flexWrap:'wrap'}} >
+            {
+              photos.map((item, index) => {
+                return(
+                  <Image key={index} source={item.source} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue', marginRight:10, marginTop:10}} />
+                )
+              })
+            }
+          </View>
+        </View>
+      )
+    }
   }
 
   renderSubmitButton(data){
     if(!data) return null;
-
-    return(
-      <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
-        <XButton onPress={this._submit} title='申请复议' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
-        <Text style={{color:'red', fontSize:14, marginTop:30}}>注：申请复议时，申请信息将同步发送给直属相关领导</Text>
-      </View>
-    )
+    else if(data.checkStatus.label === CheckStatusName['1'].label){
+      return(
+        <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
+          <XButton onPress={this._submit} title='申请复议' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+          <Text style={{color:'red', fontSize:14, marginTop:30}}>注：申请复议时，申请信息将同步发送给直属相关领导</Text>
+        </View>
+      )
+    }
   }
 
   /** Private **/
   _submit(){
-    Actions.cfApplyReInspect();
+    Actions.cfApplyReInspect({record:this.state.data, refreshScoreList:this.props.refreshScoreList});
   }
+
+  _convertLawToText(contents){
+    let content = '';
+    for(let i=0; i<contents.length; i++){
+      let c = contents[i];
+      content+=`${c.content}\n`;
+    }
+    return content.trim();
+  }
+
+  _convertPhotos(photos){
+    let r = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      r.push({source:{uri:p}})
+    }
+    return r;
+  }
+
+  _goCheckResult(url){
+    if(url){
+      Actions.bigImage({source:{uri:url, isStatic:true}})
+    }else{
+      Toast.showShortCenter('未生成处理通知单')
+    }
+  }
+
 }
 
 const styles = StyleSheet.create({
