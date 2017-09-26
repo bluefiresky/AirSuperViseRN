@@ -11,6 +11,9 @@ import {Actions} from "react-native-router-flux";
 
 const OptionH = 50;
 
+const CloseIcon = require('./image/icon-close.png');
+const DeleteIcon = require('./image/icon-delete.png');
+
 class BigImageView extends React.Component {
 
   constructor(props){
@@ -52,14 +55,14 @@ class BigImageView extends React.Component {
 
     return(
       <View style={{width:W, height:OptionH, flexDirection:'row'}}>
-        <TouchableOpacity onPress={this._closeModal.bind(this)}  activeOpacity={0.8} style={{height:OptionH, width:OptionH, backgroundColor:'lightskyblue', alignItems:'center', justifyContent:'center'}}>
-          <Image style={{height:25, width:25, resizeMode:'contain'}}/>
+        <TouchableOpacity onPress={this._closeModal.bind(this)}  activeOpacity={0.8} style={{height:OptionH, width:OptionH, alignItems:'center', justifyContent:'center'}}>
+          <Image source={CloseIcon} style={{height:20, width:20, resizeMode:'contain', tintColor:'white'}}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={this._centerPress.bind(this, operation.rePick)}  activeOpacity={0.8} style={{height:OptionH, flex:1, alignItems:'center', justifyContent:'center'}}>
           <Text style={{color:'white', fontSize:16}}>重拍</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this._rightPress.bind(this, operation.clear)} activeOpacity={0.8} style={{height:OptionH, width:OptionH, backgroundColor:'lightskyblue', alignItems:'center', justifyContent:'center'}}>
-          <Image style={{height:25, width:25, resizeMode:'contain'}}/>
+        <TouchableOpacity onPress={this._rightPress.bind(this, operation.clear)} activeOpacity={0.8} style={{height:OptionH, width:OptionH, alignItems:'center', justifyContent:'center'}}>
+          <Image source={DeleteIcon} style={{height:20, width:20, resizeMode:'contain', tintColor:'white'}}/>
         </TouchableOpacity>
       </View>
     )

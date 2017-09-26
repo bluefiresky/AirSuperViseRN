@@ -62,17 +62,17 @@ class SVMCheckedInView extends Component {
   }
 
   render(){
-    let { loading, data, data1, data2, data3 } = this.state;
+    let { loading, data, data1, data2, data3, checkListStatus } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollableTabView
           renderTabBar={() => <TabBar />}
           initialPage={0}>
-          <SubView tabLabel='全部' data={data}/>
-          <SubView tabLabel='紧急' data={data1}/>
-          <SubView tabLabel='重要' data={data2}/>
-          <SubView tabLabel='一般' data={data3}/>
+          <SubView tabLabel='全部' data={data} checkListStatus={checkListStatus}/>
+          <SubView tabLabel='紧急' data={data1} checkListStatus={checkListStatus}/>
+          <SubView tabLabel='重要' data={data2} checkListStatus={checkListStatus}/>
+          <SubView tabLabel='一般' data={data3} checkListStatus={checkListStatus}/>
         </ScrollableTabView>
         <ProgressView show={loading} />
       </View>
@@ -169,7 +169,7 @@ class SubView extends Component{
 
   /** Private **/
   _onItemPress(item, index){
-    Actions.svmCheckedInDetail({record:item});
+    Actions.svmCheckedInDetail({record:item, checkListStatus:this.props.checkListStatus});
   }
 
   _onCheckNotice(url){
