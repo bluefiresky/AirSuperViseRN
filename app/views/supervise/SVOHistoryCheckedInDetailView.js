@@ -20,7 +20,7 @@ const LabelW = 80;
 const PaddingHorizontal = 20;
 const ItemH = 50;
 const PhotoW = ((W - PaddingHorizontal*2)/3) - 20;
-const SubmitButtonW = W - (30 * 2);
+const SubmitButtonW = (W - (30 * 2) - 20)/2;
 const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
 
 const CameraIcon = require('./image/camera.png');
@@ -43,13 +43,12 @@ class SVOHistoryCheckedInDetailView extends Component {
     this.state = {
       loading: false,
       checkListNum:props.record.checkListNum,
+      statusName: null,
       data: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       measure: null
     }
 
-    this._onMeasureTextChange = this._onMeasureTextChange.bind(this);
-    this._submit = this._submit.bind(this);
   }
 
   componentDidMount(){
@@ -60,7 +59,7 @@ class SVOHistoryCheckedInDetailView extends Component {
       this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_CHECK_DETAIL, {checkListNum:this.state.checkListNum}))
         .then( res => {
           if(res){
-            this.setState({loading:false})
+            this.setState({loading:false, data:res.entity, statusName:this._convertStatus(res.entity)})
           }else{
             this.setState({loading:false})
           }
@@ -73,13 +72,15 @@ class SVOHistoryCheckedInDetailView extends Component {
   }
 
   render(){
-    let { loading, data, measure, pickerPhotos } = this.state;
+    let { loading, data, measure, pickerPhotos, statusName } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderResult(data)}
-          {this.renderSumitData(data, measure, pickerPhotos)}
+          {this.renderResult(data, statusName)}
+          {this.renderSumitData1(data)}
+          {this.renderSumitData2(data)}
+          {this.renderCheckResult(data)}
           {this.renderSubmitButton(data)}
         </ScrollView>
         <ProgressView show={loading} />
@@ -87,7 +88,7 @@ class SVOHistoryCheckedInDetailView extends Component {
     )
   }
 
-  renderResult(data){
+  renderResult(data, statusName){
     if(!data) return null;
 
     return(
@@ -95,46 +96,79 @@ class SVOHistoryCheckedInDetailView extends Component {
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>检查情况</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultTypeItem('检查类型：', data.listTypeName, data.checkListStatusName)}
+          {this.renderResultTypeItem('检查类型：', data.listTypeName, statusName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('创建时间：', data.createTime)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('创建民警：', '')}
+          {this.renderResultItem('创建民警：', data.policeName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('警员编号：','')}
+          {this.renderResultItem('警员编号：', data.policeNum)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('被检查商户：', data.companyName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('商户联系人：', '')}
+          {this.renderResultItem('商户联系人：', data.processorName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', '')}
+          {this.renderResultItem('联系方式：', data.processorPhone)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderHeightResultItem('情况描述：', '')}
+          {this.renderHeightResultItem('情况描述：', data.checkDetails)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderPhotoItem(data.livePhotos)}
+          {this.renderPhotoItem(data.policePhotoList)}
         </View>
       </View>
     )
   }
 
-  renderSumitData(data, measure, pickerPhotos){
+  renderSumitData1(data, measure, pickerPhotos){
     if(!data) return null;
-
-    return(
-      <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
-        <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>商户反馈</Text>
-        <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-        <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultItem('提交人：', '')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', '')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderAutoGrowing(measure)}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderPhotoPicker(pickerPhotos)}
+    if(data.checkListStatus == '1'){
+      return(
+        <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
+          {data.signRecordList.map((item, index) => {
+            return (
+              <Text style={{color:mainColor, fontSize:16, marignTop:5}}>{item.signUserName+'\t'}
+                <Text style={{color:mainTextGreyColor, fontSize:16}}>{item.signDetails}</Text>
+              </Text>
+            );
+          })}
         </View>
-      </View>
-    )
+      )
+    }
+  }
+
+  renderSumitData2(data){
+    if(!data) return null;
+    else if(data.checkListStatus == '2'){
+      return(
+        <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
+          <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>商户反馈</Text>
+          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+          <View style={{paddingHorizontal:PaddingHorizontal}}>
+            {this.renderResultItem('提交人：', data.processorName)}
+            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+            {this.renderResultItem('联系方式：', data.processorPhone)}
+            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+            {this.renderHeightResultItem('整改措施：', data.modifyDetails)}
+            <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+            {this.renderPhotoItem(data.companyPhotoList)}
+          </View>
+        </View>
+      )
+    }
+  }
+
+  renderCheckResult(data){
+    if(!data) return null;
+    else if(data.checkListStatus != '1' && data.checkListStatus != '2' && data.finalAuditStatus == '2'){
+      return (
+        <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
+          <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>审核不通过原因</Text>
+          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
+          <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
+            <Text style={{color:mainTextGreyColor, fontSize:15}}>{data.auditDetails}</Text>
+          </View>
+        </View>
+      );
+    }
   }
 
   renderResultTypeItem(label, content, type){
@@ -172,131 +206,72 @@ class SVOHistoryCheckedInDetailView extends Component {
       return(
         <View style={{paddingVertical:15}}>
           <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
-          <View style={{flexDirection:'row', flexWrap:'wrap'}} >
-            {
-              photos.map((item, index) => {
+            <View style={{flexDirection:'row', marginTop:10}}>
+              {photos.map((item, index) => {
                 return(
-                  <Image key={index} source={item.source} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue', marginRight:10, marginTop:10}} />
+                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.photoUrl})} activeOpacity={0.8} style={{flex:1, height:PhotoW, justifyContent:'center', alignItems:'center'}}>
+                    <Image source={{uri:item.photoUrl}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                  </TouchableOpacity>
                 )
-              })
-            }
-          </View>
+              })}
+            </View>
         </View>
       )
     }
   }
 
-  renderAutoGrowing(content){
-    return(
-      <View style={{paddingVertical:15, backgroundColor:'white'}}>
-        <Text style={{width: 150, color: inputLeftColor, fontSize: 16 }}>整改措施：</Text>
-        <AutoGrowingTextInput
-          style={styles.autoTextInput}
-          value={content}
-          underlineColorAndroid={'transparent'}
-          placeholder={''}
-          placeholderTextColor={placeholderColor}
-          onChangeText={this._onMeasureTextChange}
-          minHeight={AutoGrowingInputMinH}
-        />
-      </View>
-    )
-  }
-
-
-  renderPhotoPicker(data){
-    return(
-      <View style={{paddingVertical:15, backgroundColor:'white'}}>
-        <Text style={[styles.starStyle, {color:'transparent'}]}><Text style={styles.labelStyle}>现场照片</Text></Text>
-        {this._renderPhotoPickerItem(data)}
-      </View>
-    )
-  }
-
-  _renderPhotoPickerItem(data){
-    return(
-      <View style={{flexDirection:'row', marginTop:10}}>
-        {data.map((item, index) => {
-            return(
-              <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
-                  {
-                    !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW}} />
-                  }
-
-                </TouchableOpacity>
-              </View>
-            )
-          })}
-      </View>
-    )
-  }
-
   renderSubmitButton(data){
     if(!data) return null;
-    else{
+    else if(data.checkListStatus == '2'){
       return(
-        <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
-          <XButton onPress={this._submit} title='确认提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+        <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20, flexDirection:'row'}}>
+          <XButton onPress={this._submit.bind(this, 1)} title='审核通过' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+          <View style={{width:15}} />
+          <XButton onPress={this._submit.bind(this, 2)} title='审核不通过' textStyle={{color:mainColor}} style={{backgroundColor:'white', width:SubmitButtonW, height:40, borderRadius:20, borderWidth:1, borderColor:mainColor}} />
         </View>
       )
     }
   }
 
   /** Private **/
-  _pickPhoto(item, index, rePick){
-    if(item.photo && !rePick){
-      this.currentPhotoIndex = index;
-      Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
-    }else{
-      ImagePicker.showImagePicker(PhotoOption, (response) => {
-        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
-          // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
-          item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
-          this.forceUpdate();
-        }
-      });
-    }
-  }
-
-  _onMeasureTextChange(text){
-    this.setState({measure:text})
-  }
-
-  _submit(){
-    let params = this._convertToSubmitParams();
-    if(params){
-      this.props.dispatch( create_service('', params))
+  _submit(type){
+    if(type === 1){
+      this.setState({loading:true})
+      let params = {checkListNum:this.state.checkListNum, auditStatus:'1', auditDetails:''}
+      this.props.dispatch( create_service(Contract.POST_SUPERVISE_SUBMIT_AUDIT, params))
         .then( res => {
-          if(res) Actions.success({successType:'submit1'});
+          this.setState({loading:false})
+          if(res) Actions.success({successType:'superviseCheck', modalCallback:()=>{
+            Actions.popTo('svoHome');
+          }});
         })
+    }else{
+      Actions.svoCheckReason({checkListNum:this.state.checkListNum})
     }
   }
 
-  _convertToSubmitParams(){
-    let params = null;
-    if(!this.state.measure){
-      Toast.showShortCenter('整改措施不能为空');
-    }else {
-      let { pickerPhotos, measure } = this.state;
-      params = {
-        livePhotos:this._convertPhotosUri(pickerPhotos),
-        measure
+  _convertStatus({checkResult, checkResultName, finalAuditStatus, finalAuditStatusName, checkListStatus, checkListStatusName, circulationType}){
+    if(circulationType == '1'){
+      if(checkResult == '2'){
+        if(checkListStatus == '3'){
+          return finalAuditStatusName;
+        }else{
+          return checkListStatusName;
+        }
+      }else{
+        return checkResultName;
+      }
+    }else{
+      if(checkListStatus == '3'){
+        return checkResultName;
+      }else{
+        return checkListStatusName;
       }
     }
-
-    console.log( ' the submit params -->> ', params);
-    return params;
   }
 
-  _convertPhotosUri(photos){
-    let submit = [];
-    for(let i=0; i<photos.length; i++){
-      let p = photos[i];
-      if(p.photo) submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
-    }
-    return JSON.stringify(submit);
+  _checkBigImage(source){
+    Actions.bigImage({source})
   }
 
 

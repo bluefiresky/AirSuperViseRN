@@ -69,8 +69,9 @@ class MainView extends Component {
             renderIcon={() => <Image style={styles.icon} source={PersonalIcon} />}
             renderSelectedIcon={() => <Image style={styles.icon} source={PersonalSelectIcon} />}
             onPress={() => {
-              if(this.state.selectedTab === 'messages') return;
-              this.setState({ selectedTab: 'messages' })
+              Toast.showShortCenter('待开发')
+              // if(this.state.selectedTab === 'messages') return;
+              // this.setState({ selectedTab: 'messages' })
             }}>
             <PersonalTab />
           </TabNavigator.Item>

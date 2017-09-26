@@ -96,7 +96,19 @@ class SVMCheckedInView extends Component {
   }
 
   _converDataToShow(item){
-    return {...item, urgentTypeColor:UrgentTypeColor[item.urgentType]};
+    return {...item, urgentTypeColor:UrgentTypeColor[item.urgentType], statusName:this._convertStatus(item)};
+  }
+
+  _convertStatus({checkResult, checkResultName, finalAuditStatus, finalAuditStatusName, checkListStatus, checkListStatusName}){
+    if(checkResult == '2'){
+      if(checkListStatus == '3'){
+        return finalAuditStatusName;
+      }else{
+        return checkListStatusName;
+      }
+    }else{
+      return checkResultName;
+    }
   }
 
 }
@@ -141,7 +153,7 @@ class SubView extends Component{
           <View style={{marginRight:10, backgroundColor:item.urgentTypeColor, height:18, borderRadius:9, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
             <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
           </View>
-          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.checkListStatusName}</Text>
+          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.statusName}</Text>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />

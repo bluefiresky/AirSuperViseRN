@@ -46,7 +46,7 @@ class PersonalTab extends Component {
     InteractionManager.runAfterInteractions(() => {
       self.timer = setTimeout(function () {
         self.setState({loading:false, data:{name:'你猜'}})
-      }, 1000);
+      }, 100);
     })
   }
 
@@ -120,7 +120,7 @@ class PersonalTab extends Component {
   _logout(){
     this.setState({loading:true})
     this.props.dispatch( create_service(Contract.POST_USER_LOGOUT, {}))
-      .then( res => {        
+      .then( res => {
         this.setState({loading:false});
         Actions.login({type:'reset'});
       })

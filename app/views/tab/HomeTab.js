@@ -170,9 +170,9 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.policeNews();
     }else if(type === 2){
-
+      Toast.showShortCenter('待开发');
     }else if(type === 3){
-
+      Toast.showShortCenter('待开发');
     }
   }
 

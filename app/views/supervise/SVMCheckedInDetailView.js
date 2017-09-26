@@ -44,7 +44,7 @@ class SVMCheckedInDetailView extends Component {
       loading: false,
       checkListNum: props.record.checkListNum,
       checkListStatus: props.checkListStatus,
-      checkListStatusName: null,
+      statusName: null,
       data: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       measure: null
@@ -64,11 +64,7 @@ class SVMCheckedInDetailView extends Component {
       this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_CHECK_DETAIL, {checkListNum:this.state.checkListNum}))
         .then( res => {
           if(res){
-            let { checkListStatus, checkListStatusName } = this.state;
-            if(checkListStatus == '1' || checkListStatus == '2') checkListStatusName = res.entity.checkListStatusName;
-            else checkListStatusName = res.entity.finalAuditStatusName;
-
-            this.setState({loading:false, data:res.entity, checkListStatusName})
+            this.setState({loading:false, data:res.entity, statusName:this._convertStatus(res.entity)})
           }else{
             this.setState({loading:false})
           }
@@ -77,12 +73,12 @@ class SVMCheckedInDetailView extends Component {
   }
 
   render(){
-    let { loading, data, measure, pickerPhotos, checkListStatus, checkListStatusName } = this.state;
+    let { loading, data, measure, pickerPhotos, checkListStatus, statusName } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderResult(data, checkListStatusName)}
+          {this.renderResult(data, statusName)}
           {this.renderSumitData1(data, measure, pickerPhotos, checkListStatus)}
           {this.renderSumitData2(data, checkListStatus)}
           {this.renderCheckResult(data, checkListStatus)}
@@ -93,7 +89,7 @@ class SVMCheckedInDetailView extends Component {
     )
   }
 
-  renderResult(data, checkListStatusName){
+  renderResult(data, statusName){
     if(!data) return null;
 
     return(
@@ -101,7 +97,7 @@ class SVMCheckedInDetailView extends Component {
         <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>检查情况</Text>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{paddingHorizontal:PaddingHorizontal}}>
-          {this.renderResultTypeItem('检查类型：', data.listTypeName, checkListStatusName)}
+          {this.renderResultTypeItem('检查类型：', data.listTypeName, statusName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('创建时间：', data.createTime)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -173,7 +169,7 @@ class SVMCheckedInDetailView extends Component {
           <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>审核不通过原因</Text>
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
-            <Text style={{color:mainTextGreyColor, fontSize:15}}>{data.finalAuditStatusName}</Text>
+            <Text style={{color:mainTextGreyColor, fontSize:15}}>{data.auditDetails}</Text>
           </View>
         </View>
       );
@@ -360,6 +356,18 @@ class SVMCheckedInDetailView extends Component {
       if(p.photo) submit.push({photoData:p.photo.uri.replace('data:image/jpeg;base64,',''), photoType:'3'})
     }
     return JSON.stringify(submit);
+  }
+
+  _convertStatus({checkResult, checkResultName, finalAuditStatus, finalAuditStatusName, checkListStatus, checkListStatusName}){
+    if(checkResult == '2'){
+      if(checkListStatus == '3'){
+        return finalAuditStatusName;
+      }else{
+        return checkListStatusName;
+      }
+    }else{
+      return checkResultName;
+    }
   }
 
 

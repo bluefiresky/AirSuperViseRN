@@ -65,6 +65,7 @@ class RootView extends Component {
               <Scene key="svoHistoryCheckInDetail" component={Scenes.SVOHistoryCheckedInDetailView} title='历史检查详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoCheckInDetail" component={Scenes.SVOCheckInDetailView} title='历史检查记录详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoSearchPolice" component={Scenes.SVOSearchPoliceView} title='选择民警' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoCheckReason" component={Scenes.SVOCheckReasonView} title='审核不通过' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
               <Scene key="svmHome" component={Scenes.SVMHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svmCheckedIn" component={Scenes.SVMCheckedInView} title='被检查列表' hideNavBar={false} backTitle='返回' panHandlers={null}/>

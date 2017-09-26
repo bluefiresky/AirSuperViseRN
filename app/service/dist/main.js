@@ -92,3 +92,8 @@ export const post_get_supervise_check_detail = ({checkListNum, version}) => {
 export const post_supervise_submit_feedback = ({checkListNum, modifyDetails, photoList, version}) => {
   return http_post( 'supervision.submitFeedback', {checkListNum}, {modifyDetails, photoList}, version )
 }
+
+/** 安全监管-民警-提交审核状态 */
+export const post_supervise_submit_audit = ({checkListNum, auditStatus, auditDetails, version}) => {
+  return http_post( 'supervision.submitAudit', {checkListNum, auditStatus}, {auditDetails}, version )
+}

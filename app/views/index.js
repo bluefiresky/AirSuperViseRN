@@ -34,6 +34,7 @@ export { SVOFireCheckInTempletWebView } from './supervise/SVOFireCheckInTempletW
 export { SVOHistoryCheckInView } from './supervise/SVOHistoryCheckInView.js';
 export { SVOHistoryCheckedInDetailView } from './supervise/SVOHistoryCheckedInDetailView.js';
 export { SVOSearchPoliceView } from './supervise/SVOSearchPoliceView.js';
+export { SVOCheckReasonView } from './supervise/SVOCheckReasonView.js';
 
 export { SVMHomeView } from './supervise/SVMHomeView.js';
 export { SVMCheckedInView } from './supervise/SVMCheckedInView.js';

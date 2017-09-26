@@ -25,6 +25,7 @@ const ShowContent = {
   reportPosting:{ icon:require('./image/icon-submit-success.png'), title:'', content:'恭喜您！您的违法举报已经提交成功\n感谢您的参与', textAlign:'center' },
   submit1:{ icon:require('./image/icon-submit-success.png'), title:'提交成功', content:'', textAlign:'center' },
   superviseSubmit:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经提交成功', textAlign:'center' },
+  superviseCheck:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经审核成功', textAlign:'center' },
 }
 
 class SuccessView extends React.Component {

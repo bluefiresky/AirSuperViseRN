@@ -85,16 +85,36 @@ class SVOHistoryCheckInView extends Component {
       let item = allList[i];
       let show = this._converDataToShow(item);
       data.push(show);
-      if(item.urgentType == '1') data1.push(show);
-      else if(item.urgentType == '2') data2.push(show);
-      else if(item.urgentType == '3') data3.push(show);
+      if(item.checkListStatus == '1') data1.push(show);
+      else if(item.checkListStatus == '2') data2.push(show);
+      else if(item.checkListStatus == '3') data3.push(show);
     }
 
     return { data, data1, data2, data3 };
   }
 
   _converDataToShow(item){
-    return {...item, urgentTypeColor:UrgentTypeColor[item.urgentType]};
+    return {...item, urgentTypeColor:UrgentTypeColor[item.urgentType], statusName:this._convertStatus(item)};
+  }
+
+  _convertStatus({checkResult, checkResultName, finalAuditStatus, finalAuditStatusName, checkListStatus, checkListStatusName, circulationType}){
+    if(circulationType == '1'){
+      if(checkResult == '2'){
+        if(checkListStatus == '3'){
+          return finalAuditStatusName;
+        }else{
+          return checkListStatusName;
+        }
+      }else{
+        return checkResultName;
+      }
+    }else{
+      if(checkListStatus == '3'){
+        return checkResultName;
+      }else{
+        return checkListStatusName;
+      }
+    }
   }
 
 }
@@ -139,7 +159,7 @@ class SubView extends Component{
           <View style={{marginRight:10, backgroundColor:item.urgentTypeColor, height:18, borderRadius:9, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
             <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
           </View>
-          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.checkListStatusName}</Text>
+          <Text style={{fontSize:12, color:mainTextGreyColor}}>{item.statusName}</Text>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />
@@ -159,8 +179,7 @@ class SubView extends Component{
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }
