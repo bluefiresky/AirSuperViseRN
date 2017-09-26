@@ -497,7 +497,7 @@ class SVOAirCheckInView extends Component {
         companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
         listType:'1', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
         checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:'1', appVersion:Version, policeUserList:JSON.stringify(checkPolices),
-        lawList:this._convertLawToSubmit(law), photoList:this._convertPhotosUri(pickerPhotos)
+        lawList:this._convertLawToSubmit(law.entity), photoList:this._convertPhotosUri(pickerPhotos)
       };
     }
   }
@@ -524,7 +524,7 @@ class SVOAirCheckInView extends Component {
         companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
         listType:'1', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
         checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:'1', appVersion:Version, policeUserList:JSON.stringify(checkPolices),
-        lawList:this._convertLawToSubmit(law), photoList:this._convertPhotosUri(pickerPhotos),checkDetails:notStandStardDetail, urgentType:currentEmergentLevel.code,
+        lawList:this._convertLawToSubmit(law.entity), photoList:this._convertPhotosUri(pickerPhotos),checkDetails:notStandStardDetail, urgentType:currentEmergentLevel.code,
         timeLimit:changedDate, ccCompanyList:sendCopyMerchant?JSON.stringify(sendCopyMerchant.entity):null,
       };
     }

@@ -48,7 +48,7 @@ class CFInspectRegisterView extends Component {
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       refuse: false,
       signImage: null,
-      scroe: null,
+      score: null,
       searchProfile: props.searchProfile,
     }
 
@@ -98,7 +98,7 @@ class CFInspectRegisterView extends Component {
           !law? null :
           <AutoGrowingTextInput
             style={[styles.autoTextInput, {color:placeholderColor}]}
-            value={law.toString()}
+            value={law.text}
             underlineColorAndroid={'transparent'}
             placeholder={''}
             placeholderTextColor={placeholderColor}
@@ -180,8 +180,20 @@ class CFInspectRegisterView extends Component {
 
   /** Private **/
   _goSelectLaw(){
-    // Actions.cfLawRecordsView();
-    this.setState({law:['01','02','03'], score:15})
+    Actions.lawWeb({
+      url:'https://test.zhongchebaolian.com/airport-web-api/certify.html',
+      lawCallback:(law) => {
+        let lawText = '';
+        let score = 0;
+        for(let i=0; i<law.length; i++){
+          let l = law[i];
+          lawText += l.value+'\n'
+          score += parseInt(l.num)
+        }
+
+        this.setState({law:{text:lawText, entity:law}, score})
+      }
+    });
   }
 
   _onRefuseCheck(){
@@ -243,7 +255,7 @@ class CFInspectRegisterView extends Component {
         signFlag:refuse? 0 : 1,
         totalDeductionScore:score,
         signImage:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):'',
-        legalProvisionNumbers:this._convertLaw(law),
+        legalProvisionNumbers:law.entity[0].code,
         livePhotos:this._convertPhotosUri(pickerPhotos)
       }
     }
@@ -261,8 +273,13 @@ class CFInspectRegisterView extends Component {
     return JSON.stringify(submit);
   }
 
-  _convertLaw(law){
-    return JSON.stringify(law);
+  _convertLawToSubmit(law){
+    let params = [];
+    for(let i=0; i<law.length; i++){
+      params.push(law[i].code)
+    }
+
+    return JSON.stringify(params);
   }
 
   _goSign(){
