@@ -156,14 +156,14 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.reportHome();
     }else if(type === 2){
-      if(this._verifyEntryRole(global.myRoles, ['02'])) Actions.svoHome();
-      else if(this._verifyEntryRole(global.myRoles, ['03'])) Actions.svmHome();
+      if(this._verifyRole(global.profile.roleNums, ['02'])) Actions.svoHome();
+      else if(this._verifyRole(global.profile.roleNums, ['03'])) Actions.svmHome();
     }
   }
 
   _secondEntryPress(type){
     if(type === 0){
-      let role = this._verifyRole(global.myRoles, ['04', '05']);
+      let role = this._verifyRole(global.profile.roleNums, ['04', '05']);
       if(role){
         Actions.cfHome({role});
       }
@@ -196,7 +196,12 @@ class HomeTab extends Component {
   _getRoleList(){
     this.props.dispatch( create_service(Contract.POST_USER_ROLE_LIST, {}))
       .then( res => {
-        if(res) global.myRoles = res.list;
+        if(res) {
+          global.profile = {
+            roleNums:res.list,
+            phoneNum:res.phoneNum,
+          }
+        }
         this._getWeather();
       })
   }
@@ -218,7 +223,7 @@ class HomeTab extends Component {
   _verifyRole(source, targetList){
     if(source && source.length > 0){
       for(let i=0; i<source.length; i++){
-        let r = global.myRoles[i];
+        let r = source[i];
         if(targetList.indexOf(r.roleNum) != -1) return r;
       }
 
@@ -233,7 +238,7 @@ class HomeTab extends Component {
   _verifyEntryRole(source, targetList){
     if(source && source.length > 0){
       for(let i=0; i<source.length; i++){
-        let r = global.myRoles[i];
+        let r = source[i];
         if(targetList.indexOf(r.roleNum) != -1) return r;
       }
 

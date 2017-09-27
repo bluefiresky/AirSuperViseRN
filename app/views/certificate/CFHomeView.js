@@ -46,9 +46,9 @@ class CFHomeView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      if(global.certificateProfile){
-        this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
-      }else{
+      // if(global.certificateProfile){
+      //   this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
+      // }else{
         this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
           .then( res => {
             if(res){
@@ -57,7 +57,7 @@ class CFHomeView extends Component {
               self.setState({loading:false})
             }
           })
-      }
+      // }
     })
   }
 

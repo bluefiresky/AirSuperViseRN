@@ -374,7 +374,7 @@ class SVOAirCheckInView extends Component {
             Actions.success({
               successType:'superviseSubmit',
               modalCallback:()=>{
-                if(this._verifyEntryRole(global.myRoles, ['02'])) Actions.popTo('svoHome');
+                if(this._verifyEntryRole(global.profile.roleNums, ['02'])) Actions.popTo('svoHome');
                 else Actions.popTo('svmHome');
               }
             });
@@ -552,7 +552,7 @@ class SVOAirCheckInView extends Component {
   _verifyEntryRole(source, targetList){
     if(source && source.length > 0){
       for(let i=0; i<source.length; i++){
-        let r = global.myRoles[i];
+        let r = source[i];
         if(targetList.indexOf(r.roleNum) != -1) return r;
       }
 

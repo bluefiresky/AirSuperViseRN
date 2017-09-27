@@ -2,14 +2,14 @@
 * 设置页面
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TextInput,TouchableHighlight,Platform,InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TextInput,TouchableOpacity,Platform,InteractionManager } from "react-native";
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import SignatureCapture from 'react-native-signature-capture';
 import {Actions} from "react-native-router-flux";
 import Orientation from 'react-native-orientation';
 
-import { W, H, backgroundGrey, mainColor, mainBackColor} from '../../configs/index.js';/** 自定义配置参数 */
+import { W, H, mainColor, mainBackColor} from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
@@ -17,6 +17,8 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 const MarginTitle = Platform.select({ android: 0, ios: 22 });
 const IsIos = Platform.OS === 'ios';
 const ButtonW = (W - 60)/3
+
+const isIos = Platform.select({ android:false, ios:true })
 
 class SignatureView extends Component {
 
@@ -39,34 +41,36 @@ class SignatureView extends Component {
   }
 
   componentDidMount(){
-    // InteractionManager.runAfterInteractions(()=>{
+    if(isIos){
       Orientation.lockToLandscapeRight();
-    // })
+    }else{
+      this.setState({show:true})
+    }
   }
 
-  // componentWillUnmount(){
-  //   this._onBackEvent();
-  // }
+  componentWillUnmount(){
+    this._onBackEvent();
+  }
 
   render(){
     return(
       <View style={styles.container}>
         <View style={{flexDirection: 'row', paddingHorizontal:15, paddingVertical:10, marginTop:MarginTitle}}>
-          <TouchableHighlight style={styles.buttonStyle} onPress={() => { this._goBack() }} underlayColor={'transparent'}>
+          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._goBack() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>返回</Text>
           </TouchableHighlight>
           <View style={{width: 15}} />
-          <TouchableHighlight style={styles.buttonStyle} onPress={() => { this._resetSign() }} underlayColor={'transparent'}>
+          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._resetSign() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>重置</Text>
           </TouchableHighlight>
           <View style={{flex:1}} />
-          <TouchableHighlight style={styles.buttonStyle} onPress={() => { this._saveSign() }} underlayColor={'transparent'}>
+          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._saveSign() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>保存</Text>
           </TouchableHighlight>
         </View>
 
         {
-          !this.state.show? <View style={{flex:1, backgroundColor:backgroundGrey}} /> :
+          !this.state.show? <View style={{flex:1, backgroundColor:mainBackColor}} /> :
           <SignatureCapture
             style={{flex: 1}}
             ref={(ref)=>{ this.ref = ref }}

@@ -55,7 +55,6 @@ class CFScoreDetailView extends Component {
                     checkStatus:CheckStatusName[checkStatus],
                     legalProvisionContents:this._convertLawToText(legalProvisionContents),
                     livePhotos:this._convertPhotos(livePhotos),
-                    resultImgUrl:'http://2t.5068.com/uploads/allimg/161205/68-1612051H503.jpg'
                   }
             })
           }else {
@@ -120,7 +119,7 @@ class CFScoreDetailView extends Component {
     return(
       <View style={{paddingVertical:15, flexDirection:'row'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
-        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{content}</Text>
       </View>
     )
   }
@@ -130,15 +129,15 @@ class CFScoreDetailView extends Component {
       return(
         <View style={{paddingVertical:15}}>
           <Text style={{color:mainTextColor, fontSize:16, width:150}}>现场照片采集：</Text>
-          <View style={{flexDirection:'row', flexWrap:'wrap'}} >
-            {
-              photos.map((item, index) => {
+            <View style={{flexDirection:'row', marginTop:10}}>
+              {photos.map((item, index) => {
                 return(
-                  <Image key={index} source={item.source} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue', marginRight:10, marginTop:10}} />
+                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, item.source)} activeOpacity={0.8} style={{flex:1, height:PhotoW, justifyContent:'center', alignItems:'center'}}>
+                    <Image source={item.source} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                  </TouchableOpacity>
                 )
-              })
-            }
-          </View>
+              })}
+            </View>
         </View>
       )
     }
@@ -186,6 +185,11 @@ class CFScoreDetailView extends Component {
       Toast.showShortCenter('未生成处理通知单')
     }
   }
+
+  _checkBigImage(source){
+    Actions.bigImage({source})
+  }
+
 
 }
 

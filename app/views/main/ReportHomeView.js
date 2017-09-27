@@ -33,21 +33,6 @@ class ReportHomeView extends Component {
     }
   }
 
-  componentDidMount(){
-    // 保证动画加载完成，在进行其他耗时操作
-    let self = this;
-    InteractionManager.runAfterInteractions(() => {
-      self.setState({loading: true})
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
-  }
-
-  componentWillUnmount(){
-
-  }
-
   render(){
     let { loading } = this.state;
 

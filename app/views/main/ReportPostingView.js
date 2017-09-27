@@ -289,7 +289,7 @@ class ReportPostingView extends Component {
       let { reporterName, reporterId } = this.props.form.getData();
 
       let params = {
-        phoneNum:'15811112222', reportType:postingType.code, illegalDetails, urgentType:emergentLevel.code, reportAddress:address,
+        phoneNum:global.profile.phoneNum, reportType:postingType.code, illegalDetails, urgentType:emergentLevel.code, reportAddress:address,
         longitude:'111.111', latitude:'222.22', reporterName, reporterId, photoList:this._convertPhotosUri(pickerPhotos)
       }
 

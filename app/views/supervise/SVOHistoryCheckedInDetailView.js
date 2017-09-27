@@ -196,7 +196,7 @@ class SVOHistoryCheckedInDetailView extends Component {
     return(
       <View style={{paddingVertical:15, flexDirection:'row'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
-        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{content}</Text>
       </View>
     )
   }

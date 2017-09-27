@@ -68,7 +68,7 @@ class LoginView extends Component {
   renderInput(mobile, code, codeButton){
     return(
       <View style={{paddingHorizontal:30, marginTop:50}}>
-        <InputWithIcon {...mobile} labelWidth={30} maxLength={11} style={{height:40, backgroundColor:'transparent', paddingLeft:10}} noBorder={true} icon={MobileIcon} placeholder={'请输入您的手机号'}/>
+        <InputWithIcon {...mobile} labelWidth={30} maxLength={11} keyboardType='numeric' style={{height:40, backgroundColor:'transparent', paddingLeft:10}} noBorder={true} icon={MobileIcon} placeholder={'请输入您的手机号'}/>
         <View style={{height:1, backgroundColor:borderColor}} />
         {this.renderCodeInput(code, codeButton)}
         <View style={{height:1, backgroundColor:borderColor}} />
@@ -79,7 +79,7 @@ class LoginView extends Component {
   renderCodeInput(code, codeButton){
     return(
       <View style={{flexDirection:'row', marginTop:20}}>
-        <InputWithIcon {...code} labelWidth={30} maxLength={6} style={{height:40, width:CodeInputW, backgroundColor:'transparent', paddingLeft:10}} noBorder={true} icon={PasswordIcon} placeholder={'请输入短信验证码'}/>
+        <InputWithIcon {...code} labelWidth={30} maxLength={6} keyboardType='numeric' style={{height:40, width:CodeInputW, backgroundColor:'transparent', paddingLeft:10}} noBorder={true} icon={PasswordIcon} placeholder={'请输入短信验证码'}/>
         <TouchableOpacity onPress={this._onGetVerifyCode} activeOpacity={0.8} style={{height:40, width:CodeTextW, alignItems:'flex-end', justifyContent:'center'}}>
           <Text style={{fontSize: 14, color:codeButton.color}}>{codeButton.text}</Text>
         </TouchableOpacity>
