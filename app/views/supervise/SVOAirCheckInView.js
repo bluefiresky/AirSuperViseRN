@@ -35,7 +35,7 @@ const DeleteIcon = require('./image/icon-search-delete.png');
 const ArrowRight = require('./image/icon-arrow-right.png');
 
 const CheckResults = [{label:'合格', code:'1'},{label:'不合格', code:'2'},{label:'未检查', code:'3'},{label:'不适用', code:'4'}];
-const Sendings = [{label:'不流转', code:'1'},{label:'流转', code:'2'}];
+const Sendings = [{label:'不流转', code:'2'},{label:'流转', code:'1'}];
 const EmergentLevels = [{label:'紧急', code:'1'},{label:'重要', code:'2'},{label:'一般', code:'3'}];
 
 const PhotoOption = {
