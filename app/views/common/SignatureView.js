@@ -56,17 +56,17 @@ class SignatureView extends Component {
     return(
       <View style={styles.container}>
         <View style={{flexDirection: 'row', paddingHorizontal:15, paddingVertical:10, marginTop:MarginTitle}}>
-          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._goBack() }} underlayColor={'transparent'}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._goBack() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>返回</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
           <View style={{width: 15}} />
-          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._resetSign() }} underlayColor={'transparent'}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._resetSign() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>重置</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
           <View style={{flex:1}} />
-          <TouchableHighlight activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._saveSign() }} underlayColor={'transparent'}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.buttonStyle} onPress={() => { this._saveSign() }} underlayColor={'transparent'}>
             <Text style={{color:mainColor, fontSize: 14}}>保存</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
 
         {

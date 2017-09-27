@@ -366,6 +366,8 @@ class SVOAirCheckInView extends Component {
     }
 
     if(params){
+      if(this.state.loading) return;
+
       this.setState({loading:true})
       this.props.dispatch( create_service(Contract.POST_SUPERVISE_SUBMIT_CHECK, params))
         .then( res => {

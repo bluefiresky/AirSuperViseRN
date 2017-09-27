@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 选择被检查人-官方
+* 选择被检查人-选择被检查单位
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -82,10 +82,10 @@ class SVOInspectedMerchantView extends Component {
     )
   }
 
-  renderLocationInput(){
+  renderLocationInput(location){
     return(
       <TouchableOpacity style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal}}>
-        <Input label={'检查地点'} editable={false} labelWidth={100} value={'你再猜猜'} noBorder={true} hasClearButton={false} style={{width:LocationInputW, height:InputH}}/>
+        <Input label={'检查地点'} editable={false} labelWidth={100} value={location.address} noBorder={true} hasClearButton={false} style={{width:LocationInputW, height:InputH}}/>
         <Image source={NavIcon} style={{height:20, width:20, resizeMode:'contain'}} />
       </TouchableOpacity>
     )

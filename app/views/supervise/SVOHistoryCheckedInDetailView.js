@@ -122,10 +122,10 @@ class SVOHistoryCheckedInDetailView extends Component {
     if(!data) return null;
     if(data.checkListStatus == '1'){
       return(
-        <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
+        <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10, paddingVertical:15}}>
           {data.signRecordList.map((item, index) => {
             return (
-              <Text style={{color:mainColor, fontSize:16, marignTop:5}}>{item.signUserName+'\t'}
+              <Text key={index} style={{color:mainColor, fontSize:16, marginTop:5, flex:1, paddingHorizontal:PaddingHorizontal}}>{item.signUserName+'\t'}
                 <Text style={{color:mainTextGreyColor, fontSize:16}}>{item.signDetails}</Text>
               </Text>
             );

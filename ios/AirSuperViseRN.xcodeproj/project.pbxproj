@@ -22,6 +22,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		161CCA45B5E64C5D9DCFABB0 /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E11630897B041B3ABC896C6 /* libRSSignatureCapture.a */; };
+		33AACE061F7BBD1600445F1E /* BaiduMapModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE031F7BBD1600445F1E /* BaiduMapModule.m */; };
+		33AACE071F7BBD1600445F1E /* ImageToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE051F7BBD1600445F1E /* ImageToBase64.m */; };
 		33B302FC9A2847529B3EE178 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 084F9440744D4A1F810FBAAF /* EvilIcons.ttf */; };
 		42A11D295F7345CE8CBA337C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 73B2212A511044D0AA6346E9 /* Foundation.ttf */; };
 		5054804B86F64A6CAA36611A /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8FDF8C4E28F467DA5F4A228 /* libRNImagePicker.a */; };
@@ -313,6 +315,10 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		241B288F0CED4243A0B849F4 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		326BEDEE194341A6A7AA3536 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		33AACE021F7BBD1600445F1E /* BaiduMapModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduMapModule.h; sourceTree = "<group>"; };
+		33AACE031F7BBD1600445F1E /* BaiduMapModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaiduMapModule.m; sourceTree = "<group>"; };
+		33AACE041F7BBD1600445F1E /* ImageToBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageToBase64.h; sourceTree = "<group>"; };
+		33AACE051F7BBD1600445F1E /* ImageToBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageToBase64.m; sourceTree = "<group>"; };
 		3FFBAAC815C345D188ED335C /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		5E11630897B041B3ABC896C6 /* libRSSignatureCapture.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRSSignatureCapture.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -447,6 +453,7 @@
 		13B07FAE1A68108700A75B9A /* AirSuperViseRN */ = {
 			isa = PBXGroup;
 			children = (
+				33AACE001F7BBD1600445F1E /* Modules */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -523,6 +530,26 @@
 				338F7E641F5660BD00C6CB23 /* libRNImagePicker.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		33AACE001F7BBD1600445F1E /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				33AACE011F7BBD1600445F1E /* BaiduMap */,
+				33AACE041F7BBD1600445F1E /* ImageToBase64.h */,
+				33AACE051F7BBD1600445F1E /* ImageToBase64.m */,
+			);
+			name = Modules;
+			path = AirSuperViseRN/Modules;
+			sourceTree = "<group>";
+		};
+		33AACE011F7BBD1600445F1E /* BaiduMap */ = {
+			isa = PBXGroup;
+			children = (
+				33AACE021F7BBD1600445F1E /* BaiduMapModule.h */,
+				33AACE031F7BBD1600445F1E /* BaiduMapModule.m */,
+			);
+			path = BaiduMap;
 			sourceTree = "<group>";
 		};
 		42B4279F24CDA483F67665D8 /* Pods */ = {
@@ -1097,7 +1124,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				33AACE071F7BBD1600445F1E /* ImageToBase64.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				33AACE061F7BBD1600445F1E /* BaiduMapModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

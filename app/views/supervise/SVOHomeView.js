@@ -112,7 +112,16 @@ class SVOHomeView extends Component {
     if(type === 0){
       Toast.showShortCenter('待开发')
     }else if(type === 1){
-      Actions.svoInspectedMerchant({location:{address:'你猜', latitude:'111.11', longitude:'222.22'}})
+      this.setState({loading:true});
+      NativeModules.BaiduMapModule.location().then(res => {
+        this.setState({loading:false})
+        console.log(' the BaiduMapModule location res -->> ', res);
+        if(res && res.address){
+          Actions.svoInspectedMerchant({location:res})
+        }else{
+          Toast.showShortCenter('定位失败')
+        }
+      })
     }else if(type === 2){
       Actions.svoHistoryCheckIn()
     }
