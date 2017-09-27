@@ -30,12 +30,8 @@ class ReportHistoryDetailView extends Component {
     super(props);
     this.state = {
       loading: false,
-      postingType:'安全隐患举报',
-      emergentLevel:'非常紧急',
-      address:'你猜',
-      pickerPhotos: [{photo:null},{photo:null},{photo:null}],
-      reporter:'张三',
-      reporterID:'3874019374973597938'
+      reportNum: props.record.reportNum,
+      data: null,
     }
   }
 
@@ -45,9 +41,14 @@ class ReportHistoryDetailView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
+      this.props.dispatch( create_service(Contract.POST_GET_REPORT_DETAIL, {reportNum:this.state.reportNum}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, data:res.entity})
+          }else{
+            this.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -56,13 +57,13 @@ class ReportHistoryDetailView extends Component {
   }
 
   render(){
-    let { loading, postingType, emergentLevel, address, pickerPhotos, reporter, reporterID } = this.state;
+    let { loading, data } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} >
-          {this.renderImportance(postingType, emergentLevel, address)}
-          {this.renderUnimportance(pickerPhotos, reporter, reporterID)}
+          {this.renderImportance(data)}
+          {this.renderUnimportance(data)}
           <View style={{height:100}} />
         </ScrollView>
         <ProgressView show={loading} />
@@ -70,16 +71,18 @@ class ReportHistoryDetailView extends Component {
     )
   }
 
-  renderImportance(postingType, emergentLevel, address){
+  renderImportance(data){
+    if(!data) return null;
+
     return(
       <View style={{marginTop:10, backgroundColor:'white'}}>
-        <Input label={'举报类型：'} value={postingType} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'举报类型：'} value={data.reportTypeName} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        {this.renderAutoGrowing(null)}
+        {this.renderAutoGrowing(data.illegalDetails)}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'紧急程度：'} value={emergentLevel} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'紧急程度：'} value={data.urgentTypeName} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'举报地点：'} value={address} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'举报地点：'} value={data.reportAddress} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
       </View>
     )
   }
@@ -98,6 +101,7 @@ class ReportHistoryDetailView extends Component {
           placeholderTextColor={placeholderColor}
           minHeight={AutoGrowingInputMinH}
           maxHeight={100}
+          editable={false}
         />
       </View>
     )
@@ -106,47 +110,44 @@ class ReportHistoryDetailView extends Component {
   /**
   * 选填
   */
-  renderUnimportance(pickerPhotos, reporter, reporterID){
+  renderUnimportance(data){
+    if(!data) return null;
+
     return(
       <View style={{backgroundColor:'white', marginTop:10}}>
         <Text style={{fontSize:17, color:mainTextColor, marginVertical:15, alignSelf:'center'}}>选填信息</Text>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        {this.renderPhotoPicker(pickerPhotos)}
+        {this.renderPhotoItem(data.photoList)}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'举报人姓名：'} value={reporter} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'举报人姓名：'} value={data.reporterName} editable={false} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'举报人身份证号：'} value={reporterID} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'举报人身份证号：'} value={data.reporterId} editable={false} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
       </View>
     )
   }
 
-  renderPhotoPicker(data){
-    return(
-      <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
-        <Text style={[styles.starStyle, {color:'transparent'}]}><Text style={styles.labelStyle}>举报照片：</Text></Text>
-        {this._renderPhotoPickerItem(data)}
-      </View>
-    )
+  renderPhotoItem(photos){
+    if(photos){
+      return(
+        <View style={{paddingVertical:15, paddingHorizontal:PaddingHorizontal}}>
+          <Text style={{color:mainTextColor, fontSize:16, width:150}}>举报照片：</Text>
+            <View style={{flexDirection:'row', marginTop:10}}>
+              {photos.map((item, index) => {
+                return(
+                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.photoUrl})} activeOpacity={0.8} style={{flex:1, height:PhotoW, justifyContent:'center', alignItems:'center'}}>
+                    <Image source={{uri:item.photoUrl}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                  </TouchableOpacity>
+                )
+              })}
+            </View>
+        </View>
+      )
+    }
   }
 
-  _renderPhotoPickerItem(data){
-    return(
-      <View style={{flexDirection:'row', marginTop:10}}>
-        {data.map((item, index) => {
-            return(
-              <View key={index} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
-                  {
-                    !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
-                  }
-
-                </TouchableOpacity>
-              </View>
-            )
-          })}
-      </View>
-    )
+  /** Private **/
+  _checkBigImage(source){
+    Actions.bigImage({source})
   }
 
 }

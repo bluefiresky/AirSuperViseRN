@@ -28,6 +28,8 @@ const ExampleList = [
   {level:'非常紧急', levelColor:'red', type:'违法犯罪举报', reporter:'张三', reportContent:'有人违规乱丢垃圾', date:'2012年12月21 06:06:06'},
 ];
 
+const UrgentColor = {'1':'red', '2':'rgb(255, 176, 91)', '3':'rgb(42, 215, 143)'};
+
 class ReportHistoryView extends Component {
 
   constructor(props){
@@ -43,9 +45,14 @@ class ReportHistoryView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList})
-      }, 1000);
+      this.props.dispatch( create_service(Contract.POST_GET_REPORT_HISTORY, {}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, data:res.entity.reportList})
+          }else{
+            this.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -81,10 +88,10 @@ class ReportHistoryView extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.date}</Text>
-          <Text style={{fontSize:16, color:mainColor, flex:1, marginLeft:20}}>{item.type}</Text>
-          <View style={{marginRight:10, backgroundColor:item.levelColor, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.level}</Text>
+          <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.reportTime}</Text>
+          <Text style={{fontSize:16, color:mainColor, flex:1, marginLeft:20}}>{item.reportTypeName}</Text>
+          <View style={{marginRight:10, backgroundColor:UrgentColor[item.urgentType], height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
+            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
           </View>
         </View>
 
@@ -92,8 +99,8 @@ class ReportHistoryView extends Component {
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <View style={{flex:1}}>
-            <Text style={{fontSize:14, color:mainTextGreyColor}}>举报人：{item.reporter}</Text>
-            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:10}}>举报信息：{item.reportContent}</Text>
+            <Text style={{fontSize:14, color:mainTextGreyColor}}>举报人：{item.reporterName}</Text>
+            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:10}} numberOfLines={1} >举报信息：{item.illegalDetails}</Text>
           </View>
           <Image source={ArrowRight} style={{width:25, height:25, resizeMode:'contain'}} />
         </View>
@@ -105,8 +112,7 @@ class ReportHistoryView extends Component {
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }
@@ -114,7 +120,7 @@ class ReportHistoryView extends Component {
 
   /** Private **/
   _goDetail(item, index){
-    Actions.reportHistoryDetail();
+    Actions.reportHistoryDetail({record:item});
   }
 
 }

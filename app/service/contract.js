@@ -45,7 +45,9 @@ export const POST_SUPERVISE_SUBMIT_CHECK = 'post_supervise_submit_check';       
 export const POST_GET_SUPERVISE_CHECK_DETAIL = 'post_get_supervise_check_detail';             // 安全监管-获取检查单详情
 export const POST_GET_SUPERVISE_SUBMIT_FEEDBACK = 'post_supervise_submit_feedback';           // 安全监管-提交检查单反馈
 export const POST_SUPERVISE_SUBMIT_AUDIT = 'post_supervise_submit_audit';                     // 安全监管-提交审核状态
-
+export const POST_REPORT_SUBMIT_REPORT = 'post_report_submit_report';                         // 违法举报-提交我要举报
+export const POST_GET_REPORT_HISTORY = 'post_get_report_history';                             // 违法举报-获取历史举报信息
+export const POST_GET_REPORT_DETAIL = 'post_get_report_detail';                               // 违法举报-获取举报详情
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)
