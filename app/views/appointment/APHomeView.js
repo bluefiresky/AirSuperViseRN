@@ -15,11 +15,11 @@ import { ProgressView } from '../../components/index.js';  /** 自定义组件 *
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const ADH = 130;
+const ADH = W*320/750;
 const PaddingHorizontal = 10;
 const MainEntryItemPadding = W/6;
-import swiperImg1 from '../tab/image/123.png'
 
+const ADIcon = require('./image/cover-home-ad.jpg');
 const MainIcon1 = require('./image/icon-xiaofang-appointment.png');
 const MainIcon2 = require('./image/icon-kongfang-auditing.png');
 const MainIcon3 = require('./image/icon-new-apply.png');
@@ -31,20 +31,6 @@ class APHomeView extends Component {
     this.state = {
       loading: false,
     }
-  }
-
-  componentDidMount(){
-    this.setState({loading:true});
-    let self = this;
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
-  }
-
-  componentWillUnmount(){
-
   }
 
   render(){
@@ -65,9 +51,9 @@ class APHomeView extends Component {
     return(
       <View style={{height:ADH}}>
         <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
+          <Image style={{width:W,height:ADH}} source={ADIcon}/>
+          <Image style={{width:W,height:ADH}} source={ADIcon}/>
+          <Image style={{width:W,height:ADH}} source={ADIcon}/>
         </Swiper>
       </View>
     )
@@ -101,7 +87,7 @@ class APHomeView extends Component {
     }else if(type === 1){
       Actions.apAirMerchantCheck();
     }else if(type === 2){
-
+      Actions.apCertificateApplyHome();
     }
   }
 }

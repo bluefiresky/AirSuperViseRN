@@ -53,6 +53,7 @@ class RootView extends Component {
               <Scene key="apAirMerchantCheck" component={Scenes.APAirMerchantCheckView} title='空防新入场单位资质审核' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apAirMerchantCheckHistory" component={Scenes.APAirMerchantCheckHistoryView} title='空防单位审核历史' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apAirMerchantCheckDetail" component={Scenes.APAirMerchantCheckDetailView} title='空防单位审核详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="apCertificateApplyHome" component={Scenes.APCertificateApplyHomeView} title='新机场证件' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
               <Scene key="svoHome" component={Scenes.SVOHomeView} title='安全监管' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoInspectedMerchant" component={Scenes.SVOInspectedMerchantView} title='选择被检查单位' hideNavBar={false} backTitle='返回' panHandlers={null}/>

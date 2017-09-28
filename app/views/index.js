@@ -22,6 +22,7 @@ export { APFireControlTempletView } from './appointment/APFireControlTempletView
 export { APAirMerchantCheckView } from './appointment/APAirMerchantCheckView.js';
 export { APAirMerchantCheckHistoryView } from './appointment/APAirMerchantCheckHistoryView.js';
 export { APAirMerchantCheckDetailView } from './appointment/APAirMerchantCheckDetailView.js';
+export { APCertificateApplyHomeView } from './appointment/APCertificateApplyHomeView.js';
 
 export { SVOHomeView } from './supervise/SVOHomeView.js';
 export { SVOInspectedMerchantView } from './supervise/SVOInspectedMerchantView.js';
