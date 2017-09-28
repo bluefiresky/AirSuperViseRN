@@ -33,6 +33,7 @@ const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
 const CameraIcon = require('./image/camera.png');
 const DeleteIcon = require('./image/icon-search-delete.png');
 const ArrowRight = require('./image/icon-arrow-right.png');
+const AddIcon = require('./image/icon-add.png');
 
 const CheckResults = [{label:'合格', code:'1'},{label:'不合格', code:'2'}];
 const Sendings = [{label:'不流转', code:'2'},{label:'流转', code:'1'}];
@@ -141,7 +142,7 @@ class SVOFireCheckInView extends Component {
           }
         </View>
         <TouchableOpacity onPress={this._goSelectPolice} activeOpacity={0.8} style={{width:AddPoliceButtonW, height:AddPoliceButtonW, alignItems:'center', justifyContent:'center'}}>
-          <Image style={{height:25, width:25, backgroundColor:'lightskyblue'}} />
+          <Image source={AddIcon} style={{height:25, width:25, tintColor:mainColor}} />
         </TouchableOpacity>
       </View>
     );
@@ -343,7 +344,7 @@ class SVOFireCheckInView extends Component {
 
     if(params){
       if(this.state.loading) return;
-      
+
       this.setState({loading:true})
       this.props.dispatch( create_service(Contract.POST_SUPERVISE_SUBMIT_CHECK, params))
         .then( res => {
@@ -465,7 +466,7 @@ class SVOFireCheckInView extends Component {
         companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
         listType:'2', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
         checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:templet.templateType, templateData:templet.content, appVersion:Version,
-        policeUserList:JSON.stringify(checkPolices), photoList:this._convertPhotosUri(pickerPhotos), timeLimit:'2012-12-21'
+        policeUserList:JSON.stringify(checkPolices), photoList:this._convertPhotosUri(pickerPhotos)
       };
     }
   }

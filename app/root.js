@@ -14,6 +14,7 @@ import { routerReducerCreate } from './redux/index.js';
 
 /** 所有views页面 */
 import * as Scenes from './views/index.js';
+import * as Components from './components/index.js';
 
 const backIcon = require('./views/image/icon-back.png');
 const statusBackColor = Platform.select({ android:mainColor, ios:'transparent' })
@@ -98,6 +99,7 @@ class RootView extends Component {
             <Scene key="netTip" component={Scenes.NetTipView} />
             <Scene key="bigImage" component={Scenes.BigImageView} />
             <Scene key="policeList" component={Scenes.PoliceListView} />
+            <Scene key="datePicker" component={Components.DatePicker} />
 
           </Scene>
         </Router>

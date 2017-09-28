@@ -33,6 +33,7 @@ const AutoGrowingInputMinH = Platform.select({android:100, ios:100})
 const CameraIcon = require('./image/camera.png');
 const DeleteIcon = require('./image/icon-search-delete.png');
 const ArrowRight = require('./image/icon-arrow-right.png');
+const AddIcon = require('./image/icon-add.png');
 
 const CheckResults = [{label:'合格', code:'1'},{label:'不合格', code:'2'},{label:'未检查', code:'3'},{label:'不适用', code:'4'}];
 const Sendings = [{label:'不流转', code:'2'},{label:'流转', code:'1'}];
@@ -83,6 +84,7 @@ class SVOAirCheckInView extends Component {
     this._convertStandardParams = this._convertStandardParams.bind(this);
     this._submit = this._submit.bind(this);
     this._sendCopySearch = this._sendCopySearch.bind(this);
+    this._goSelectChangeDate = this._goSelectChangeDate.bind(this);
   }
 
   componentDidMount(){
@@ -151,7 +153,7 @@ class SVOAirCheckInView extends Component {
           }
         </View>
         <TouchableOpacity onPress={this._goSelectPolice} activeOpacity={0.8} style={{width:AddPoliceButtonW, height:AddPoliceButtonW, alignItems:'center', justifyContent:'center'}}>
-          <Image style={{height:25, width:25, backgroundColor:'lightskyblue'}} />
+          <Image source={AddIcon} style={{height:25, width:25, tintColor:mainColor}} />
         </TouchableOpacity>
       </View>
     );
@@ -336,7 +338,7 @@ class SVOAirCheckInView extends Component {
   _renderChangedDate(date){
     let show = date? {text:date, textColor:inputRightColor}:{text:'请选择整改时限', textColor:placeholderColor};
     return(
-      <TouchableOpacity activeOpacity={0.8} style={{paddingHorizontal:PaddingHorizontal, flexDirection:'row', height:InputH, alignItems:'center'}}>
+      <TouchableOpacity activeOpacity={0.8} onPress={this._goSelectChangeDate} style={{paddingHorizontal:PaddingHorizontal, flexDirection:'row', height:InputH, alignItems:'center'}}>
         <Text style={[styles.starStyle, {color:'transparent'}]}>*<Text style={styles.labelStyle}>整改时间</Text></Text>
         <Text style={{color:show.textColor, fontSize:16, flex:1}}>{show.text}</Text>
         <Image source={ArrowRight} style={{width:16, height:16, resizeMode:'contain'}} />
@@ -420,13 +422,20 @@ class SVOAirCheckInView extends Component {
     this.setState({notStandStardDetail:text})
   }
 
+  _goSelectChangeDate(){
+    Actions.datePicker({modalCallback:(date)=>{
+      console.log('_goSelectChangeDate get date -->> ', date);
+      this.setState({changedDate:date})
+    }})
+  }
+
   _goSelectLaw(){
     Actions.lawWeb({
       url:'https://test.zhongchebaolian.com/airport-web-api/supervisionLaw.html',
       lawCallback:(law) => {
         let lawText = '';
         for(let i=0; i<law.length; i++){
-          lawText += law[i].value+'\n'
+          lawText += law[i].value+'\n\n'
         }
         this.setState({law:{text:lawText, entity:law}})
       }

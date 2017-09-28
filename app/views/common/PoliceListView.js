@@ -26,7 +26,7 @@ class PoliceListView extends React.Component {
     super (props);
     this.state = {
         offset: new Animated.Value(H),
-        data: [],
+        data: props.data,
         selectedIndex:props.selectedIndex? props.selectedIndex : 0,
     };
 
@@ -39,9 +39,6 @@ class PoliceListView extends React.Component {
       duration: 200,
       toValue: 0
     }).start();
-    InteractionManager.runAfterInteractions(()=>{
-      this.setState({data:this.props.data})
-    })
   }
 
   componentWillUnmount(){
