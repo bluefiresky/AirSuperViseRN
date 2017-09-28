@@ -128,9 +128,9 @@ class SVOHomeView extends Component {
   }
 
   _getProfile(){
-    if(global.superviseProfile){
-      this.setState({loading:false, data:global.superviseProfile})
-    }else{
+    // if(global.superviseProfile){
+    //   this.setState({loading:false, data:global.superviseProfile})
+    // }else{
       this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_USER_INFO, {}))
         .then( res => {
           if(res){
@@ -139,7 +139,7 @@ class SVOHomeView extends Component {
             this.setState({loading:false})
           }
         })
-    }
+    // }
   }
 
 }
