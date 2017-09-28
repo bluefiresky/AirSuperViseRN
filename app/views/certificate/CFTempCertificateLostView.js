@@ -82,6 +82,7 @@ class CFTempCertificateLostView extends Component {
         <AutoGrowingTextInput
           style={styles.autoTextInput}
           value={reason}
+          maxLength={200}
           underlineColorAndroid={'transparent'}
           placeholder={'请输入挂失理由'}
           placeholderTextColor={placeholderColor}

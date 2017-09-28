@@ -22,6 +22,8 @@ const HomeIcon = require('./image/tab-home.png');
 const HomeSelectIcon = require('./image/tab-home-selected.png');
 const PersonalIcon = require('./image/tab-personal.png');
 const PersonalSelectIcon = require('./image/tab-personal-selected.png');
+const MessageIcon = require('./image/tab-message.png');
+const MessageSelectIcon = require('./image/tab-message-selected.png');
 
 const ComponentW = (W - 30);
 
@@ -66,8 +68,8 @@ class MainView extends Component {
             title="消息"
             titleStyle={{color: mainTextColor}}
             selectedTitleStyle={{color: mainColor}}
-            renderIcon={() => <Image style={styles.icon} source={PersonalIcon} />}
-            renderSelectedIcon={() => <Image style={styles.icon} source={PersonalSelectIcon} />}
+            renderIcon={() => <Image style={styles.icon} source={MessageIcon} />}
+            renderSelectedIcon={() => <Image style={styles.icon} source={MessageSelectIcon} />}
             onPress={() => {
               Toast.showShortCenter('待开发')
               // if(this.state.selectedTab === 'messages') return;

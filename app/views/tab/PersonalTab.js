@@ -29,6 +29,14 @@ const HeaderSubPaddingTop = HeaderImageW/2 + 5;
 const EntryItemH = 50;
 
 const ArrowRight = require('./image/icon-arrow-right.png');
+const OrdersIcon = require('./image/icon-my-orders.png');
+const CertificateIcon = require('./image/icon-my-certificate-records.png');
+const ScoreIcon = require('./image/icon-my-score-rcords.png');
+const AppointmentIcon = require('./image/icon-my-appointment-records.png');
+const AirportIcon = require('./image/icon-my-new-airport-records.png');
+const ReportIcon = require('./image/icon-my-report-records.png');
+// const OrdersIcon = require('./image/icon-my-orders.png');
+
 
 class PersonalTab extends Component {
 
@@ -41,13 +49,13 @@ class PersonalTab extends Component {
   }
 
   componentDidMount(){
-    this.setState({loading: true})
-    let self = this;
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading:false, data:{name:'你猜'}})
-      }, 100);
-    })
+    // this.setState({loading: true})
+    // let self = this;
+    // InteractionManager.runAfterInteractions(() => {
+    //   self.timer = setTimeout(function () {
+    //     self.setState({loading:false, data:{name:'你猜'}})
+    //   }, 100);
+    // })
   }
 
   render(){
@@ -59,13 +67,13 @@ class PersonalTab extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           {this.renderHeader(data)}
           <View style={{height:10}} />
-          {this.renderEntryItem(null, '我的检查单')}
-          {this.renderEntryItem(null, '证件审核记录')}
-          {this.renderEntryItem(null, '证件扣分记录')}
-          {this.renderEntryItem(null, '消防网上预约记录')}
-          {this.renderEntryItem(null, '新机场入场单位资质审核记录')}
+          {this.renderEntryItem(OrdersIcon, '我的检查单')}
+          {this.renderEntryItem(CertificateIcon, '证件审核记录')}
+          {this.renderEntryItem(ScoreIcon, '证件扣分记录')}
+          {this.renderEntryItem(AppointmentIcon, '消防网上预约记录')}
+          {this.renderEntryItem(AirportIcon, '新机场入场单位资质审核记录')}
           {this.renderEntryItem(null, '空防新入场单位资质审核记录')}
-          {this.renderEntryItem(null, '历史违法举报')}
+          {this.renderEntryItem(ReportIcon, '历史违法举报')}
           {this.renderLoginButton()}
         </ScrollView>
         <ProgressView show={loading} />
@@ -87,7 +95,7 @@ class PersonalTab extends Component {
         <View style={{flex:1, backgroundColor:mainColor}} />
         <View style={{height:30}} />
         <View style={{position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal, backgroundColor:'white', height:HeaderSubH, borderRadius:5, alignItems:'center', paddingTop:HeaderSubPaddingTop}}>
-          <Text style={{fontSize:16, color:mainTextGreyColor}}>{data?data.name:null}</Text>
+          <Text style={{fontSize:16, color:mainTextGreyColor}}>{global.profile?global.profile.phoneNum:null}</Text>
         </View>
         <View style={{position:'absolute', width:HeaderImageW, height:HeaderImageW, left:HeaderImageL, borderRadius:HeaderImageRadius, backgroundColor:'lightskyblue'}}>
         </View>
@@ -99,7 +107,7 @@ class PersonalTab extends Component {
     return(
       <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:'white'}}>
         <View style={{height:EntryItemH, flexDirection:'row', paddingHorizontal:PaddingHorizontal, alignItems:'center'}}>
-          <View style={{marginLeft:20, width:30, height:30, backgroundColor:'lightskyblue'}} />
+          <Image source={icon} style={{marginLeft:20, width:20, height:20, resizeMode:'contain'}} />
           <Text style={{marginLeft:20, fontSize:16, color:mainTextGreyColor, flex:1}}>{title}</Text>
           <Image source={ArrowRight} style={{width:14, height:14, resizeMode:'contain'}} />
         </View>
@@ -110,7 +118,7 @@ class PersonalTab extends Component {
 
   renderLoginButton(){
     return(
-      <View style={{marginVertical:10, height:100, alignItems:'center', justifyContent:'center', backgroundColor:'white'}}>
+      <View style={{marginVertical:10, height:100, alignItems:'center', justifyContent:'center'}}>
         <XButton onPress={this._logout.bind(this)} title={'退出登录'} style={{height:40, width:W-100, borderRadius:20}} />
       </View>
     )

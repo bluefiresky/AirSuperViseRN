@@ -83,6 +83,7 @@ class SVOFireCheckInView extends Component {
     this._goSign = this._goSign.bind(this);
     this._convertStandardParams = this._convertStandardParams.bind(this);
     this._submit = this._submit.bind(this);
+    this._goSelectChangeDate = this._goSelectChangeDate.bind(this);
 
   }
 
@@ -312,7 +313,7 @@ class SVOFireCheckInView extends Component {
   _renderChangedDate(date){
     let show = date? {text:date, textColor:inputRightColor}:{text:'请选择整改时限', textColor:placeholderColor};
     return(
-      <TouchableOpacity activeOpacity={0.8} style={{paddingHorizontal:PaddingHorizontal, flexDirection:'row', height:InputH, alignItems:'center'}}>
+      <TouchableOpacity onPress={this._goSelectChangeDate} activeOpacity={0.8} style={{paddingHorizontal:PaddingHorizontal, flexDirection:'row', height:InputH, alignItems:'center'}}>
         <Text style={[styles.starStyle,{color:'transparent'}]}>*<Text style={styles.labelStyle}>整改时间</Text></Text>
         <Text style={{color:show.textColor, fontSize:16, flex:1}}>{show.text}</Text>
         <Image source={ArrowRight} style={{width:16, height:16, resizeMode:'contain'}} />
@@ -433,6 +434,13 @@ class SVOFireCheckInView extends Component {
       }
     })
   }
+
+  _goSelectChangeDate(){
+    Actions.datePicker({modalCallback:(date)=>{
+      this.setState({changedDate:date})
+    }})
+  }
+
 
   _sendCopySearch(){
     Actions.svoCopySearch({searchResult:(merchant) => {

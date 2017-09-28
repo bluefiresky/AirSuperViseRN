@@ -179,8 +179,6 @@ const validate = (assert, fields) => {
   assert("mobile", ValidateMethods.min_length(11), '请输入正确手机号')
   assert("mobile", ValidateMethods.max_length(11), '请输入正确手机号')
   assert("code", ValidateMethods.required(), '请输入验证码')
-  assert("code", ValidateMethods.min_length(6), '验证码必须在6到24位')
-  assert("code", ValidateMethods.max_length(6), '验证码必须在6到24位')
 }
 
 const ExportView = connect()(form_connector(LoginView, fields, validate));

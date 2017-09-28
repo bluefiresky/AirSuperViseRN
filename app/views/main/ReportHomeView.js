@@ -31,6 +31,8 @@ class ReportHomeView extends Component {
     this.state = {
       loading: false,
     }
+
+    this._goPosting = this._goPosting.bind(this);
   }
 
   render(){
@@ -93,7 +95,15 @@ class ReportHomeView extends Component {
 
   /** Private **/
   _goPosting(){
-    Actions.reportPosting();
+    NativeModules.BaiduMapModule.location().then(res => {
+      this.setState({loading:false})
+      console.log(' the BaiduMapModule location res -->> ', res);
+      if(res && res.address){
+        Actions.reportPosting({location:res})
+      }else{
+        Toast.showShortCenter('定位失败')
+      }
+    })
   }
 
   _goHistory(){

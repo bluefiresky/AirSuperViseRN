@@ -49,8 +49,8 @@ class ReportPostingView extends Component {
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       postingType: {},
       emergentLevel: {},
-      address:'我也不知道',
       illegalDetails: null,
+      location: props.location,
     }
 
     this._onIllegalDetailTextChanged = this._onIllegalDetailTextChanged.bind(this);
@@ -62,12 +62,12 @@ class ReportPostingView extends Component {
   }
 
   render(){
-    let { loading, postingType, emergentLevel, address, pickerPhotos, illegalDetails } = this.state;
+    let { loading, postingType, emergentLevel, location, pickerPhotos, illegalDetails } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} >
-          {this.renderImportance(postingType, emergentLevel, address, illegalDetails)}
+          {this.renderImportance(postingType, emergentLevel, location.address, illegalDetails)}
           {this.renderUnimportance(pickerPhotos)}
           {this.renderSubmitButton()}
           <View style={{height:100}} />
@@ -280,7 +280,7 @@ class ReportPostingView extends Component {
   }
 
   _convertToSubmit(){
-    let { postingType, illegalDetails, emergentLevel, address, pickerPhotos } = this.state;
+    let { postingType, illegalDetails, emergentLevel, pickerPhotos, location } = this.state;
     if(!postingType.code) Toast.showShortCenter('请选择举报类型');
     else if(!illegalDetails) Toast.showShortCenter('请输入违法举报信息');
     else if(!emergentLevel.code) Toast.showShortCenter('请选择紧急程度');
@@ -289,8 +289,8 @@ class ReportPostingView extends Component {
       let { reporterName, reporterId } = this.props.form.getData();
 
       let params = {
-        phoneNum:global.profile.phoneNum, reportType:postingType.code, illegalDetails, urgentType:emergentLevel.code, reportAddress:address,
-        longitude:'111.111', latitude:'222.22', reporterName, reporterId, photoList:this._convertPhotosUri(pickerPhotos)
+        phoneNum:global.profile.phoneNum, reportType:postingType.code, illegalDetails, urgentType:emergentLevel.code, reportAddress:location.address,
+        longitude:location.longitude, latitude:location.latitude, reporterName, reporterId, photoList:this._convertPhotosUri(pickerPhotos)
       }
 
       console.log(' the _convertToSubmit params -->> ', params);

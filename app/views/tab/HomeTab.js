@@ -18,11 +18,11 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 const TitleH = Platform.select({ android: 50, ios: 70 });
 const TitleMarginTop = Platform.select({ android: 0, ios: 20 });
 const PaddingHorizontal = 10;
-const ADH = 130;
+const ADH = W*320/750;
 const MainEntryH = 150;
 const SecondaryEntryH = 100;
 
-import swiperImg1 from './image/123.png'
+const CoverAD = require('./image/cover-home-ad.jpg');
 const MainIcon1 = require('./image/icon-appointment.png');
 const MainIcon2 = require('./image/icon-report.png');
 const MainIcon3 = require('./image/icon-supervise.png');
@@ -82,9 +82,9 @@ class HomeTab extends Component {
     return(
       <View style={{height:ADH}}>
         <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
+          <Image key={1} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={2} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={3} style={{width:W,height:ADH}} source={CoverAD}/>
         </Swiper>
       </View>
     )

@@ -424,7 +424,6 @@ class SVOAirCheckInView extends Component {
 
   _goSelectChangeDate(){
     Actions.datePicker({modalCallback:(date)=>{
-      console.log('_goSelectChangeDate get date -->> ', date);
       this.setState({changedDate:date})
     }})
   }
