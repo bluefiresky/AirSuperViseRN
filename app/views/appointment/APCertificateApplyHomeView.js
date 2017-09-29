@@ -18,6 +18,10 @@ const PaddingHorizontal = 30;
 const ItemH = 90;
 const ItemContentW = 150;
 
+const ApplyIcon = require('./image/icon-certificate-apply.png');
+const DetailIcon = require('./image/icon-check-detail.png');
+const HistoryIcon = require('./image/icon-apply-history.png');
+
 class APCertificateApplyHomeView extends Component {
 
   constructor(props){
@@ -33,24 +37,34 @@ class APCertificateApplyHomeView extends Component {
     return(
       <View style={styles.container}>
         <View style={{height:10}} />
-        {this.renderItem(null, '证件申请')}
-        {this.renderItem(null, '审核证件信息')}
-        {this.renderItem(null, '历史申请记录')}
+        {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}
+        {this.renderItem(DetailIcon, '审核证件信息', borderColor, 2)}
+        {this.renderItem(HistoryIcon, '历史申请记录', 'transparent', 3)}
         <ProgressView show={loading}/>
       </View>
     )
   }
 
-  renderItem(icon, label){
+  renderItem(icon, label, bc, type){
     return (
-      <TouchableOpacity activeOpacity={0.8} style={{height:ItemH, justifyContent:'center', alignItems:'center', backgroundColor:'white'}}>
+      <TouchableOpacity onPress={this._onItemPress.bind(this, type)} activeOpacity={0.8} style={{height:ItemH, justifyContent:'center', alignItems:'center', backgroundColor:'white'}}>
         <View style={{flexDirection:'row', alignItems:'center', width:ItemContentW}}>
-          <Image source={icon} style={{height:35, width:35, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+          <Image source={icon} style={{height:30, width:30, resizeMode:'contain'}} />
           <Text style={{color:mainTextColor, fontSize:18, marginLeft:20}}>{label}</Text>
         </View>
-        <View style={{backgroundColor:borderColor, height:1, position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal}} />
+        <View style={{backgroundColor:bc, height:1, position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal}} />
       </TouchableOpacity>
     );
+  }
+
+  _onItemPress(type){
+    if(type == 1){
+      Actions.apSelectPartment();
+    }else if(type == 2){
+
+    }else if(type == 3){
+
+    }
   }
 
 }

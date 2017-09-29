@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   mainEntryItemImage:{
-    width:45,
-    height:45,
+    width:40,
+    height:40,
     resizeMode:'contain'
   },
   mainEntryItemText:{
