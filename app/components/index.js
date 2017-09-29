@@ -14,6 +14,7 @@ export { ObjectPicker } from './custom/ObjectPicker.js';   /** 自定义组件�
 export { UploadImageView } from './custom/UploadImage.js'; /** 自定义可上传服务器并返回上传后地址的ImageView */
 export { EmptyView } from './custom/EmptyView.js'; /** 自定义可上传服务器并返回上传后地址的ImageView */
 export { DatePicker } from './custom/DatePicker.js'; /** 自定义 时间插件，仅到日 */
+export { CommonPickerView } from './custom/CommonPickerView.js'; /** 自定义 picker */
 
 /** Basic Component [注]可在custom逐渐集中对其进行自定义修改*/
 export { BaseView } from './basic/BaseView.js';         /** 基础View，提供一些提特定的基础显示效果 */

@@ -10,12 +10,13 @@ import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
 const PaddingHorizontal = 20;
 const ItemH = 50;
+const SubmitButtonW = W - (30 * 2);
 
 const ArrowIcon = require('./image/icon-arrow-right.png');
 
@@ -39,6 +40,7 @@ class APSelectPartmentView extends Component {
         {this.renderItem('工程部门：', partment? partment : '请选择工程部门', 1)}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
         {this.renderItem('单位名称：', merchant? merchant : '请选择单位名称', 2)}
+        {this.renderSubmitButton()}
         <ProgressView show={loading}/>
       </View>
     )
@@ -54,13 +56,25 @@ class APSelectPartmentView extends Component {
     );
   }
 
+  renderSubmitButton(){
+    return(
+      <View style={{flexDirection:'row', height:80, alignItems:'center', justifyContent:'center', marginTop:30}}>
+        <XButton onPress={this._submit} title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+      </View>
+    )
+  }
+
   /** Private **/
   _onItemPress(type){
     if(type == 1){
-
+      Actions.commonPicker({data:['1','2','3']})
     }else if(type == 2){
-
+      Actions.commonPicker({data:['4','5','6']})
     }
+  }
+
+  _submit(){
+    Actions.apCertificateApplySubmit()
   }
 
 }
