@@ -61,9 +61,9 @@ class APCertificateApplyHomeView extends Component {
     if(type == 1){
       Actions.apSelectPartment();
     }else if(type == 2){
-
+      Actions.apCertificateCheckRecords();
     }else if(type == 3){
-
+      Actions.apCertificateApplyHistory();
     }
   }
 

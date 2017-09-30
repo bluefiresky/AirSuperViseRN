@@ -23,6 +23,11 @@ const LabelW = 120;
 
 const ArrowIcon = require('./image/icon-arrow-right.png');
 const CameraIcon = require('./image/camera.png');
+const Cover1 = require('./image/cover-submit-1.jpg');
+const Cover2 = require('./image/cover-submit-2.jpg');
+const Cover3 = require('./image/cover-submit-3.jpg');
+const Cover4 = require('./image/cover-submit-4.jpg');
+const Cover5 = require('./image/cover-submit-5.jpg');
 
 const ApplyerTypes = [{label:'企业', code:'1'}, {label:'个人', code:'2'}];
 const CarMerchantRelations = [{label:'自有', code:'1'}, {label:'租赁', code:'2'}];
@@ -46,11 +51,11 @@ class APCertificateApplySubmitView extends Component {
     this.state = {
       loading: false,
       pickerPhotos: [
-        {photo:null, cover:null, label:'行驶证正本', type:'1'},
-        {photo:null, cover:null, label:'行驶证副本', type:'2'},
-        {photo:null, cover:null, label:'车辆正面', type:'3'},
-        {photo:null, cover:null, label:'车辆侧面', type:'4'},
-        {photo:null, cover:null, label:'道路运输许可证', type:'5'}
+        {photo:null, cover:Cover1, label:'行驶证正本', type:'1'},
+        {photo:null, cover:Cover2, label:'行驶证副本', type:'2'},
+        {photo:null, cover:Cover3, label:'车辆正面', type:'3'},
+        {photo:null, cover:Cover4, label:'车辆侧面', type:'4'},
+        {photo:null, cover:Cover5, label:'道路运输许可证', type:'5'}
       ],
       applyerType:ApplyerTypes[1],
       idAddress: null, // 户籍地
@@ -67,6 +72,8 @@ class APCertificateApplySubmitView extends Component {
 
     this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
     this._rePickCallback = this._rePickCallback.bind(this);
+    this._submit = this._submit.bind(this);
+    this._submitCallback = this._submitCallback.bind(this);
   }
 
   render(){
@@ -84,7 +91,7 @@ class APCertificateApplySubmitView extends Component {
           {this.renderPhotoPicker(pickerPhotos)}
           <Line />
           {this.renderSubmitButton()}
-          <View style={{height:50}} />
+          <View style={{height:50, backgroundColor:mainBackColor}} />
         </ScrollView>
         <ProgressView show={loading}/>
       </View>
@@ -228,6 +235,22 @@ class APCertificateApplySubmitView extends Component {
   }
 
   /** Private **/
+  _submit(){
+    Actions.tip({
+      tipType:'submitConfirm',
+      callback:this._submitCallback
+    });
+  }
+
+  _submitCallback(){
+    let self = this;
+    this.setState({loading: true})
+    this.timer = setTimeout(function () {
+      self.setState({loading: false})
+      Actions.success({successType:'certificateApply', modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
+    }, 500);
+  }
+
   _pickPhoto(item, index, rePick){
     if(item.photo && !rePick){
       this.currentPhotoIndex = index;
@@ -325,4 +348,4 @@ const styles = StyleSheet.create({
 
 const ExportView = connect()(APCertificateApplySubmitView);
 
-module.exports.APCertificateApplySubmitView = APCertificateApplySubmitView
+module.exports.APCertificateApplySubmitView = ExportView

@@ -25,6 +25,8 @@ export { APAirMerchantCheckDetailView } from './appointment/APAirMerchantCheckDe
 export { APCertificateApplyHomeView } from './appointment/APCertificateApplyHomeView.js';
 export { APSelectPartmentView } from './appointment/APSelectPartmentView.js';
 export { APCertificateApplySubmitView } from './appointment/APCertificateApplySubmitView.js';
+export { APCertificateCheckRecords } from './appointment/APCertificateCheckRecords.js';
+export { APCertificateApplyHistoryView } from './appointment/APCertificateApplyHistoryView.js';
 
 export { SVOHomeView } from './supervise/SVOHomeView.js';
 export { SVOInspectedMerchantView } from './supervise/SVOInspectedMerchantView.js';

@@ -13,7 +13,12 @@ const ContentW = (W - 40*2);
 const ContentH = 150;
 
 const Types = {
-  makePhone110:{content:{color:'red', fontSize:18, text:'报警电话：110'}, left:{label:'取消', press:0}, right:{label:'拨打', press:1}}
+  makePhone110:{content:{color:'red', fontSize:18, text:'报警电话：110', textAlign:'center'}, left:{label:'取消', press:0}, right:{label:'拨打', press:1}},
+  submitConfirm:{
+    content:{color:mainTextGreyColor, fontSize:16, text:'请申请人对填报内容仔细核对，\n并对填写内容真实性负责', textAlign:'center'},
+    left:{label:'返回修改', press:2},
+    right:{label:'提交申请', press:0}
+  }
 }
 
 class TipView extends React.Component {
@@ -25,9 +30,10 @@ class TipView extends React.Component {
     };
 
     this._closeCallback = this._closeCallback.bind(this);
+    this._closeModalNothing = this._closeModalNothing.bind(this);
     this._closeModal = this._closeModal.bind(this);
     this._makePhone = this._makePhone.bind(this, '110');
-    this.pressEventArray = [this._closeModal, this._makePhone]
+    this.pressEventArray = [this._closeModal, this._makePhone, this._closeModalNothing]
     this.currentTypes = props.tipType? Types[props.tipType] : Types.makePhone110;
   }
 
@@ -56,8 +62,8 @@ class TipView extends React.Component {
 
   renderContent(content){
     return(
-      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-        <Text style={{color:content.color, fontSize:content.fontSize}}>{content.text}</Text>
+      <View style={{flex:1, alignItems:'center', justifyContent:'center', paddingHorizontal:20}}>
+        <Text style={{color:content.color, fontSize:content.fontSize, textAlign:content.textAlign, lineHeight:30}}>{content.text}</Text>
       </View>
     )
   }
@@ -70,7 +76,7 @@ class TipView extends React.Component {
         </TouchableOpacity>
         <View style={{width:1, backgroundColor:borderColor}} />
         <TouchableOpacity onPress={this.pressEventArray[right.press]} activeOpacity={0.8} style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-          <Text style={{color:mainTextGreyColor, fontSize:15}}>{right.label}</Text>
+          <Text style={{color:mainColor, fontSize:15}}>{right.label}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -88,6 +94,14 @@ class TipView extends React.Component {
    Actions.pop();
    if(this.props.callback) this.props.callback();
  }
+
+ _closeModalNothing() {
+   Animated.timing(this.state.offset, {
+     duration: 300,
+     toValue: H
+   }).start(Actions.pop);
+ }
+
 
  // 打开地图：Linking.openURL("geo:37.2122 , 12.222")
  // 打电话：Linking.openURL("tel:123456789552")

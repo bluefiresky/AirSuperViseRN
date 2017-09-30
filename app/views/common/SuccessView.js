@@ -26,6 +26,7 @@ const ShowContent = {
   submit1:{ icon:require('./image/icon-submit-success.png'), title:'提交成功', content:'', textAlign:'center' },
   superviseSubmit:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经提交成功', textAlign:'center' },
   superviseCheck:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经审核成功', textAlign:'center' },
+  certificateApply:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的申请已提交成功，\n请耐心等待审核结果！', textAlign:'center' },
 }
 
 class SuccessView extends React.Component {
@@ -60,7 +61,7 @@ class SuccessView extends React.Component {
           <View style={{width:ComponentW, height:ContentH, backgroundColor:'white', borderRadius:10, paddingTop:ContentPaddingTop, paddingHorizontal:15}}>
             <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
               <Text style={{fontSize:18, color:mainTextColor}}>{IconSource.title}</Text>
-              <Text style={{fontSize:15, color:mainTextGreyColor, marginTop:15, textAlign:IconSource.textAlign}}>{IconSource.content}</Text>
+              <Text style={{fontSize:15, color:mainTextGreyColor, marginTop:15, textAlign:IconSource.textAlign, lineHeight:20}}>{IconSource.content}</Text>
             </View>
             <View style={{flex:1, justifyContent:'flex-end', paddingBottom:10}} >
               <XButton title={'确定'} onPress={this._closeModal.bind(this)} style={{alignSelf:'center', width:ButtonW}}/>
