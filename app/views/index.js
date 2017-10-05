@@ -27,6 +27,8 @@ export { APSelectPartmentView } from './appointment/APSelectPartmentView.js';
 export { APCertificateApplySubmitView } from './appointment/APCertificateApplySubmitView.js';
 export { APCertificateCheckRecords } from './appointment/APCertificateCheckRecords.js';
 export { APCertificateApplyHistoryView } from './appointment/APCertificateApplyHistoryView.js';
+export { APCertificateCheckDetailView } from './appointment/APCertificateCheckDetailView.js';
+export { APCertificateApplyDetailView } from './appointment/APCertificateApplyDetailView.js';
 
 export { SVOHomeView } from './supervise/SVOHomeView.js';
 export { SVOInspectedMerchantView } from './supervise/SVOInspectedMerchantView.js';

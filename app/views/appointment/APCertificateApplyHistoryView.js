@@ -127,6 +127,7 @@ class APCertificateApplyHistoryView extends Component {
 
   /** Private **/
   _goDetail(item, index){
+    Actions.apCertificateApplyDetail({record:item});
   }
 
 }

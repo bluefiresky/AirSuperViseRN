@@ -120,6 +120,7 @@ class APCertificateCheckRecords extends Component {
 
   /** Private **/
   _goDetail(item, index){
+    Actions.apCertificateCheckDetail({record:item});
   }
 
 }
