@@ -8,6 +8,8 @@ import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
+import { CheckBox } from 'react-native-elements';
+import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor, inputLeftColor, inputRightColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, Input, XButton } from '../../components/index.js';  /** 自定义组件 */
@@ -22,8 +24,29 @@ const PhotoW = PhotoViewW - 20;
 const SubmitButtonW = W - (30 * 2);
 
 const CameraIcon = require('./image/camera.png');
+const PhotoOption = {
+  title: '选择照片', //选择器的标题，可以设置为空来不显示标题
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍照', //调取摄像头的按钮，可以设置为空使用户不可选择拍照
+  chooseFromLibraryButtonTitle: '从手机相册选择', //调取相册的按钮，可以设置为空使用户不可选择相册照片
+  mediaType: 'photo',
+  maxWidth: 750,
+  maxHeight: 1000,
+  quality: 0.5,
+  storageOptions: { cameraRoll:true, skipBackup: true, path: 'images' }
+}
 
-const CertificateTypes = [{label:'营业执照', code:'0'},{label:'纳税证明', code:'1'},{label:'证件3', code:'2'},{label:'证件4', code:'3'},{label:'证件5', code:'4'}];
+const CertificateTypes = [
+  {label:'申请证件办理的函件', code:'1'},
+  {label:'组织筹建及运营情况说明', code:'2'},
+  {label:'拟申请证件人员情况报告', code:'3'},
+  {label:'与机场管理机构签订的合同及安全协议', code:'4'},
+  {label:'航空公司申请的首都机场座位运营基地的复函', code:'5'},
+  {label:'企业法人营业执照及副本', code:'6'},
+  {label:'营业许可证', code:'7'},
+  {label:'航空运营人云行许可证', code:'8'},
+  {label:'本单位制定的通行证管理规定', code:'9'}
+];
 
 class APAirMerchantCheckView extends Component {
 
@@ -34,6 +57,11 @@ class APAirMerchantCheckView extends Component {
       currentCertificateTypeCodes:[CertificateTypes[0].code],
       pickerPhotos: [{photo:null},{photo:null},{photo:null},{photo:null},{photo:null},{photo:null}],
     }
+
+    this.currentPhotoIndex;
+    this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
+    this._rePickCallback = this._rePickCallback.bind(this);
+
   }
 
   componentDidMount(){
@@ -82,7 +110,7 @@ class APAirMerchantCheckView extends Component {
 
   renderCertificateTypes(current){
     return(
-      <View style={{flexDirection:'row', paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH}}>
+      <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH}}>
         <Text style={[styles.starStyle,{marginTop:12}]}><Text style={styles.labelStyle}>证件类型</Text></Text>
         {this._renderCertificateTypesItem(current)}
       </View>
@@ -91,17 +119,20 @@ class APAirMerchantCheckView extends Component {
 
   _renderCertificateTypesItem(current){
     return(
-      <View style={{flexDirection:'row', flex:1, flexWrap:'wrap'}}>
+      <View style={{flex:1, paddingTop:10}}>
         {CertificateTypes.map((item, index) => {
-          let show = (current.indexOf(item.code) != -1)? {back:mainColor, text:'white'}:{back:mainBackColor, text:mainTextGreyColor};
+          let checked = current.indexOf(item.code) != -1;
           return(
-            <TouchableOpacity onPress={this._changeCertificateType.bind(this, item)} key={index} activeOpacity={0.8} style={{height:26, paddingHorizontal:8, backgroundColor:show.back, borderRadius:13, alignItems:'center', justifyContent:'center', marginRight:10, marginTop:10}}>
-              <Text style={{fontSize:14, color:show.text, includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.label}</Text>
-            </TouchableOpacity>
+            <CheckBox key={index} title={item.label} onPress={this._changeCertificateType.bind(this, item)} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} checkedColor={mainColor} uncheckedColor={mainColor} />
           )
         })}
       </View>
     )
+
+    // <TouchableOpacity onPress={this._changeCertificateType.bind(this, item)} key={index} activeOpacity={0.8} style={{height:26, paddingHorizontal:8, backgroundColor:show.back, borderRadius:13, alignItems:'center', justifyContent:'center', marginRight:10, marginTop:10}}>
+    //   <Text style={{fontSize:14, color:show.text, includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.label}</Text>
+    // </TouchableOpacity>
+
   }
 
   renderPhotoPicker(data){
@@ -119,12 +150,11 @@ class APAirMerchantCheckView extends Component {
         {data.map((item, index) => {
             return(
               <View key={index} style={{width:PhotoViewW, height:PhotoViewW, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:'lightskyblue'}} />
+                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
                   }
-
                 </TouchableOpacity>
               </View>
             )
@@ -167,6 +197,33 @@ class APAirMerchantCheckView extends Component {
     Actions.apAirMerchantCheckHistory();
   }
 
+  _pickPhoto(item, index, rePick){
+    if(item.photo && !rePick){
+      this.currentPhotoIndex = index;
+      Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
+    }else{
+      ImagePicker.showImagePicker(PhotoOption, (response) => {
+        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+          // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
+          item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
+          this.forceUpdate();
+        }
+      });
+    }
+  }
+
+  _deletePhotoCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    item.photo = null;
+    this.forceUpdate();
+  }
+
+  _rePickCallback(){
+    let item = this.state.pickerPhotos[this.currentPhotoIndex];
+    this._pickPhoto(item, this.currentPhotoIndex, true);
+  }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -183,6 +240,17 @@ const styles = StyleSheet.create({
   labelStyle:{
     color:inputLeftColor,
     fontSize:16
+  },
+  checkbox: {
+    margin: 1,
+    marginLeft: 1,
+    marginRight: 1,
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    padding: 1,
+    borderRadius: 1,
+    height:30,
   },
 });
 
