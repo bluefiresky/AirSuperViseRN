@@ -45,6 +45,7 @@ class RootView extends Component {
               <Scene key="commonWeb" component={Scenes.CommonWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="signature" component={Scenes.SignatureView} hideNavBar={true} backTitle='返回' panHandlers={null}/>
               <Scene key="lawWeb" component={Scenes.LawWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="appointmentSuccess" component={Scenes.AppointmentSuccessView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
               <Scene key="apHome" component={Scenes.APHomeView} title='网上办公大厅' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apFireControlTypes" component={Scenes.APFireControlTypesView} title='消防网上预约办理' hideNavBar={false} backTitle='返回' panHandlers={null}/>
@@ -107,6 +108,7 @@ class RootView extends Component {
             <Scene key="bigImage" component={Scenes.BigImageView} />
             <Scene key="policeList" component={Scenes.PoliceListView} />
             <Scene key="datePicker" component={Components.DatePicker} />
+            <Scene key="appointmentDatePicker" component={Components.AppointmentDatePicker} />
             <Scene key="commonPicker" component={Components.CommonPickerView} />
 
           </Scene>

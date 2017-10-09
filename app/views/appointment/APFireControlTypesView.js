@@ -3,7 +3,7 @@
 * 消防网上预约办理
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, FlatList } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -17,6 +17,8 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
 const PaddingHorizontal = 20;
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
+const ItemH = 50;
+const SeparatorH = StyleSheet.hairlineWidth;
 
 class APFireControlTypesView extends Component {
 
@@ -24,6 +26,7 @@ class APFireControlTypesView extends Component {
     super(props);
     this.state = {
       loading: false,
+      data: null
     }
   }
 
@@ -31,9 +34,14 @@ class APFireControlTypesView extends Component {
     this.setState({loading:true});
     let self = this;
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
+      self.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_LIST, {}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, data:res.entity.itemList})
+          }else{
+            this.setState({loading:false})
+          }
+        })
     })
   }
 
@@ -42,44 +50,54 @@ class APFireControlTypesView extends Component {
   }
 
   render(){
-    let { loading } = this.state;
+    let { loading, data } = this.state;
 
     return(
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{backgroundColor:'white'}}>
-          <View style={{height:10, backgroundColor:mainBackColor}} />
-          {this.renderTypesItem('建设工程消防设计审核')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('建设工程竣工验收消防备案指南')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('建设工程消防设计审核')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('公众聚集场所使用，营业前消防安全检查指南')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('建设工程消防设计审核')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('建设工程验收指南')}
-          <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor, marginHorizontal:PaddingHorizontal}} />
-          {this.renderTypesItem('公众聚集场所使用，营业前消防安全检查指南')}
-        </ScrollView>
+        {this.renderTypesList(data)}
+        {this.renderEmpty(data)}
         <ProgressView show={loading} />
       </View>
     )
   }
 
-  renderTypesItem(title, border){
+  renderTypesList(data){
+    if(data && data.length > 0){
+      return(
+        <FlatList
+          data={data}
+          style={{marginTop:10}}
+          keyExtractor={(item, index) => index }
+          showsVerticalScrollIndicator={false}
+          getItemLayout={(data, index) => ( {length: (ItemH+SeparatorH), offset: (ItemH+SeparatorH) * index, index} )}
+          ItemSeparatorComponent={()=>  <View style={{backgroundColor:borderColor, height:SeparatorH}} /> }
+          renderItem={this._renderTypesItem.bind(this)}
+        />
+      );
+    }
+  }
+
+  _renderTypesItem({item, index}){
     return(
-      <TouchableOpacity onPress={this._goToTempletInfo} activeOpacity={0.8} style={styles.mainEntryItem} >
+      <TouchableOpacity onPress={this._goToTempletInfo.bind(this, item, index)} activeOpacity={0.8} style={styles.mainEntryItem} >
         <View style={styles.mainEntryItemImage} />
-        <Text style={styles.mainEntryItemText}>{title}</Text>
+        <Text style={styles.mainEntryItemText}>{item.reservationProjectTypeTitle}</Text>
         <Image source={ArrowRight} style={styles.mainEntryItemArrow} />
       </TouchableOpacity>
     )
   }
 
+  renderEmpty(data){
+    if(data && data.length === 0){
+      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+        <Text style={{fontSize:16, color:mainTextGreyColor}}>暂无数据</Text>
+      </View>
+    }
+  }
+
   /** Private **/
-  _goToTempletInfo(){
-    Actions.apFireControlTemplet();
+  _goToTempletInfo(item, index){
+    Actions.apFireControlTemplet({url:item.htmlUrl, record:item});
   }
 }
 
@@ -90,10 +108,11 @@ const styles = StyleSheet.create({
     backgroundColor: mainBackColor,
   },
   mainEntryItem:{
-    height:50,
+    height:ItemH,
     flexDirection:'row',
+    alignItems:'center',
     paddingHorizontal:PaddingHorizontal,
-    alignItems:'center'
+    backgroundColor:'white'
   },
   mainEntryItemImage:{
     width:8,

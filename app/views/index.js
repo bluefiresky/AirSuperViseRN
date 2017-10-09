@@ -77,3 +77,4 @@ export { BigImageView } from './common/BigImageView.js';
 export { SignatureView } from './common/SignatureView.js';
 export { PoliceListView } from './common/PoliceListView.js';
 export { LawWebView } from './common/LawWebView.js';
+export { AppointmentSuccessView } from './common/AppointmentSuccessView.js';

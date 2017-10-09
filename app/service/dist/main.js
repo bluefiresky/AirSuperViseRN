@@ -112,3 +112,18 @@ export const post_get_report_history = ({version}) => {
 export const post_get_report_detail = ({reportNum, version}) => {
   return http_post( 'report.getReportDetails', {reportNum}, {}, version )
 }
+
+/** 网上预约-获取消防所有子项列表 */
+export const post_get_fire_fighting_list = ({version}) => {
+  return http_post( 'firefighting.getFirefightingItems', {}, {}, version )
+}
+
+/** 网上预约-消防预约接口 */
+export const post_fire_fighting_submit_reservation = ({itemId, reservationDueDate, dayHalfType, version}) => {
+  return http_post( 'firefighting.submitReservation', {itemId, reservationDueDate, dayHalfType}, {}, version )
+}
+
+/** 网上预约-获取消防历史预约接口 */
+export const post_get_fire_fighting_history_reservations = ({version}) => {
+  return http_post( 'firefighting.getHistoryReservations', {}, {}, version )
+}

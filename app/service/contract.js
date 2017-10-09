@@ -48,6 +48,10 @@ export const POST_SUPERVISE_SUBMIT_AUDIT = 'post_supervise_submit_audit';       
 export const POST_REPORT_SUBMIT_REPORT = 'post_report_submit_report';                         // 违法举报-提交我要举报
 export const POST_GET_REPORT_HISTORY = 'post_get_report_history';                             // 违法举报-获取历史举报信息
 export const POST_GET_REPORT_DETAIL = 'post_get_report_detail';                               // 违法举报-获取举报详情
+export const POST_GET_FIRE_FIGHTING_LIST = 'post_get_fire_fighting_list';                     // 网上预约-获取消防所有子项列表
+export const POST_FIRE_FIGHTING_SUBMIT_RESERVATION = 'post_fire_fighting_submit_reservation';            // 网上预约-消防预约接口
+export const POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS = 'post_get_fire_fighting_history_reservations';     // 网上预约-获取消防历史预约接口
+
 
 /*
  * Common 产品-相关接口-(获取版本号。。。)

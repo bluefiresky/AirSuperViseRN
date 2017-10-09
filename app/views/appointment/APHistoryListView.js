@@ -14,7 +14,7 @@ import { ProgressView } from '../../components/index.js';  /** 自定义组件 *
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-const PaddingHorizontal = 10;
+const PaddingHorizontal = 20;
 const ItemH = 100;
 const ItemTitleH = 40;
 const SeparatorH = 10;
@@ -24,6 +24,11 @@ const ExampleList = [
   {title:'AAAAA', date:'2012-06-12 00:00', num:'12345', status:'未按期办理', statusColor:'red'},
   {title:'AAAAA', date:'2012-06-12 00:00', num:'12345', status:'已完结', statusColor:'blue'}
 ];
+const ReservationStatus = {
+  '1':{text:'预约成功', color:'rgb(0,221,155)'},
+  '4':{text:'未按期办理', color:'red'},
+  '5':{text:'已办结', color:'rgb(0,143,219)'}
+}
 
 class APHistoryListView extends Component {
 
@@ -39,9 +44,11 @@ class APHistoryListView extends Component {
     this.setState({loading: true})
     let self = this;
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList})
-      }, 1000);
+      self.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS, {}))
+        .then( res => {
+          if(res) this.setState({loading:false, data:res.entity.reservationList})
+          else this.setState({loading:false})
+        })
     })
   }
 
@@ -63,9 +70,11 @@ class APHistoryListView extends Component {
 
   renderEmpty(data){
     if(data && data.length === 0){
-      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-        <Text style={{fontSize:16, color:mainTextGreyColor}}>暂无历史数据</Text>
-      </View>
+      return(
+        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:16, color:mainTextGreyColor}}>暂无历史数据</Text>
+        </View>
+      )
     }
   }
 
@@ -74,7 +83,7 @@ class APHistoryListView extends Component {
       return(
         <FlatList
           data={data}
-          style={{marginTop:10, marginHorizontal:PaddingHorizontal}}
+          style={{marginTop:10}}
           keyExtractor={(item, index) => index }
           showsVerticalScrollIndicator={false}
           getItemLayout={(data, index) => ( {length: (ItemH+SeparatorH), offset: (ItemH+SeparatorH) * index, index} )}
@@ -87,20 +96,20 @@ class APHistoryListView extends Component {
 
   _renderHistoryItem({item, index}){
     return(
-      <View style={{paddingHorizontal:PaddingHorizontal, height:ItemH, backgroundColor:'white'}}>
+      <View style={{height:ItemH, backgroundColor:'white', paddingHorizontal:PaddingHorizontal}}>
         <View style={{flexDirection:'row', height:ItemTitleH, alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor, includeFontPadding:false, flex:1}} numberOfLines={1}>{item.title}</Text>
-          <View style={{marginRight:10, backgroundColor:item.statusColor, height:16, borderRadius:8, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.status}</Text>
+          <Text style={{fontSize:16, color:mainTextColor, includeFontPadding:false, flex:1}} numberOfLines={1}>{item.reservationProjectTypeTitle}</Text>
+          <View style={{backgroundColor:ReservationStatus[item.reservationStatus].color, height:16, borderRadius:8, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
+            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{ReservationStatus[item.reservationStatus].text}</Text>
           </View>
         </View>
         <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{flex:1, justifyContent:'center'}}>
           <Text style={{fontSize:14, color:placeholderColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}>
-            预约时间：{item.date}
+            预约时间：{item.reservationDueDate + ' ' + item.dayHalfType}
           </Text>
           <Text style={{fontSize:14, color:mainColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center', marginTop:5}}>
-            预约号：{item.num}
+            预约号：{item.reservationNo}
           </Text>
         </View>
       </View>
