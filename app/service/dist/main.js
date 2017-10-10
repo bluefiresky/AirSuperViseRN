@@ -127,3 +127,13 @@ export const post_fire_fighting_submit_reservation = ({itemId, reservationDueDat
 export const post_get_fire_fighting_history_reservations = ({version}) => {
   return http_post( 'firefighting.getHistoryReservations', {}, {}, version )
 }
+
+/** 网上预约-获取登录用户在新机场模块的角色列表 */
+export const post_airportcard_get_role_list = ({version}) => {
+  return http_post( 'airportcard.getRole', {}, {}, version )
+}
+
+/** 网上预约-申请部门单位列表接口 */
+export const post_airportcard_get_approve_deptorunit = ({deptCode, version}) => {
+  return http_post( 'airportcard.getApproveDeptOrUnit', {deptCode}, {}, version )
+}

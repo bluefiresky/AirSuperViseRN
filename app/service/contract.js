@@ -51,6 +51,8 @@ export const POST_GET_REPORT_DETAIL = 'post_get_report_detail';                 
 export const POST_GET_FIRE_FIGHTING_LIST = 'post_get_fire_fighting_list';                     // 网上预约-获取消防所有子项列表
 export const POST_FIRE_FIGHTING_SUBMIT_RESERVATION = 'post_fire_fighting_submit_reservation';            // 网上预约-消防预约接口
 export const POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS = 'post_get_fire_fighting_history_reservations';     // 网上预约-获取消防历史预约接口
+export const POST_AIRPORTCARD_GET_ROLE_LIST = 'post_airportcard_get_role_list';               // 网上预约-获取登录用户在新机场模块的角色列表
+export const POST_AIRPORTCARD_GET_APPROVE_DEPTORUNIT = 'post_airportcard_get_approve_deptorunit';        // 网上预约-申请部门单位列表接口
 
 
 /*

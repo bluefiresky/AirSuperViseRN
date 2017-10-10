@@ -19,11 +19,6 @@ const ItemH = 100;
 const ItemTitleH = 40;
 const SeparatorH = 10;
 
-const ExampleList = [
-  {title:'AAAAA', date:'2012-06-12 00:00', num:'12345', status:'预约成功', statusColor:'green'},
-  {title:'AAAAA', date:'2012-06-12 00:00', num:'12345', status:'未按期办理', statusColor:'red'},
-  {title:'AAAAA', date:'2012-06-12 00:00', num:'12345', status:'已完结', statusColor:'blue'}
-];
 const ReservationStatus = {
   '1':{text:'预约成功', color:'rgb(0,221,155)'},
   '4':{text:'未按期办理', color:'red'},
@@ -42,9 +37,8 @@ class APHistoryListView extends Component {
 
   componentDidMount(){
     this.setState({loading: true})
-    let self = this;
     InteractionManager.runAfterInteractions(() => {
-      self.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS, {}))
+      this.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS, {}))
         .then( res => {
           if(res) this.setState({loading:false, data:res.entity.reservationList})
           else this.setState({loading:false})

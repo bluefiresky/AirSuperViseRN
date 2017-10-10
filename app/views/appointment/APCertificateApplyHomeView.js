@@ -28,21 +28,43 @@ class APCertificateApplyHomeView extends Component {
     super(props);
     this.state = {
       loading: false,
+      data: null,
     }
   }
 
+  componentDidMount(){
+    this.setState({loading: true})
+    InteractionManager.runAfterInteractions(() => {
+      this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_ROLE_LIST, {}))
+        .then( res => {
+          if(res) this.setState({loading:false, data:res.entity.rsUserType})
+          else this.setState({loading:false})
+        })
+    })
+  }
+
   render(){
-    let { loading } = this.state;
+    let { loading, data } = this.state;
 
     return(
       <View style={styles.container}>
-        <View style={{height:10}} />
-        {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}
-        {this.renderItem(DetailIcon, '审核证件信息', borderColor, 2)}
-        {this.renderItem(HistoryIcon, '历史申请记录', 'transparent', 3)}
+        {this.renderEntry(data)}
         <ProgressView show={loading}/>
       </View>
     )
+  }
+
+  renderEntry(data){
+    if(!data) return null;
+
+    let checker = (data != '04');
+    return (
+      <View style={{marginTop:10}}>
+        {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}
+        {checker?this.renderItem(DetailIcon, '审核证件信息', borderColor, 2):null}
+        {this.renderItem(HistoryIcon, '历史申请记录', 'transparent', 3)}
+      </View>
+    );
   }
 
   renderItem(icon, label, bc, type){
@@ -67,6 +89,20 @@ class APCertificateApplyHomeView extends Component {
     }
   }
 
+  /** Method **/
+  _verifyEntryRole(source, targetList){
+    if(source && source.length > 0){
+      for(let i=0; i<source.length; i++){
+        let r = source[i];
+        if(targetList.indexOf(r.roleNum) != -1) return r;
+      }
+
+      return false;
+    }else{
+      return false;
+    }
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -79,4 +115,4 @@ const styles = StyleSheet.create({
 
 const ExportView = connect()(APCertificateApplyHomeView);
 
-module.exports.APCertificateApplyHomeView = APCertificateApplyHomeView
+module.exports.APCertificateApplyHomeView = ExportView;

@@ -26,10 +26,27 @@ class APSelectPartmentView extends Component {
     super(props);
     this.state = {
       loading: false,
+      partmentData: null,
+      merchantData: null,
       partment: null,
       merchant: null,
     }
+
+    this._getMerchantData = this._getMerchantData.bind(this);
+    this._submit = this._submit.bind(this);
   }
+
+  componentDidMount(){
+    this.setState({loading: true})
+    InteractionManager.runAfterInteractions(() => {
+      this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_APPROVE_DEPTORUNIT, {deptCode:'all'}))
+        .then( res => {
+          if(res) this.setState({loading:false, partmentData:res.entity.deptList})
+          else this.setState({loading:false})
+        })
+    })
+  }
+
 
   render(){
     let { loading, partment, merchant } = this.state;
@@ -37,9 +54,9 @@ class APSelectPartmentView extends Component {
     return(
       <View style={styles.container}>
         <View style={{height:10}} />
-        {this.renderItem('工程部门：', partment? partment : '请选择工程部门', 1)}
+        {this.renderItem('工程部门：', partment? partment.deptName : '请选择工程部门', 1)}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth}} />
-        {this.renderItem('单位名称：', merchant? merchant : '请选择单位名称', 2)}
+        {this.renderItem('单位名称：', merchant? merchant.unitName : '请选择单位名称', 2)}
         {this.renderSubmitButton()}
         <ProgressView show={loading}/>
       </View>
@@ -65,16 +82,49 @@ class APSelectPartmentView extends Component {
   }
 
   /** Private **/
+  _submit(){
+    Actions.apCertificateApplySubmit()
+  }
+
   _onItemPress(type){
     if(type == 1){
-      Actions.commonPicker({data:['1','2','3']})
+      let { partmentData } = this.state;
+      if(partmentData){
+        let data = [];
+        for(let i=0; i<partmentData.length; i++){
+          data.push(partmentData[i].deptName)
+        }
+        Actions.commonPicker({data, modalCallback:(deptName, index) => {
+          let partment = partmentData[index];
+          this.setState({partment, loading:true})
+          this._getMerchantData(partment.deptCode)
+        }})
+      }else{
+        Toast.showShortCenter('未获取部门数据，请稍后重试')
+      }
+
     }else if(type == 2){
-      Actions.commonPicker({data:['4','5','6']})
+      let { merchantData } = this.state;
+      if(merchantData){
+        let data = [];
+        for(let i=0; i<merchantData.length; i++){
+          data.push(merchantData[i].unitName)
+        }
+        Actions.commonPicker({data, modalCallback:(deptName, index) => {
+          this.setState({merchant:merchantData[index]})
+        }})
+      }else{
+        Toast.showShortCenter('未获取单位数据，请稍后重试')
+      }
     }
   }
 
-  _submit(){
-    Actions.apCertificateApplySubmit()
+  _getMerchantData(deptCode){
+    this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_APPROVE_DEPTORUNIT, {deptCode}))
+      .then( res => {
+        if(res) this.setState({loading:false, merchantData:res.entity.unitList})
+        else this.setState({loading:false})
+      })
   }
 
 }
@@ -89,4 +139,4 @@ const styles = StyleSheet.create({
 
 const ExportView = connect()(APSelectPartmentView);
 
-module.exports.APSelectPartmentView = APSelectPartmentView
+module.exports.APSelectPartmentView = ExportView
