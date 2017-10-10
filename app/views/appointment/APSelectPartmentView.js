@@ -83,7 +83,10 @@ class APSelectPartmentView extends Component {
 
   /** Private **/
   _submit(){
-    Actions.apCertificateApplySubmit()
+    let { partment, merchant } = this.state;
+    if(!partment) Toast.showShortCenter('请选择工程部门')
+    else if(!merchant) Toast.showShortCenter('请选择单位');
+    else Actions.apCertificateApplySubmit({partment, merchant})
   }
 
   _onItemPress(type){

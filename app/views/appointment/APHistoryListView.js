@@ -93,7 +93,7 @@ class APHistoryListView extends Component {
       <View style={{height:ItemH, backgroundColor:'white', paddingHorizontal:PaddingHorizontal}}>
         <View style={{flexDirection:'row', height:ItemTitleH, alignItems:'center'}}>
           <Text style={{fontSize:16, color:mainTextColor, includeFontPadding:false, flex:1}} numberOfLines={1}>{item.reservationProjectTypeTitle}</Text>
-          <View style={{backgroundColor:ReservationStatus[item.reservationStatus].color, height:16, borderRadius:8, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
+          <View style={{marginLeft:15, backgroundColor:ReservationStatus[item.reservationStatus].color, height:16, borderRadius:8, paddingHorizontal:5, justifyContent:'center', alignItems:'center'}}>
             <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{ReservationStatus[item.reservationStatus].text}</Text>
           </View>
         </View>

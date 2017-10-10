@@ -56,7 +56,7 @@ class RootView extends Component {
               <Scene key="apAirMerchantCheckDetail" component={Scenes.APAirMerchantCheckDetailView} title='空防单位审核详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apCertificateApplyHome" component={Scenes.APCertificateApplyHomeView} title='新机场证件' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apSelectPartment" component={Scenes.APSelectPartmentView} title='选择工程项目部门' hideNavBar={false} backTitle='返回' panHandlers={null}/>
-              <Scene key="apCertificateApplySubmit" component={Scenes.APCertificateApplySubmitView} title='新机场证件' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="apCertificateApplySubmit" initial={true} component={Scenes.APCertificateApplySubmitView} title='新机场证件' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apCertificateCheckRecords" component={Scenes.APCertificateCheckRecords} title='证件审核信息' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apCertificateCheckDetail" component={Scenes.APCertificateCheckDetailView} title='证件审核详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="apCertificateApplyHistory" component={Scenes.APCertificateApplyHistoryView} title='证件申请历史记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>

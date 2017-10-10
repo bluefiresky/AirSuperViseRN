@@ -11,7 +11,7 @@ import Toast from '@remobile/react-native-toast';
 import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor, inputLeftColor, inputRightColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, XButton, Input } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, XButton, Input, form_connector, ValidateMethods, SelectCarNum  } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -29,7 +29,20 @@ const Cover3 = require('./image/cover-submit-3.jpg');
 const Cover4 = require('./image/cover-submit-4.jpg');
 const Cover5 = require('./image/cover-submit-5.jpg');
 
-const ApplyerTypes = [{label:'企业', code:'1'}, {label:'个人', code:'2'}];
+const ApplyerTypes = [{label:'企业', code:'2'}, {label:'个人', code:'1'}];
+const Provinces = ['北京市','天津市','河北省','山西省','内蒙古自治区','辽宁 省','吉林省','黑龙江省','上海市','江苏省','浙江省','安徽省','福建省','江西省','山东省','河南省','湖北省','湖南省','广东省','广西壮 族自治区','海南省','四川省','贵州省','云南省','重庆市','西藏自治'];
+
+const CarTypes = [{label:'小型客车', code:'1'}, {label:'中型客车', code:'2'}, {label:'大型客车', code:'3'}, {label:'小型货车', code:'4'}, {label:'中型货车', code:'5'}, {label:'重型货车', code:'6'}, {label:'专项作业车', code:'7'}]
+const CarTypeLabels = ['小型客车', '中型客车', '大型客车', '小型货车', '中型货车', '重型货车', '专项作业车']
+
+const CarUsingWays = [{label:'营运', code:'1'}, {label:'非营运', code:'2'}];
+const CarUsingWayLabels = ['营运', '非营运'];
+
+const CertificateTypes = [{label:'C 类(施工现场)', code:'1'}];
+const CertificateTypeLabels = ['C 类(施工现场)'];
+
+const ApplyReasons = ['行政办公', '货物运输', '后勤保障', '施工作业', '其他']
+
 const CarMerchantRelations = [{label:'自有', code:'1'}, {label:'租赁', code:'2'}];
 const ApplyTypes = [{label:'首次申请', code:'1'}, {label:'补、换发', code:'2'}, {label:'失效重新申请', code:'3'}];
 
@@ -50,6 +63,8 @@ class APCertificateApplySubmitView extends Component {
     super(props);
     this.state = {
       loading: false,
+      partment: props.partment,
+      merchant: props.merchant,
       pickerPhotos: [
         {photo:null, cover:Cover1, label:'行驶证正本', type:'1'},
         {photo:null, cover:Cover2, label:'行驶证副本', type:'2'},
@@ -59,14 +74,15 @@ class APCertificateApplySubmitView extends Component {
       ],
       applyerType:ApplyerTypes[1],
       idAddress: null, // 户籍地
-      carType: null,   // 车辆类型
-      carUsingWay: null,  // 车辆使用性质
+      carNumber: null, // 车牌号
+      carType: {},   // 车辆类型
+      carUsingWay: {},  // 车辆使用性质
       startDate: null, // 开始时间
       endDate: null,   // 结束时间
       validDate: null, // 有效期
       carMerchantRelation: {}, // 车辆与申请单位关系
       applyType: {},   // 申请类型,
-      certificateType: null,
+      certificateType: {},
       applyReason: null,
     }
 
@@ -74,6 +90,7 @@ class APCertificateApplySubmitView extends Component {
     this._rePickCallback = this._rePickCallback.bind(this);
     this._submit = this._submit.bind(this);
     this._submitCallback = this._submitCallback.bind(this);
+    this._onCarNumberChange = this._onCarNumberChange.bind(this);
   }
 
   render(){
@@ -83,7 +100,7 @@ class APCertificateApplySubmitView extends Component {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{backgroundColor:'white'}} >
           {this.renderRadio('所有人类型：', applyerType, ApplyerTypes, 1)}
-          {applyerType.code == '1'? null : <Line />}
+          <Line />
           {this.renderPersonal(applyerType)}
           <Line />
           {this.renderCommon()}
@@ -98,10 +115,10 @@ class APCertificateApplySubmitView extends Component {
     )
   }
 
-  renderRadio(label, current, data, type){
+  renderRadio(label, current, data, type, labelWidth){
     return (
       <View style={{flexDirection:'row', paddingBottom:15, paddingHorizontal:PaddingHorizontal}}>
-        <Text style={{color:mainTextColor, fontSize:16, width:110, marginTop:15}}>{label}</Text>
+        <Text style={{color:mainTextColor, fontSize:16, width:labelWidth?labelWidth:110, marginTop:15}}>{label}</Text>
         <View style={{flex:1, flexDirection:'row', flexWrap:'wrap'}}>
           {data.map((item, index) => {
             let show = (current.code == item.code)? {back:mainColor, text:'white'}:{back:mainBackColor, text:mainTextGreyColor};
@@ -117,52 +134,65 @@ class APCertificateApplySubmitView extends Component {
   }
 
   renderPersonal(applyerType){
-    if(applyerType.code == '1') return null;
+    if(applyerType.code == '2') {
+      let { ownCompanyName } = this.props.fields;
 
-    return (
-      <View>
-        <Input label={'姓名：'} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
-        <Line />
-        <Input label={'身份证号：'} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
-        <Line />
-        <Input label={'手机号：'} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
-      </View>
-    );
+      return (
+        <View>
+          <Input label={'企业名称：'} maxLength={30} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        </View>
+      );
+    }else{
+      let { idAddress } = this.state;
+      let { ownerName, ownerIdCard, ownerPhoneNo } = this.props.fields;
+
+      return (
+        <View>
+          <Input label={'姓名：'} {...ownerName} maxLength={10} labelWidth={LabelW} placeholder={'请输入您的姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Line />
+          <Input label={'身份证号：'} {...ownerIdCard} maxLength={18} labelWidth={LabelW} placeholder={'请输入您的身份证号码'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Line />
+          <Input label={'手机号：'} {...ownerPhoneNo} maxLength={11} keyboardType='numeric' labelWidth={LabelW} placeholder={'请输入您的手机号'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Line />
+          {this.renderPicker('户籍地：', idAddress, '请选择户籍地', Provinces, 1)}
+        </View>
+      );
+    }
   }
 
   renderCommon(){
-    let { idAddress, carType, carUsingWay, startDate, endDate, validDate, carMerchantRelation, applyType, certificateType, applyReason } = this.state;
+    let { carNumber, carType, carUsingWay, startDate, endDate, validDate, carMerchantRelation, applyType, certificateType, applyReason } = this.state;
+    let { vin, insurancePolicyNumber, linkName, applyDeptOrUnit } = this.props.fields;
     return (
       <View>
-        {this.renderPicker('户籍地：', idAddress, '请选择户籍地', [], 1)}
+        {/*this.renderPicker('牌照号码：', null, '请选择', [], -1)*/}
+        <SelectCarNum label={'牌照号码：'} plateNum={carNumber} labelWidth={LabelW} style={{paddingHorizontal:PaddingHorizontal}} onChangeValue={this._onCarNumberChange}/>
         <Line/>
-        {this.renderPicker('牌照号码：', null, '请选择', [], -1)}
+        {this.renderPicker('车辆类型：', carType.label, '请选择车辆类型', CarTypeLabels, 2)}
         <Line/>
-        {this.renderPicker('车辆类型：', carType, '请选择车辆类型', [], 2)}
+        {this.renderPicker('车辆使用性质：', carUsingWay.label, '请选择车辆使用性质', CarUsingWayLabels, 3)}
         <Line/>
-        {this.renderPicker('车辆使用性质：', carUsingWay, '请选择车辆使用性质', [], 3)}
-        <Line/>
-        <Input label={'车辆识别代码：'} labelWidth={LabelW} placeholder={'请输入车流量识别代码'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'车辆识别代码：'} {...vin} maxLength={18} labelWidth={LabelW} placeholder={'请输入车辆识别代码'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
-        <Input label={'交强险保单号：'} labelWidth={LabelW} placeholder={'请输入交强险保单号'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'交强险保单号：'} {...insurancePolicyNumber} labelWidth={LabelW} placeholder={'请输入交强险保单号'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
         {this.renderSectionDate('交强险有效期：', startDate, endDate, 6, 7)}
         <Line/>
-        {this.renderPicker('车辆使用性质：', validDate, '请选择车辆使用性质', null, 8)}
+        {this.renderPicker('年检有效期至：', validDate, '请选择有效期', null, 8)}
         <Line/>
-        {this.renderRadio('车辆与申请单位关系：', carMerchantRelation, CarMerchantRelations, 2)}
+        {this.renderRadio('车辆与申请单位关系：', carMerchantRelation, CarMerchantRelations, 2, 170)}
         <Line/>
-        {this.renderRadio('申请类型：', applyType, ApplyTypes)}
+        {this.renderRadio('申请类型：', applyType, ApplyTypes, 3)}
         <Line />
-        <Input label={'联系人姓名：'} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'联系人姓名：'} {...linkName} maxLength={10} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
-        <Input label={'联系方式：'} labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'联系方式：'} maxLength={11} labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
-        <Input label={'申请部门或单位：'} labelWidth={LabelW} placeholder={'请输入申请部门或单位'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'申请部门或单位：'} {...applyDeptOrUnit} maxLength={30} labelWidth={140} placeholder={'请输入申请部门或单位'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line/>
-        {this.renderPicker('证件类别：', certificateType, '请选择证件类别', [], 4)}
+        {this.renderPicker('证件类别：', certificateType.label, '请选择证件类别', CertificateTypeLabels, 4)}
         <Line/>
-        {this.renderPicker('申请事由：', applyReason, '请选择申请事由', [], 5)}
+        {this.renderPicker('申请事由：', applyReason, '请选择申请事由', ApplyReasons, 5)}
       </View>
     );
   }
@@ -285,17 +315,17 @@ class APCertificateApplySubmitView extends Component {
 
     Actions.commonPicker({
       data,
-      modalCallback:(value)=>{
+      modalCallback:(value, index)=>{
         if(type == 1){
-
+          this.setState({idAddress:value})
         }else if(type == 2){
-
+          this.setState({carType:CarTypes[index]})
         }else if(type == 3){
-
+          this.setState({carUsingWay:CarUsingWays[index]})
         }else if(type == 4){
-
+          this.setState({certificateType:CertificateTypes[index]})
         }else if(type == 5){
-
+          this.setState({applyReason:value})
         }
       }
     })
@@ -317,10 +347,13 @@ class APCertificateApplySubmitView extends Component {
     }else if(type == 2){
       this.setState({carMerchantRelation:item})
     }else if(type == 3){
-
+      this.setState({applyType:item})
     }
   }
 
+  _onCarNumberChange(value){
+    this.setState({carNumber:value})
+  }
 
 }
 
@@ -346,6 +379,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const ExportView = connect()(APCertificateApplySubmitView);
+/** post-提交所需数据配置 */
+/**
+  ownerName: 姓名
+  ownerIdCard: 身份证号码
+  ownerPhoneNo: 手机号
+  ownCompanyName: 企业名称
+  vin: 车辆识别代码
+  insurancePolicyNumber: 交强险保单号
+  linkName: 联系人姓名
+  applyDeptOrUnit: 申请部门或单位
+**/
+const fields = ['ownerName', 'ownerIdCard', 'ownerPhoneNo', 'ownCompanyName', 'vin', 'insurancePolicyNumber', 'linkName', 'applyDeptOrUnit']
+const validate = (assert, fields) => {
+  assert("ownerName", ValidateMethods.required(), '请输入姓名')
+  assert("ownerIdCard", ValidateMethods.required(), '请输入身份证号码')
+  assert("ownerIdCard", ValidateMethods.min_length(18), '身份证号码为18位')
+  assert("ownerPhoneNo", ValidateMethods.required(), '请输入手机号')
+  assert("ownerPhoneNo", ValidateMethods.min_length(11), '请输入11位手机号')
+}
+
+const ExportView = connect()(form_connector(APCertificateApplySubmitView, fields, validate));
 
 module.exports.APCertificateApplySubmitView = ExportView

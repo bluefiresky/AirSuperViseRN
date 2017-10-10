@@ -9,7 +9,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { Version, W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
@@ -120,6 +120,7 @@ class PersonalTab extends Component {
     return(
       <View style={{marginVertical:10, height:100, alignItems:'center', justifyContent:'center'}}>
         <XButton onPress={this._logout.bind(this)} title={'退出登录'} style={{height:40, width:W-100, borderRadius:20}} />
+        <Text style={{color:placeholderColor, fontSize:14, marginTop:10}}>版本号：{Version}</Text>
       </View>
     )
   }
