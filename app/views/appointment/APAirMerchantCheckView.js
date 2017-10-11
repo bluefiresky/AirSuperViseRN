@@ -12,7 +12,7 @@ import { CheckBox } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor, inputLeftColor, inputRightColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, Input, XButton } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, Input, XButton, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -37,15 +37,15 @@ const PhotoOption = {
 }
 
 const CertificateTypes = [
-  {label:'申请证件办理的函件', code:'1'},
-  {label:'组织筹建及运营情况说明', code:'2'},
-  {label:'拟申请证件人员情况报告', code:'3'},
-  {label:'与机场管理机构签订的合同及安全协议', code:'4'},
-  {label:'航空公司申请的首都机场座位运营基地的复函', code:'5'},
-  {label:'企业法人营业执照及副本', code:'6'},
-  {label:'营业许可证', code:'7'},
-  {label:'航空运营人云行许可证', code:'8'},
-  {label:'本单位制定的通行证管理规定', code:'9'}
+  {label:'申请证件办理的函件', code:1},
+  {label:'组织筹建及运营情况说明', code:2},
+  {label:'拟申请证件人员情况报告', code:3},
+  {label:'与机场管理机构签订的合同及安全协议', code:4},
+  {label:'航空公司申请的首都机场座位运营基地的复函', code:5},
+  {label:'企业法人营业执照及副本', code:6},
+  {label:'营业许可证', code:7},
+  {label:'航空运营人云行许可证', code:8},
+  {label:'本单位制定的通行证管理规定', code:9}
 ];
 
 class APAirMerchantCheckView extends Component {
@@ -61,18 +61,7 @@ class APAirMerchantCheckView extends Component {
     this.currentPhotoIndex;
     this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
     this._rePickCallback = this._rePickCallback.bind(this);
-
-  }
-
-  componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 1000);
-    })
+    this._submit = this._submit.bind(this);
   }
 
   render(){
@@ -94,15 +83,17 @@ class APAirMerchantCheckView extends Component {
   }
 
   renderInput(){
+    let { enterpriseName, corporateName, contactName, contactWay } = this.props.fields;
+
     return(
       <View style={{backgroundColor:'white', marginTop:10}}>
-        <Input label={'企业名称'} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'企业名称'} {...enterpriseName} maxLength={50} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
-        <Input label={'企业法人'} labelWidth={LabelW} placeholder={'请输入企业法人'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'企业法人'} {...corporateName} maxLength={20} labelWidth={LabelW} placeholder={'请输入企业法人'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
-        <Input label={'联系人姓名'} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'联系人姓名'} {...contactName} maxLength={20} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
-        <Input label={'联系方式'} labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'联系方式'} {...contactWay} maxLength={11} keyboardType='numeric' labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
       </View>
     )
@@ -166,7 +157,7 @@ class APAirMerchantCheckView extends Component {
   renderSubmitButton(){
     return(
       <View style={{height:80, alignItems:'center', justifyContent:'center', marginTop:30}}>
-        <XButton title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
+        <XButton onPress={this._submit} title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />
         <Text style={{color:placeholderColor, fontSize:14, marginTop:20}} onPress={this._goHistory}>历史记录查询</Text>
       </View>
     )
@@ -180,6 +171,27 @@ class APAirMerchantCheckView extends Component {
   }
 
   /** Private **/
+  _submit(){
+    if (!this.props.form.validate()) {
+      Toast.showShortCenter(this.props.form.getErrors()[0]);
+    }else {
+      this.setState({loading:true})
+      let { currentCertificateTypeCodes, pickerPhotos } = this.state;
+      let { enterpriseName, corporateName, contactName, contactWay } = this.props.form.getData();
+      let params = {
+        enterpriseName, corporateName, contactName, contactWay,
+        certificateTypes:JSON.stringify(currentCertificateTypeCodes),
+        certificatePhotos:this._convertPhotosUri(pickerPhotos)
+      }
+      this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPLY, params))
+        .then( res => {
+          this.setState({loading:false})
+          if(res) Actions.success({successType:'airportcardApply', modalCallback:Actions.pop})
+        })
+    }
+
+  }
+
   _changeCertificateType(item, index){
     let code = item.code;
     let { currentCertificateTypeCodes } = this.state;
@@ -223,6 +235,14 @@ class APAirMerchantCheckView extends Component {
     this._pickPhoto(item, this.currentPhotoIndex, true);
   }
 
+  _convertPhotosUri(photos){
+    let submit = [];
+    for(let i=0; i<photos.length; i++){
+      let p = photos[i];
+      if(p.photo) submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
+    }
+    return JSON.stringify(submit);
+  }
 
 }
 
@@ -254,6 +274,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const ExportView = connect()(APAirMerchantCheckView);
+/** post-提交所需数据配置 */
+const fields = ['enterpriseName', 'corporateName', 'contactName', 'contactWay']
+const validate = (assert, fields) => {
+  assert("enterpriseName", ValidateMethods.required(), '请输入企业名称')
+  assert("corporateName", ValidateMethods.required(), '请输入企业法人')
+  assert("contactName", ValidateMethods.required(), '请输入联系人姓名')
+  assert("contactWay", ValidateMethods.required(), '请输入联系方式')
+  assert("contactWay", ValidateMethods.min_length(11), '输入的手机号必须为11位')
+}
+
+const ExportView = connect()(form_connector(APAirMerchantCheckView, fields, validate));
 
 module.exports.APAirMerchantCheckView = ExportView

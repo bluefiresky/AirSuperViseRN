@@ -20,11 +20,7 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExampleList = [
-  {status:'待审核', statusColor:'rgb(255, 176, 91)', merchant:'肯德基', applyer:'张三', date:'2012年12月21 06:06:06'},
-  {status:'审核通过', statusColor:'rgb(42, 215, 143)', merchant:'肯德基', applyer:'张三', date:'2012年12月21 06:06:06'},
-  {status:'审核不通过', statusColor:'red', merchant:'肯德基', applyer:'张三', date:'2012年12月21 06:06:06'},
-];
+const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'审核通过'}, '9':{color:'red', text:'审核不通过'}}
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
@@ -43,9 +39,11 @@ class APAirMerchantCheckHistoryView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList})
-      }, 1000);
+      this.props.dispatch( create_service(Contract.POST_GET_AIRPORTCARD_APPLY_RECORD, {}))
+        .then( res => {
+          if(res) this.setState({loading:false, data:res.entity})
+          else this.setState({loading:false})
+        })
     })
   }
 
@@ -81,9 +79,9 @@ class APAirMerchantCheckHistoryView extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor, flex:1}}>{item.merchant}</Text>
-          <View style={{marginRight:10, backgroundColor:item.statusColor, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.status}</Text>
+          <Text style={{fontSize:16, color:mainTextColor, flex:1}}>{item.enterpriseName}</Text>
+          <View style={{marginRight:10, backgroundColor:ExamineStatus[item.examineStatus].color, height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
+            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{ExamineStatus[item.examineStatus].text}</Text>
           </View>
         </View>
 
@@ -91,8 +89,8 @@ class APAirMerchantCheckHistoryView extends Component {
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <View style={{flex:1}}>
-            <Text style={{fontSize:14, color:mainTextGreyColor}}>创建时间：{item.date}</Text>
-            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:10}}>申请人：{item.applyer}</Text>
+            <Text style={{fontSize:14, color:mainTextGreyColor}}>创建时间：{item.applyTime}</Text>
+            <Text style={{fontSize:14, color:mainTextGreyColor, marginTop:10}}>申请人：{item.contactName}</Text>
           </View>
           <Image source={ArrowRight} style={{width:25, height:25, resizeMode:'contain'}} />
         </View>
@@ -113,7 +111,7 @@ class APAirMerchantCheckHistoryView extends Component {
 
   /** private **/
   _goDetail(item, index){
-    Actions.apAirMerchantCheckDetail();
+    Actions.apAirMerchantCheckDetail({record:item});
   }
 
 

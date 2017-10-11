@@ -153,3 +153,18 @@ export const post_airportcard_submit_apply_record = ({
     version
   )
 }
+
+/** 网上预约-申请部门单位列表接口 */
+export const post_airportcard_apply = ({enterpriseName, corporateName, contactName, contactWay, certificateTypes, certificatePhotos, version}) => {
+  return http_post( 'airdefense.apply', {enterpriseName, corporateName, contactName, contactWay, certificateTypes}, {certificatePhotos}, version )
+}
+
+/** 网上预约-空防新入场单位资质审核记录查询接口  */
+export const post_get_airportcard_apply_record = ({version}) => {
+  return http_post( 'airdefense.apply.record.get', {}, {}, version )
+}
+
+/** 网上预约-空防新入场单位资质审核记录详情查询接口  */
+export const post_get_airportcard_apply_detail = ({id, version}) => {
+  return http_post( 'airdefense.apply.detail.get', {id}, {}, version )
+}

@@ -27,6 +27,7 @@ const ShowContent = {
   superviseSubmit:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经提交成功', textAlign:'center' },
   superviseCheck:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经审核成功', textAlign:'center' },
   certificateApply:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的申请已提交成功，\n请耐心等待审核结果！', textAlign:'center' },
+  airportcardApply:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的申请已提交成功，\n请耐心等待审核结果！', textAlign:'center' },
 }
 
 class SuccessView extends React.Component {

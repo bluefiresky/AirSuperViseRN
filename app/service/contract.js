@@ -54,6 +54,9 @@ export const POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS = 'post_get_fire_fighti
 export const POST_AIRPORTCARD_GET_ROLE_LIST = 'post_airportcard_get_role_list';               // 网上预约-获取登录用户在新机场模块的角色列表
 export const POST_AIRPORTCARD_GET_APPROVE_DEPTORUNIT = 'post_airportcard_get_approve_deptorunit';        // 网上预约-申请部门单位列表接口
 export const POST_AIRPORTCARD_SUBMIT_APPLY_RECORD = 'post_airportcard_submit_apply_record';   // 网上预约-新机场证件-提交申请记录接口
+export const POST_AIRPORTCARD_APPLY = 'post_airportcard_apply';                               // 网上预约-空防新入场单位资质申请接口
+export const POST_GET_AIRPORTCARD_APPLY_RECORD = 'post_get_airportcard_apply_record';         // 网上预约-空防新入场单位资质审核记录查询接口
+export const POST_GET_AIRPORTCARD_APPLY_DETAIL = 'post_get_airportcard_apply_detail';         // 网上预约-空防新入场单位资质审核记录详情查询接口
 
 
 /*
