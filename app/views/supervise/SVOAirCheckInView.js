@@ -243,12 +243,15 @@ class SVOAirCheckInView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
-            {
-              !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
-              <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
-            }
-          </TouchableOpacity>
+          {
+            checked? null :
+            <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
+              {
+                !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
+                <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
+              }
+            </TouchableOpacity>
+          }
           <CheckBox onPress={this._onRefuseCheck} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} title='拒签' checkedColor={mainColor} uncheckedColor={mainColor} />
         </View>
       </View>
@@ -389,11 +392,14 @@ class SVOAirCheckInView extends Component {
 
   _goSelectPolice(){
     let self = this;
-    Actions.svoSearchPolice({callback:(data) => {
-      let { checkPolices } = self.state;
-      checkPolices.push(data);
-      this.setState({checkPolices})
-    }});
+    let { checkPolices } = self.state;
+    if(checkPolices.length == 4) Toast.showShortCenter('检查民警最多添加4个')
+    else {
+      Actions.svoSearchPolice({callback:(data) => {
+        checkPolices.push(data);
+        this.setState({checkPolices})
+      }});
+    }
   }
 
   _onDeletePolice(item, index){

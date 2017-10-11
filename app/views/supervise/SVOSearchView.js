@@ -59,9 +59,9 @@ class SVOSearchView extends Component {
   renderSearchInput(){
     return(
       <View style={{padding:10, backgroundColor:'white', flexDirection:'row'}}>
-        <InputWithIcon onChange={this._onSearchTextChanged} labelWidth={25} iconColor={mainColor} style={{height:36, width:InputW, backgroundColor:mainBackColor, paddingLeft:10, borderTopLeftRadius:18, borderBottomLeftRadius:18}} noBorder={true} icon={SearchIcon} placeholder={'请搜索被检查单位'}/>
-        <TouchableOpacity onPress={this._search.bind(this, this.state.searchContent)} activeOpacity={0.8} style={{backgroundColor:mainColor, height:36, width:SearchButtonW, borderTopRightRadius:18, borderBottomRightRadius:18, alignItems:'center', justifyContent:'center'}}>
-          <Image source={SearchIcon} style={{width:18, height:18, resizeMode:'contain'}}/>
+        <InputWithIcon onChange={this._onSearchTextChanged} labelWidth={25} iconColor={mainColor} style={{height:44, width:InputW, backgroundColor:mainBackColor, paddingLeft:10, borderTopLeftRadius:22, borderBottomLeftRadius:22}} noBorder={true} icon={SearchIcon} placeholder={'请搜索被检查单位'}/>
+        <TouchableOpacity onPress={this._search.bind(this, this.state.searchContent)} activeOpacity={0.8} style={{backgroundColor:mainColor, height:44, width:SearchButtonW, borderTopRightRadius:22, borderBottomRightRadius:22, alignItems:'center', justifyContent:'center'}}>
+          <Image source={SearchIcon} style={{width:22, height:22, resizeMode:'contain'}}/>
         </TouchableOpacity>
       </View>
     )

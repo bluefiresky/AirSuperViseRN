@@ -74,6 +74,19 @@ class LoginView extends Component {
     this.timer = setTimeout( () => {
       this.setState({submiting: false})
     }, 1000)
+    // if (!this.props.form.validate()) {
+    //   Toast.showShortCenter(this.props.form.getErrors()[0]);
+    // }else {
+    //   this.setState({loading:true})
+    //   let { mobile, code } = this.props.form.getData();
+    //   this.props.dispatch( create_service(Contract.POST_USER_LOGIN_ACCOUNT, {phoneNum:mobile, smsCode:code, deviceId:'uerqpiueonvuqh378r93h9uhn', appType:AppType}))
+    //     .then( res => {
+    //       this.setState({loading:false})
+    //       if(res){
+    //         Actions.main({type:'reset'})
+    //       }
+    //     })
+    // }
   }
 
   _onGetVerifyCode(){

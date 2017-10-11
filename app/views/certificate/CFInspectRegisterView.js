@@ -157,12 +157,15 @@ class CFInspectRegisterView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
-            {
-              !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
-              <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
-            }
-          </TouchableOpacity>
+          {
+            checked?null:
+            <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
+              {
+                !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
+                <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
+              }
+            </TouchableOpacity>
+          }
           <CheckBox onPress={this._onRefuseCheck} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} title='拒签' checkedColor={mainColor} uncheckedColor={mainColor} />
         </View>
       </View>
@@ -254,7 +257,7 @@ class CFInspectRegisterView extends Component {
         paperworkSerialNumber:searchProfile.serialNumber,
         signFlag:refuse? 0 : 1,
         totalDeductionScore:score,
-        signImage:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):'',
+        signImg:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):'',
         legalProvisionNumbers:law.entity[0].code,
         livePhotos:this._convertPhotosUri(pickerPhotos)
       }

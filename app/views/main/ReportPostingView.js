@@ -161,9 +161,9 @@ class ReportPostingView extends Component {
 
   renderCurrentAddress(address){
     return(
-      <View style={{flexDirection:'row', paddingHorizontal:PaddingHorizontal, height:InputH, alignItems:'center'}}>
+      <View style={{flexDirection:'row', paddingHorizontal:PaddingHorizontal, paddingVertical:15, alignItems:'center'}}>
         <Text style={[styles.starStyle]}>*<Text style={styles.labelStyle}>举报地点：</Text></Text>
-        <Text style={{color:inputRightColor, fontSize:16}}>{address}</Text>
+        <Text style={{color:inputRightColor, fontSize:16, flex:1}}>{address}</Text>
       </View>
     )
   }
@@ -284,7 +284,6 @@ class ReportPostingView extends Component {
     if(!postingType.code) Toast.showShortCenter('请选择举报类型');
     else if(!illegalDetails) Toast.showShortCenter('请输入违法举报信息');
     else if(!emergentLevel.code) Toast.showShortCenter('请选择紧急程度');
-    else if(!address) Toast.showShortCenter('举报地点不能为空');
     else {
       let { reporterName, reporterId } = this.props.form.getData();
 
@@ -327,7 +326,7 @@ const styles = StyleSheet.create({
   autoTextInput:{
     fontSize:15,
     padding:5,
-    marginHorizontal:17,
+    marginHorizontal:7,
     borderWidth:StyleSheet.hairlineWidth,
     borderColor:borderColor,
     backgroundColor:'#FBFBFE',

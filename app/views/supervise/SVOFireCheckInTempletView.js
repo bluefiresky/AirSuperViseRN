@@ -57,7 +57,7 @@ class SVOFireCheckInTempletView extends Component {
 
   /** Private **/
   _goSelectTemplet(type, name, url){
-    Actions.svoFireCheckInTempletWeb({url, moduleName:name, callback:this.props.callback})
+    Actions.svoFireCheckInTempletWeb({url, moduleName:name, callback:this.props.callback, moduleType:type})
     // Actions.pop();
     // if(this.props.callback) this.props.callback(type, name, JSON.stringify({name:'nicai', age:'woqu'}))
   }

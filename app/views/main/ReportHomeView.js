@@ -15,11 +15,11 @@ import { ProgressView, XButton } from '../../components/index.js';  /** 自定�
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
-import swiperImg1 from './image/123.png'
-const ADH = 130;
+const ADH = W*320/750;
 const EntryItemImageW = (W/3)/3;
 const ButtonW = W - 30*2;
 
+const CoverAD = require('./image/cover-home-ad.jpg');
 const EntryIcon1 = require('./image/icon-report-posting.png');
 const EntryIcon2 = require('./image/icon-report-history.png');
 const EntryIcon3 = require('./image/icon-report-order.png');
@@ -55,9 +55,9 @@ class ReportHomeView extends Component {
     return(
       <View style={{height:ADH}}>
         <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
-          <Image style={{width:W,height:ADH}} source={swiperImg1}/>
+          <Image key={1} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={2} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={3} style={{width:W,height:ADH}} source={CoverAD}/>
         </Swiper>
       </View>
     )
@@ -121,8 +121,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: mainBackColor,
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 

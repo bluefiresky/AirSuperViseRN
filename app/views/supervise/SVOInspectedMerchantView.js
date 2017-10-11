@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, formLeftText, commonText, placeholderColor, mainTextGreyColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, formLeftText, commonText, placeholderColor, mainTextGreyColor, mainTextColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, Input, XButton, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
@@ -56,7 +56,7 @@ class SVOInspectedMerchantView extends Component {
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderLocationInput(location)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            <Input label={'详细地址'} {...address} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} style={{height:InputH}}/>
+            <Input label={'详细地址'} {...address} maxLength={50} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} style={{height:InputH}}/>
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderIntroduction(merchant.introduction)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:merchant.introduction?borderColor:'transparent'}} />
@@ -84,8 +84,9 @@ class SVOInspectedMerchantView extends Component {
 
   renderLocationInput(location){
     return(
-      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal}}>
-        <Input label={'检查地点'} editable={false} labelWidth={100} value={location.address} noBorder={true} hasClearButton={false} style={{width:LocationInputW, height:InputH}}/>
+      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal, paddingVertical:15}}>
+        <Text style={{color:mainTextColor, fontSize:16, width:100, marginLeft:20}}>{'检查地点'}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{location.address}</Text>
         <Image source={NavIcon} style={{height:20, width:20, resizeMode:'contain'}} />
       </TouchableOpacity>
     )

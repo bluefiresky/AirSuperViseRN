@@ -21,7 +21,9 @@ class SVOFireCheckInTempletWebView extends Component {
     super(props);
     this.state = {
       loading: false,
-      url:null
+      url:null,
+      moduleName: props.moduleName,
+      moduleType: props.moduleType,
     }
     this._onMessage = this._onMessage.bind(this);
   }
@@ -74,8 +76,8 @@ class SVOFireCheckInTempletWebView extends Component {
   }
 
   _onMessage(event){
-    console.log(' execute onMessage and the event data -->> ', event.nativeEvent.data);
-    if(this.props.callback) this.props.callback('3', '模板二', event.nativeEvent.data)
+    // console.log(' execute onMessage and the event data -->> ', event.nativeEvent.data);
+    if(this.props.callback) this.props.callback(this.state.moduleType, this.state.moduleName, event.nativeEvent.data)
     Actions.popTo('svoFireCheckIn')
   }
 

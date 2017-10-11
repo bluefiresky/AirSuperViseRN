@@ -135,7 +135,7 @@ export class InputWithIcon extends Component {
           <Image style={{height: 18, width: 18, resizeMode:'contain', tintColor:iconColor?iconColor:null}} source={icon}/>
         </View>
         <TextInput
-          style={{flex: 1, fontSize: 16, color: commonText}}
+          style={{flex: 1, fontSize: 16, color: commonText, includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}
           onChangeText={ (text) => { this._onChangeText(text) } }
           value={value}
           autoFocus={autoFocus}

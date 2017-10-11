@@ -186,12 +186,12 @@ class SVOFireCheckInView extends Component {
           <TouchableOpacity onPress={this._goSelectTemplet} activeOpacity={0.8} style={{flex:1, justifyContent:'center'}}>
             <Text style={{color:'red', fontSize:16}}>{content?content.templeteName:'请选择检查模板'}</Text>
           </TouchableOpacity>
-          {
+          {/*
             !content? null :
             <TouchableOpacity activeOpacity={0.8} style={{justifyContent:'center', paddingHorizontal:10}}>
               <Text style={{color:mainColor, fontSize:16}}>修改</Text>
             </TouchableOpacity>
-          }
+          */}
         </View>
       </View>
     )
@@ -227,12 +227,15 @@ class SVOFireCheckInView extends Component {
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15}}>
         <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>被检查人签名</Text></Text>
         <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          <TouchableOpacity onPress={this._goSign}  activeOpacity={0.8}>
-            {
-              !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
-              <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
-            }
-          </TouchableOpacity>
+          {
+            checked? null :
+            <TouchableOpacity onPress={this._goSign}  activeOpacity={0.8}>
+              {
+                !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
+                <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
+              }
+            </TouchableOpacity>
+          }
           <CheckBox onPress={this._onRefuseCheck} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} title='拒签' checkedColor={mainColor} uncheckedColor={mainColor} />
         </View>
       </View>
@@ -497,7 +500,7 @@ class SVOFireCheckInView extends Component {
 
       return {
         companyNum, companyName, locationAddress:location.address, inputAddress:address, longitude:location.longitude, latitude:location.latitude,
-        listType:'1', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
+        listType:'2', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
         checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:templet.templateType, templateData:templet.content,
         appVersion:Version, policeUserList:JSON.stringify(checkPolices), photoList:this._convertPhotosUri(pickerPhotos), urgentType:currentEmergentLevel.code,
         timeLimit:changedDate, ccCompanyList:sendCopyMerchant?JSON.stringify(sendCopyMerchant.entity):null

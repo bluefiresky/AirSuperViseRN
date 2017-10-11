@@ -137,3 +137,19 @@ export const post_airportcard_get_role_list = ({version}) => {
 export const post_airportcard_get_approve_deptorunit = ({deptCode, version}) => {
   return http_post( 'airportcard.getApproveDeptOrUnit', {deptCode}, {}, version )
 }
+
+/** 网上预约-申请部门单位列表接口 */
+export const post_airportcard_submit_apply_record = ({
+  ownerType, owner, ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration, ownCompanyName,
+  licenseNo, vehicleType, vehicleUseProperty, vin, insurancePolicyNumber, insuranceValidityStartDay, insuranceValidityEndDay,
+  annualInspectionPeriodEndDay, relationshipBetweenVehicleAndApplyUnit, applyType, linkName, linkWay, applyDeptOrUnit, IDType, applyReason,
+  approveDeptCode, approveUnitCode, approveUserId, photoList, version}) => {
+  return http_post(
+    'airportcard.submitApplyRecord',
+    {ownerType, owner, ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration, ownCompanyName,
+      licenseNo, applyReason, vehicleType, vehicleUseProperty, vin, insurancePolicyNumber, insuranceValidityStartDay, insuranceValidityEndDay,
+      annualInspectionPeriodEndDay, applyDeptOrUnit, IDType, approveDeptCode, approveUnitCode, approveUserId},
+    {relationshipBetweenVehicleAndApplyUnit, applyType, linkName, linkWay, photoList},
+    version
+  )
+}

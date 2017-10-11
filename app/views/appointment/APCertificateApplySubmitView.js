@@ -91,6 +91,7 @@ class APCertificateApplySubmitView extends Component {
     this._submit = this._submit.bind(this);
     this._submitCallback = this._submitCallback.bind(this);
     this._onCarNumberChange = this._onCarNumberChange.bind(this);
+    this._commonVerify = this._commonVerify.bind(this);
   }
 
   render(){
@@ -162,7 +163,7 @@ class APCertificateApplySubmitView extends Component {
 
   renderCommon(){
     let { carNumber, carType, carUsingWay, startDate, endDate, validDate, carMerchantRelation, applyType, certificateType, applyReason } = this.state;
-    let { vin, insurancePolicyNumber, linkName, applyDeptOrUnit } = this.props.fields;
+    let { vin, insurancePolicyNumber, linkName, linkWay, applyDeptOrUnit } = this.props.fields;
     return (
       <View>
         {/*this.renderPicker('牌照号码：', null, '请选择', [], -1)*/}
@@ -186,7 +187,7 @@ class APCertificateApplySubmitView extends Component {
         <Line />
         <Input label={'联系人姓名：'} {...linkName} maxLength={10} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
-        <Input label={'联系方式：'} maxLength={11} labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'联系方式：'} {...linkWay} maxLength={11} labelWidth={LabelW} placeholder={'请输入联系方式'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line />
         <Input label={'申请部门或单位：'} {...applyDeptOrUnit} maxLength={30} labelWidth={140} placeholder={'请输入申请部门或单位'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         <Line/>
@@ -266,19 +267,22 @@ class APCertificateApplySubmitView extends Component {
 
   /** Private **/
   _submit(){
-    Actions.tip({
-      tipType:'submitConfirm',
-      callback:this._submitCallback
-    });
+    let { applyerType } = this.state;
+    let submitData = null;
+    if(applyerType.code == '1') submitData = this._convertPersonalSubmitData();
+    else submitData = this._convertMerchantSubmitData();
+
+    if(submitData) Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, submitData) });
   }
 
-  _submitCallback(){
-    let self = this;
+  _submitCallback(data){
+    console.log(' the _submitCallback data -->> ', data);
     this.setState({loading: true})
-    this.timer = setTimeout(function () {
-      self.setState({loading: false})
-      Actions.success({successType:'certificateApply', modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
-    }, 500);
+    this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_SUBMIT_APPLY_RECORD, data))
+      .then( res => {
+        this.setState({loading:false})
+        if(res) Actions.success({successType:'certificateApply', modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
+      })
   }
 
   _pickPhoto(item, index, rePick){
@@ -355,6 +359,95 @@ class APCertificateApplySubmitView extends Component {
     this.setState({carNumber:value})
   }
 
+  /** submit **/
+  _convertPersonalSubmitData(){
+    if (!this.props.form.validate()) Toast.showShortCenter(this.props.form.getErrors()[0]);
+    else if(!this.state.idAddress) Toast.showShortCenter('请选择户籍地');
+    else {
+      let common = this._commonVerify();
+      if(common){
+        let { ownerName, ownerIdCard, ownerPhoneNo } = this.props.form.getData();
+        let { idAddress, partment, merchant } = this.state;
+
+        return {
+          ownerType:'1', ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration:idAddress, ownCompanyName:'北京网都邮箱公司',
+          approveDeptCode:partment.deptCode, approveUnitCode:merchant.unitCode,
+          owner:'', approveUserId:'1',
+          ...common
+        }
+      }
+    }
+
+    return false;
+  }
+
+  _convertMerchantSubmitData(){
+    let ownCompanyName = this.props.fields.ownCompanyName.value;
+    if(!ownCompanyName) Toast.showShortCenter('请输入企业名称');
+    else{
+      let common = this._commonVerify();
+      if(common){
+        let { partment, merchant } = this.state;
+
+        return {
+          ownerType:'2', ownCompanyName,
+          approveDeptCode:partment.deptCode, approveUnitCode:merchant.unitCode,
+          owner:'', approveUserId:'1',
+          ...common
+        };
+      }
+    }
+
+    return false;
+  }
+
+  _commonVerify(){
+    let { applyerType, carNumber, carType, carUsingWay, startDate, endDate, validDate, carMerchantRelation, applyType, certificateType, applyReason, pickerPhotos } = this.state;
+    let { vin, insurancePolicyNumber, linkName, linkWay, applyDeptOrUnit } = this.props.form.getData();
+    if(!carNumber) Toast.showShortCenter('请输入牌照号码');
+    else if(!carType.code) Toast.showShortCenter('请选择车辆类型');
+    else if(!carUsingWay.code) Toast.showShortCenter('请选择车辆使用性质');
+    else if(!carType.code) Toast.showShortCenter('请输入牌照号码');
+    else if(!vin) Toast.showShortCenter('请输入车辆识别代码');
+    else if(!insurancePolicyNumber) Toast.showShortCenter('请输入交强险保单号');
+    else if(!startDate) Toast.showShortCenter('请选择交强险有效期开始时间');
+    else if(!endDate) Toast.showShortCenter('请选择交强险有效期结束时间');
+    else if(!validDate) Toast.showShortCenter('请选择年检有效期');
+    else if(!carMerchantRelation.code) Toast.showShortCenter('请选择车辆与申请单位关系');
+    else if(!applyType.code) Toast.showShortCenter('请选择申请类型');
+    else if(!linkName) Toast.showShortCenter('请输入联系人姓名');
+    else if(!linkWay) Toast.showShortCenter('请输入联系方式');
+    else if(!applyDeptOrUnit) Toast.showShortCenter('请输入申请部门或单位');
+    else if(!certificateType.code) Toast.showShortCenter('请选择证件类别');
+    else if(!applyReason) Toast.showShortCenter('请选择申请事由');
+    else{
+      // let photoList = this._photoListVerirfy(pickerPhotos);
+      if(true){
+        return {
+          licenseNo:carNumber, vehicleType:carType.code, vehicleUseProperty:carUsingWay.code, vin, insurancePolicyNumber,
+          insuranceValidityStartDay:startDate, insuranceValidityEndDay:endDate, annualInspectionPeriodEndDay:validDate,
+          relationshipBetweenVehicleAndApplyUnit:carMerchantRelation.code, applyType:applyType.code,
+          linkName, linkWay, applyDeptOrUnit, IDType:certificateType.code, applyReason
+        };
+      }
+    }
+
+    return false;
+  }
+
+  _photoListVerirfy(photoList){
+    let list = [];
+    for(let i=0; i<photoList.length; i++){
+      let p = photoList[i];
+      if(p.photo) list.push({photoData:p.photo.uri.replace('data:image/jpeg;base64,',''), photoType:p.type})
+      else if(p.type != '5') {
+        Toast.showShortCenter(`${p.label}为必传照片`)
+        return false;
+      }
+    }
+    return JSON.stringify(list);
+  }
+
 }
 
 const Line = (props) => {
@@ -390,7 +483,7 @@ const styles = StyleSheet.create({
   linkName: 联系人姓名
   applyDeptOrUnit: 申请部门或单位
 **/
-const fields = ['ownerName', 'ownerIdCard', 'ownerPhoneNo', 'ownCompanyName', 'vin', 'insurancePolicyNumber', 'linkName', 'applyDeptOrUnit']
+const fields = ['ownerName', 'ownerIdCard', 'ownerPhoneNo', 'ownCompanyName', 'vin', 'insurancePolicyNumber', 'linkName', 'linkWay','applyDeptOrUnit']
 const validate = (assert, fields) => {
   assert("ownerName", ValidateMethods.required(), '请输入姓名')
   assert("ownerIdCard", ValidateMethods.required(), '请输入身份证号码')
