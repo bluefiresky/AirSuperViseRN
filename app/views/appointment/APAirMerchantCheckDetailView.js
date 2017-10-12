@@ -133,7 +133,7 @@ class APAirMerchantCheckDetailView extends Component {
             return(
               <View key={index} style={{width:PhotoViewW, height:PhotoViewW, alignItems:'center', justifyContent:'center'}}>
                 <TouchableOpacity onPress={this._checkBigImage.bind(this, item, index)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
-                  <Image source={item} style={{width:PhotoW, height:PhotoW, resizeMode:'contain', backgroundColor:mainBackColor}} />
+                  <Image source={item} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
                 </TouchableOpacity>
               </View>
             )

@@ -57,6 +57,10 @@ export const POST_AIRPORTCARD_SUBMIT_APPLY_RECORD = 'post_airportcard_submit_app
 export const POST_AIRPORTCARD_APPLY = 'post_airportcard_apply';                               // 网上预约-空防新入场单位资质申请接口
 export const POST_GET_AIRPORTCARD_APPLY_RECORD = 'post_get_airportcard_apply_record';         // 网上预约-空防新入场单位资质审核记录查询接口
 export const POST_GET_AIRPORTCARD_APPLY_DETAIL = 'post_get_airportcard_apply_detail';         // 网上预约-空防新入场单位资质审核记录详情查询接口
+export const POST_GET_AIRPORTCARD_APPROVE_LISTS = 'post_get_airportcard_approve_lists';       // 网上预约-新机场证件-审核申请记录列表
+export const POST_GET_AIRPORTCARD_APPROVE_DETAIL = 'post_get_airportcard_approve_detail';     // 网上预约-新机场证件-获取显示审核申请记录详情
+export const POST_GET_AIRPORTCARD_HISTORY_APPROVE_LIST = 'post_get_airportcard_history_approve_lists';     // 网上预约-新机场证件-查看历史申请记录列表接口
+export const POST_GET_AIRPORTCARD_APPROVE_HISTORY_DETAIL = 'post_get_airportcard_approve_history_detail';  // 网上预约-新机场证件-历史记录详情接口
 
 
 /*

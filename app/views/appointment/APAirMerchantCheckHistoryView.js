@@ -102,8 +102,7 @@ class APAirMerchantCheckHistoryView extends Component {
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }

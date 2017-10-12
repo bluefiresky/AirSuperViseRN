@@ -140,7 +140,7 @@ class APCertificateApplySubmitView extends Component {
 
       return (
         <View>
-          <Input label={'企业名称：'} maxLength={30} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Input label={'企业名称：'} {...ownCompanyName} maxLength={30} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
         </View>
       );
     }else{
@@ -370,7 +370,7 @@ class APCertificateApplySubmitView extends Component {
         let { idAddress, partment, merchant } = this.state;
 
         return {
-          ownerType:'1', ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration:idAddress, ownCompanyName:'北京网都邮箱公司',
+          ownerType:'1', ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration:idAddress, ownCompanyName:'',
           approveDeptCode:partment.deptCode, approveUnitCode:merchant.unitCode,
           owner:'', approveUserId:'1',
           ...common
@@ -382,7 +382,7 @@ class APCertificateApplySubmitView extends Component {
   }
 
   _convertMerchantSubmitData(){
-    let ownCompanyName = this.props.fields.ownCompanyName.value;
+    let ownCompanyName = this.props.form.getData().ownCompanyName;
     if(!ownCompanyName) Toast.showShortCenter('请输入企业名称');
     else{
       let common = this._commonVerify();
@@ -390,7 +390,7 @@ class APCertificateApplySubmitView extends Component {
         let { partment, merchant } = this.state;
 
         return {
-          ownerType:'2', ownCompanyName,
+          ownerType:'2', ownCompanyName, ownerName:'', ownerIdCard:'', ownerPhoneNo:'', placeOfHouseholdRegistration:'',
           approveDeptCode:partment.deptCode, approveUnitCode:merchant.unitCode,
           owner:'', approveUserId:'1',
           ...common
@@ -421,13 +421,13 @@ class APCertificateApplySubmitView extends Component {
     else if(!certificateType.code) Toast.showShortCenter('请选择证件类别');
     else if(!applyReason) Toast.showShortCenter('请选择申请事由');
     else{
-      // let photoList = this._photoListVerirfy(pickerPhotos);
-      if(true){
+      let photoList = this._photoListVerirfy(pickerPhotos);
+      if(photoList){
         return {
           licenseNo:carNumber, vehicleType:carType.code, vehicleUseProperty:carUsingWay.code, vin, insurancePolicyNumber,
           insuranceValidityStartDay:startDate, insuranceValidityEndDay:endDate, annualInspectionPeriodEndDay:validDate,
           relationshipBetweenVehicleAndApplyUnit:carMerchantRelation.code, applyType:applyType.code,
-          linkName, linkWay, applyDeptOrUnit, IDType:certificateType.code, applyReason
+          linkName, linkWay, applyDeptOrUnit, IDType:certificateType.code, applyReason, photoList
         };
       }
     }

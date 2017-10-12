@@ -20,12 +20,20 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExampleList = [
-  {name:'张三', phone:'010-1223344', merchant:'A单位', status:'已审核通过', statusColor:'rgb(0,215,149)'},
-  {name:'李四', phone:'010-345234', merchant:'B单位', status:'等待领导审核', statusColor:'rgb(14,140,229)'},
-  {name:'王五', phone:'010-345234', merchant:'C单位', status:'等待保卫干部审核', statusColor:'rgb(255,176,92)'},
-  {name:'曹六', phone:'010-345234', merchant:'D单位', status:'审核不通过', statusColor:'rgb(255,95,129)'}
-];
+// const ExampleList = [
+//   {name:'张三', phone:'010-1223344', merchant:'A单位', status:'已审核通过', statusColor:'rgb(0,215,149)'},
+//   {name:'李四', phone:'010-345234', merchant:'B单位', status:'等待领导审核', statusColor:'rgb(14,140,229)'},
+//   {name:'王五', phone:'010-345234', merchant:'C单位', status:'等待保卫干部审核', statusColor:'rgb(255,176,92)'},
+//   {name:'曹六', phone:'010-345234', merchant:'D单位', status:'审核不通过', statusColor:'rgb(255,95,129)'}
+// ];
+
+const ApprveStatus = {
+  '01':{text:'待专办员审核', color:'rgb(255,176,92)'},
+  '11':{text:'待保卫干部审核', color:'rgb(255,176,92)'},
+  '21':{text:'待民警审核', color:'rgb(14,140,229)'},
+  '10':{text:'专办员审核不通过', color:'rgb(255,95,129)'}, '20':{text:'保卫干部审核不通过', color:'rgb(255,95,129)'},  '30':{text:'民警审核不通过', color:'rgb(255,95,129)'},
+  '31':{text:'民警审核通过', color:'rgb(0,215,149)'},
+}
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
@@ -41,26 +49,14 @@ class APCertificateApplyHistoryView extends Component {
 
   componentDidMount(){
     let self = this;
-    // self.setState({loading: true})
+    self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      this.setState({data: ExampleList})
-      // self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_CHECK_LIST, {}))
-      //   .then( res => {
-      //     if(res){
-      //       let data = [];
-      //       if(res.entity && res.entity.length > 0){
-      //         let list = res.entity;
-      //         for(let i=0; i<list.length; i++){
-      //           let { deductionScore, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents } = list[i];
-      //           data.push({deductionScore:`-${deductionScore}分`, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents:legalProvisionContents[0].content})
-      //         }
-      //       }
-      //       self.setState({loading:false, data})
-      //     }else{
-      //       self.setState({loading:false})
-      //     }
-      //   })
+      self.props.dispatch( create_service(Contract.POST_GET_AIRPORTCARD_HISTORY_APPROVE_LIST, {}))
+        .then( res => {
+          if(res) this.setState({loading:false, data:res.entity.applyRecordList})
+          else this.setState({loading:false})
+        })
     })
   }
 
@@ -96,10 +92,10 @@ class APCertificateApplyHistoryView extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人${item.name}`}</Text>
-          <Text style={{fontSize:16, color:placeholderColor, flex:1, paddingLeft:10}}>{item.phone}</Text>
-          <View style={{paddingHorizontal:5, height:18, borderRadius:9, backgroundColor:item.statusColor, justifyContent:'center'}}>
-            <Text style={{fontSize:14, color:'white', textAlign:'justify', textAlignVertical:'center', includeFontPadding:false}}>{item.status}</Text>
+          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.submitUserName}`}</Text>
+          <Text style={{fontSize:16, color:placeholderColor, flex:1, paddingLeft:10}}>{item.submitUserPhone}</Text>
+          <View style={{paddingHorizontal:5, height:18, borderRadius:9, backgroundColor:ApprveStatus[item.approveStatus].color, justifyContent:'center'}}>
+            <Text style={{fontSize:14, color:'white', textAlign:'justify', textAlignVertical:'center', includeFontPadding:false}}>{ApprveStatus[item.approveStatus].text}</Text>
           </View>
         </View>
 
@@ -107,7 +103,7 @@ class APCertificateApplyHistoryView extends Component {
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <View style={{flex:1}}>
-            <Text style={{fontSize:16, color:mainTextGreyColor}}>申请单位：{item.merchant}</Text>
+            <Text style={{fontSize:16, color:mainTextGreyColor}}>申请单位：{item.approveUnitName}</Text>
           </View>
           <Image source={ArrowRight} style={{width:20, height:20, resizeMode:'contain'}} />
         </View>

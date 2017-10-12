@@ -19,16 +19,25 @@ const PhotoW = ((W - PaddingHorizontal*2)/3) - 10;
 const SignW = W - PaddingHorizontal*2;
 const SignH = 80;
 
+const OwnerType = {'1':'个人', '2':'企业'}
+const CarType = {'1':'小型客车', '2':'中型客车', '3':'大型客车', '4':'小型货车', '5':'中型货车', '6':'重型货车', '7':'专项作业车'}
+const CarUsingWay = {'1':'运营', '2':'非运营'}
+const CarMerchantRelation = {'1':'自由', '2':'租赁'}
+const ApplyType = {'1':'首次申领', '2':'补换发', '3':'失效重新申领'}
+const IDTypes = {'1':'C类（施工现场）'}
+
 class APCertificateApplyDetailView extends Component {
 
   constructor(props){
     super(props);
     this.state = {
       loading: false,
-      data: props.record,
+      recordId: props.record.formId,
+      recordFlowId: props.record.flowId,
+      data: null,
     }
 
-    console.log(' the APCertificateApplyDetailView data -->> ', this.state.data);
+
   }
 
   componentDidMount(){
@@ -36,11 +45,15 @@ class APCertificateApplyDetailView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false})
-      }, 100);
+      let { recordId, recordFlowId } = self.state;
+      self.props.dispatch( create_service(Contract.POST_GET_AIRPORTCARD_APPROVE_HISTORY_DETAIL, {formId:recordId, flowId:recordFlowId}) )
+        .then( res => {
+          if(res) self.setState({loading:false, data:res.entity})
+          else self.setState({loading:false})
+        })
     })
   }
+
 
   componentWillUnmount(){
 
@@ -67,28 +80,45 @@ class APCertificateApplyDetailView extends Component {
 
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
-        {this.renderDetailItem('所属企业：', '')}
-        {this.renderDetailItem('所有人类型：', '')}
-        {this.renderDetailItem('企业名称：', '')}
-        {this.renderDetailItem('牌照号码：', '')}
-        {this.renderDetailItem('车辆类型：', '')}
-        {this.renderDetailItem('车辆使用性质：', '')}
-        {this.renderDetailItem('车辆识别代码：', '')}
-        {this.renderDetailItem('交强险保单号：', '')}
-        {this.renderDetailItem('交强险起止日期：', '')}
-        {this.renderDetailItem('年检日期', '')}
-        {this.renderDetailItem('车辆与申请单位类型：', '')}
-        {this.renderDetailItem('申请类型：', '')}
-        {this.renderDetailItem('联想人姓名：', '')}
-        {this.renderDetailItem('联系方式：', '')}
-        {this.renderDetailItem('申请部门或单位：', '')}
-        {this.renderDetailItem('申请类别：', '')}
-        {this.renderDetailItem('申请事由：', '')}
-        {this.renderPhotoItem([{},{},{},{},{}])}
+        {this.renderDetailItem('所属企业：', data.approveUnitName)}
+        {this.renderDetailItem('所有人类型：', OwnerType[data.ownerType])}
+        {this.renderPersonal(data)}
+        {this.renderDetailItem('牌照号码：', data.licenseNo)}
+        {this.renderDetailItem('车辆类型：', CarType[data.vehicleType])}
+        {this.renderDetailItem('车辆使用性质：', CarUsingWay[data.vehicleUseProperty])}
+        {this.renderDetailItem('车辆识别代码：', data.vin)}
+        {this.renderDetailItem('交强险保单号：', data.insurancePolicyNumber)}
+        {this.renderDetailItem('交强险起止日期：', data.insuranceValidityStartDay + '-' + data.insuranceValidityEndDay)}
+        {this.renderDetailItem('年检日期：', data.annualInspectionPeriodEndDay)}
+        {this.renderDetailItem('车辆与申请单位类型：', CarMerchantRelation[data.relationshipBetweenVehicleAndApplyUnit])}
+        {this.renderDetailItem('申请类型：', ApplyType[data.applyType])}
+        {this.renderDetailItem('联系人姓名：', data.linkName)}
+        {this.renderDetailItem('联系方式：', data.linkWay)}
+        {this.renderDetailItem('申请部门或单位：', data.applyDeptOrUnit)}
+        {this.renderDetailItem('证件类别：', IDTypes[data.IDType])}
+        {this.renderDetailItem('申请事由：', data.applyReason)}
+        {this.renderPhotoItem(data.photoList)}
 
       </View>
     );
   }
+
+  renderPersonal(data){
+    let { ownerType, ownerName, ownerIdCard, ownerPhoneNo, placeOfHouseholdRegistration, ownCompanyName } = data;
+    if(ownerType == '1'){
+      return (
+        <View>
+          {this.renderDetailItem('姓名：', ownerName)}
+          {this.renderDetailItem('身份证号：', ownerIdCard)}
+          {this.renderDetailItem('手机号：', ownerPhoneNo)}
+          {this.renderDetailItem('户籍地：', placeOfHouseholdRegistration)}
+        </View>
+      );
+    }else{
+      return this.renderDetailItem('企业名称：', ownCompanyName);
+    }
+  }
+
 
   renderDetailItem(label, content, personal){
     return (
@@ -121,28 +151,61 @@ class APCertificateApplyDetailView extends Component {
   /** 审核详情 **/
   renderCheckResult(data){
     if(!data) return null;
+    // else if(data.approveStatus == '01') return null;
 
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
         <Text style={{color:mainTextColor, fontSize:18, alignSelf:'center', paddingVertical:15}}>审核进度</Text>
-        <Line />
-        {this.renderCheckResultItem('专办员审核', '审核专办员：', '专办员签字：', {})}
-        <Line />
-        {this.renderCheckResultItem('领导审核', '审核领导：', '领导签字：', {})}
+        {this.renderCheckResultItem1(data)}
+        {this.renderCheckResultItem2(data)}
+        {this.renderCheckResultFailItem(data)}
       </View>
     );
   }
 
-  renderCheckResultItem(label, checkerLabel, signLabel, data){
-    return (
-      <View style={{padding:PaddingHorizontal}}>
-        <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+label}</Text></Text>
-        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>{checkerLabel}<Text style={{color:mainTextGreyColor, fontSize:16}}>{label}</Text></Text>
-        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{label}</Text></Text>
-        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>{signLabel}</Text>
-        <Image source={null} style={{width:SignW, height:SignH, backgroundColor:mainBackColor, marginTop:10}}/>
-      </View>
-    )
+  renderCheckResultItem1(data){
+    let { approveStatus, zbySignPhoto } = data;
+    if(zbySignPhoto){
+      return (
+        <View style={{padding:PaddingHorizontal}}>
+          <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t专办员审核'}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>专办员签字：</Text>
+          <Image source={{uri:zbySignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
+        </View>
+      )
+    }
+  }
+
+  renderCheckResultItem2(data){
+    let { approveStatus, bwgbSignPhoto } = data;
+    if(bwgbSignPhoto){
+      return (
+        <View style={{padding:PaddingHorizontal}}>
+          <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t保卫干部审核'}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>保卫干部签字：</Text>
+          <Image source={{uri:bwgbSignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
+        </View>
+      )
+    }
+  }
+
+  renderCheckResultFailItem(data){
+    let { approveStatus } = data;
+    if(approveStatus == '10' || approveStatus == '20' || approveStatus == '30'){
+      return (
+        <View style={{padding:PaddingHorizontal}}>
+          <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+checker}</Text></Text>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核不通过理由：</Text>
+            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{}</Text>
+          </View>
+        </View>
+      )
+    }
   }
 
 

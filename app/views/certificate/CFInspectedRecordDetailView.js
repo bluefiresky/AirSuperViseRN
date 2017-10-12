@@ -158,7 +158,8 @@ class CFInspectedRecordDetailView extends Component {
 
   _goCheckResult(url){
     if(url){
-      Actions.bigImage({source:{uri:url, isStatic:true}})
+      // Actions.bigImage({source:{uri:url, isStatic:true}})
+      Actions.commonWeb({url, title:'处理通知单'})
     }else{
       Toast.showShortCenter('未生成处理通知单')
     }

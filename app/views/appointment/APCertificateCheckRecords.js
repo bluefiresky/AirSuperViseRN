@@ -20,8 +20,7 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExampleList = [{name:'张三', phone:'010-1223344', marchant:'A单位', checker:'待保卫干部审核'},{name:'李四', phone:'010-345234', merchant:'B单位', checker:'待领导审核'}];
-
+const ApprveStatus = {'01':'待专员审核', '11':'待保卫干部审核', '10':'专员驳回', '21':'待保领导审核', '20':'保卫干部驳回', '31':'领导通过', '30':'领导驳回'}
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
 class APCertificateCheckRecords extends Component {
@@ -36,26 +35,14 @@ class APCertificateCheckRecords extends Component {
 
   componentDidMount(){
     let self = this;
-    // self.setState({loading: true})
+    self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      this.setState({data: ExampleList})
-      // self.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_CHECK_LIST, {}))
-      //   .then( res => {
-      //     if(res){
-      //       let data = [];
-      //       if(res.entity && res.entity.length > 0){
-      //         let list = res.entity;
-      //         for(let i=0; i<list.length; i++){
-      //           let { deductionScore, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents } = list[i];
-      //           data.push({deductionScore:`-${deductionScore}分`, holderName, createdTime, holderPaperworkSerialNumber, id, legalProvisionContents:legalProvisionContents[0].content})
-      //         }
-      //       }
-      //       self.setState({loading:false, data})
-      //     }else{
-      //       self.setState({loading:false})
-      //     }
-      //   })
+      self.props.dispatch( create_service(Contract.POST_GET_AIRPORTCARD_APPROVE_LISTS, {}))
+        .then( res => {
+          if(res) this.setState({loading:false, data:res.entity.toApproveformslist})
+          else this.setState({loading:false})
+        })
     })
   }
 
@@ -91,16 +78,16 @@ class APCertificateCheckRecords extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人${item.name}`}</Text>
-          <Text style={{fontSize:16, color:mainTextColor, flex:1, paddingLeft:10}}>{item.phone}</Text>
-          <Text style={{fontSize:14, color:'red'}}>{item.checker}</Text>
+          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.submitUserName?item.submitUserName : item.ownCompanyName}`}</Text>
+          <Text style={{fontSize:16, color:mainTextColor, flex:1, paddingLeft:10}}>{item.submitUserPhone}</Text>
+          <Text style={{fontSize:14, color:'red'}}>{ApprveStatus[item.approveStatus]}</Text>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <View style={{flex:1}}>
-            <Text style={{fontSize:16, color:mainTextGreyColor}}>申请单位：{item.marchant}</Text>
+            <Text style={{fontSize:16, color:mainTextGreyColor}}>申请单位：{item.approveUnitName}</Text>
           </View>
           <Image source={ArrowRight} style={{width:20, height:20, resizeMode:'contain'}} />
         </View>
