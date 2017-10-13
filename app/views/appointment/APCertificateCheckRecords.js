@@ -78,8 +78,8 @@ class APCertificateCheckRecords extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.submitUserName?item.submitUserName : item.ownCompanyName}`}</Text>
-          <Text style={{fontSize:16, color:mainTextColor, flex:1, paddingLeft:10}}>{item.submitUserPhone}</Text>
+          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.ownerName?item.ownerName : item.ownCompanyName}`}</Text>
+          <Text style={{fontSize:16, color:mainTextColor, flex:1, paddingLeft:10}}>{item.ownerPhoneNo}</Text>
           <Text style={{fontSize:14, color:'red'}}>{ApprveStatus[item.approveStatus]}</Text>
         </View>
 

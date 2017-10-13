@@ -139,8 +139,8 @@ class APCertificateCheckDetailView extends Component {
             <View style={{flexDirection:'row', marginTop:10, flexWrap:'wrap'}}>
               {photos.map((item, index) => {
                 return(
-                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.data_url, isStatic:true})} activeOpacity={0.8} style={{paddingRight:10, paddingTop:10}}>
-                    <Image source={{uri:item.data_url, isStatic:true}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.dataUrl, isStatic:true})} activeOpacity={0.8} style={{paddingRight:10, paddingTop:10}}>
+                    <Image source={{uri:item.dataUrl, isStatic:true}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
                   </TouchableOpacity>
                 )
               })}
@@ -153,7 +153,7 @@ class APCertificateCheckDetailView extends Component {
   /** 审核详情 **/
   renderCheckResult(data){
     if(!data) return null;
-    else if(data.approveStatus == '01') return null;
+    // else if(data.approveStatus == '01') return null;
 
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
