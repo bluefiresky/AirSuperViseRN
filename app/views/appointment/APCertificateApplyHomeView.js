@@ -33,14 +33,17 @@ class APCertificateApplyHomeView extends Component {
   }
 
   componentDidMount(){
-    this.setState({loading: true})
-    InteractionManager.runAfterInteractions(() => {
-      this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_ROLE_LIST, {}))
-        .then( res => {
-          if(res) this.setState({loading:false, data:res.entity.rsUserType})
-          else this.setState({loading:false})
-        })
-    })
+    let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
+    if(role) this.setState({data:'06'})
+    else this.setState({data:'00'})
+    // this.setState({loading: true})
+    // InteractionManager.runAfterInteractions(() => {
+    //   this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_ROLE_LIST, {}))
+    //     .then( res => {
+    //       if(res) this.setState({loading:false, data:res.entity.rsUserType})
+    //       else this.setState({loading:false, data:'04'})
+    //     })
+    // })
   }
 
   render(){
@@ -57,7 +60,7 @@ class APCertificateApplyHomeView extends Component {
   renderEntry(data){
     if(!data) return null;
 
-    let checker = (data != '04');
+    let checker = (data == '06');
     return (
       <View style={{marginTop:10}}>
         {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}

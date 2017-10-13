@@ -25,6 +25,13 @@ const CarUsingWay = {'1':'运营', '2':'非运营'}
 const CarMerchantRelation = {'1':'自由', '2':'租赁'}
 const ApplyType = {'1':'首次申领', '2':'补换发', '3':'失效重新申领'}
 const IDTypes = {'1':'C类（施工现场）'}
+const ApprveStatus = {
+  '01':{text:'待专办员审核', color:'rgb(255,176,92)'},
+  '11':{text:'待保卫干部审核', color:'rgb(255,176,92)'},
+  '21':{text:'待民警审核', color:'rgb(14,140,229)'},
+  '10':{text:'专办员审核不通过', color:'rgb(255,95,129)'}, '20':{text:'保卫干部审核不通过', color:'rgb(255,95,129)'},  '30':{text:'民警审核不通过', color:'rgb(255,95,129)'},
+  '31':{text:'民警审核通过', color:'rgb(0,215,149)'},
+}
 
 class APCertificateApplyDetailView extends Component {
 
@@ -88,7 +95,7 @@ class APCertificateApplyDetailView extends Component {
         {this.renderDetailItem('车辆使用性质：', CarUsingWay[data.vehicleUseProperty])}
         {this.renderDetailItem('车辆识别代码：', data.vin)}
         {this.renderDetailItem('交强险保单号：', data.insurancePolicyNumber)}
-        {this.renderDetailItem('交强险起止日期：', data.insuranceValidityStartDay + '-' + data.insuranceValidityEndDay)}
+        {this.renderDetailItem('交强险起止日期：', data.insuranceValidityStartDay + '  至  ' + data.insuranceValidityEndDay)}
         {this.renderDetailItem('年检日期：', data.annualInspectionPeriodEndDay)}
         {this.renderDetailItem('车辆与申请单位类型：', CarMerchantRelation[data.relationshipBetweenVehicleAndApplyUnit])}
         {this.renderDetailItem('申请类型：', ApplyType[data.applyType])}
@@ -137,8 +144,8 @@ class APCertificateApplyDetailView extends Component {
             <View style={{flexDirection:'row', marginTop:10, flexWrap:'wrap'}}>
               {photos.map((item, index) => {
                 return(
-                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.photoUrl})} activeOpacity={0.8} style={{paddingRight:10, paddingTop:10}}>
-                    <Image source={{uri:item.photoUrl}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                  <TouchableOpacity key={index} onPress={this._checkBigImage.bind(this, {uri:item.dataUrl})} activeOpacity={0.8} style={{paddingRight:10, paddingTop:10}}>
+                    <Image source={{uri:item.dataUrl}} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
                   </TouchableOpacity>
                 )
               })}
@@ -151,7 +158,7 @@ class APCertificateApplyDetailView extends Component {
   /** 审核详情 **/
   renderCheckResult(data){
     if(!data) return null;
-    // else if(data.approveStatus == '01') return null;
+    else if(data.approveStatus == '01') return null;
 
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
@@ -164,13 +171,13 @@ class APCertificateApplyDetailView extends Component {
   }
 
   renderCheckResultItem1(data){
-    let { approveStatus, zbySignPhoto } = data;
+    let { approveStatus, zbySignPhoto, zbyName, zbyPhone } = data;
     if(zbySignPhoto){
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t专办员审核'}</Text></Text>
-          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
-          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyName}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyPhone}</Text></Text>
           <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>专办员签字：</Text>
           <Image source={{uri:zbySignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
         </View>
@@ -179,13 +186,13 @@ class APCertificateApplyDetailView extends Component {
   }
 
   renderCheckResultItem2(data){
-    let { approveStatus, bwgbSignPhoto } = data;
+    let { approveStatus, bwgbSignPhoto, bwgbName, bwgbPhone } = data;
     if(bwgbSignPhoto){
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t保卫干部审核'}</Text></Text>
-          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
-          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbName}</Text></Text>
+          <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbPhone}</Text></Text>
           <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>保卫干部签字：</Text>
           <Image source={{uri:bwgbSignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
         </View>
@@ -194,14 +201,16 @@ class APCertificateApplyDetailView extends Component {
   }
 
   renderCheckResultFailItem(data){
-    let { approveStatus } = data;
+    let { approveStatus, applyAdviceText } = data;
     if(approveStatus == '10' || approveStatus == '20' || approveStatus == '30'){
+      let checker = ApprveStatus[approveStatus].text;
+
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+checker}</Text></Text>
           <View style={{flexDirection:'row'}}>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核不通过理由：</Text>
-            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{}</Text>
+            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, marginTop:15, lineHeight:20}}>{applyAdviceText+applyAdviceText+applyAdviceText+applyAdviceText}</Text>
           </View>
         </View>
       )

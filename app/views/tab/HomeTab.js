@@ -156,16 +156,20 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.reportHome();
     }else if(type === 2){
-      if(this._verifyRole(global.profile.roleNums, ['02'])) Actions.svoHome();
-      else if(this._verifyRole(global.profile.roleNums, ['03'])) Actions.svmHome();
+      if(global.profile){
+        if(this._verifyRole(global.profile.roleNums, ['02'])) Actions.svoHome();
+        else if(this._verifyRole(global.profile.roleNums, ['03'])) Actions.svmHome();
+      }
     }
   }
 
   _secondEntryPress(type){
     if(type === 0){
-      let role = this._verifyRole(global.profile.roleNums, ['04', '05']);
-      if(role){
-        Actions.cfHome({role});
+      if(global.profile){
+        let role = this._verifyRole(global.profile.roleNums, ['04', '05']);
+        if(role){
+          Actions.cfHome({role});
+        }
       }
     }else if(type === 1){
       Actions.policeNews();

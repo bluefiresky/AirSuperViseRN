@@ -92,8 +92,8 @@ class APCertificateApplyHistoryView extends Component {
     return(
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.submitUserName}`}</Text>
-          <Text style={{fontSize:16, color:placeholderColor, flex:1, paddingLeft:10}}>{item.submitUserPhone}</Text>
+          <Text style={{fontSize:16, color:mainTextColor}}>{`申请人：${item.ownerName}`}</Text>
+          <Text style={{fontSize:16, color:placeholderColor, flex:1, paddingLeft:10}}>{item.ownerPhoneNo}</Text>
           <View style={{paddingHorizontal:5, height:18, borderRadius:9, backgroundColor:ApprveStatus[item.approveStatus].color, justifyContent:'center'}}>
             <Text style={{fontSize:14, color:'white', textAlign:'justify', textAlignVertical:'center', includeFontPadding:false}}>{ApprveStatus[item.approveStatus].text}</Text>
           </View>

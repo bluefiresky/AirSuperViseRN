@@ -45,6 +45,7 @@ class APCertificateCheckDetailView extends Component {
     }
 
     this._goSign = this._goSign.bind(this);
+    this._submit = this._submit.bind(this);
   }
 
   componentDidMount(){
@@ -166,13 +167,13 @@ class APCertificateCheckDetailView extends Component {
 
 
     renderCheckResultItem1(data){
-      let { approveStatus, zbySignPhoto } = data;
+      let { approveStatus, zbySignPhoto, zbyName, zbyPhone  } = data;
       if(zbySignPhoto){
         return (
           <View style={{padding:PaddingHorizontal}}>
             <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t专办员审核'}</Text></Text>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyName}</Text></Text>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyPhone}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>专办员签字：</Text>
             <Image source={{uri:zbySignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
           </View>
@@ -181,13 +182,13 @@ class APCertificateCheckDetailView extends Component {
     }
 
     renderCheckResultItem2(data){
-      let { approveStatus, bwgbSignPhoto } = data;
+      let { approveStatus, bwgbSignPhoto, bwgbName, bwgbPhone  } = data;
       if(bwgbSignPhoto){
         return (
           <View style={{padding:PaddingHorizontal}}>
             <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t保卫干部审核'}</Text></Text>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{}</Text></Text>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbName}</Text></Text>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbPhone}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>保卫干部签字：</Text>
             <Image source={{uri:bwgbSignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
           </View>
@@ -250,30 +251,24 @@ class APCertificateCheckDetailView extends Component {
     );
   }
 
-  renderSign(signImage, checked){
-    return(
-      <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
-        <Text style={[styles.starStyle, {width:120}]}>*<Text style={styles.labelStyle}>签名</Text></Text>
-        <View style={{flexDirection:'row', paddingLeft:7, alignItems:'center', marginTop:10}}>
-          {
-            checked?null:
-            <TouchableOpacity onPress={this._goSign} activeOpacity={0.8}>
-              {
-                !signImage? <View style={{width:SignW, height:60, backgroundColor:mainBackColor}} />:
-                <Image source={signImage} style={{width:SignW, height:60, resizeMode:'contain'}} />
-              }
-            </TouchableOpacity>
-          }
-          <CheckBox onPress={this._onRefuseCheck} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} title='拒签' checkedColor={mainColor} uncheckedColor={mainColor} />
-        </View>
-      </View>
-    )
-  }
-
 
   /** Private **/
   _submit(){
-
+    let { recordId, signImage, reason, checkResult } = this.state;
+    if(!checkResult.code) Toast.showShortCenter('请选择审核结果')
+    else{
+      if(checkResult.code == '2' && !reason) Toast.showShortCenter('请输入不通过理由')
+      else if(!signImage) Toast.showShortCenter('请签名');
+      else {
+        this.setState({loading:true})
+        let params = { formId:recordId, operateType:checkResult.code, signImage, applyAdviceText:reason }
+        this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
+          .then( res => {
+            if(res) this.setState({loading:false})
+            else this.setState({loading:false})
+          })
+      }
+    }
   }
 
   _checkBigImage(source){

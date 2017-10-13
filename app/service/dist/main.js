@@ -160,8 +160,8 @@ export const post_get_airportcard_approve_lists = ({version}) => {
 }
 
 /** 网上预约-新机场证件-获取显示审核申请记录详情  */
-export const post_get_airportcard_approve_detail = ({formId, flowId, version}) => {
-  return http_post( 'airportcard.detailApproveRecord', {formId}, {flowId}, version )
+export const post_get_airportcard_approve_detail = ({formId, version}) => {
+  return http_post( 'airportcard.detailApproveRecord', {formId}, {}, version )
 }
 
 /** 网上预约-新机场证件-查看历史申请记录列表接口  */
@@ -170,8 +170,13 @@ export const post_get_airportcard_history_approve_lists = ({version}) => {
 }
 
 /** 网上预约-新机场证件-历史记录详情接口  */
-export const post_get_airportcard_approve_history_detail = ({formId, flowId,version}) => {
-  return http_post( 'airportcard.detailHistoryApplyRecord', {formId, flowId}, {}, version )
+export const post_get_airportcard_approve_history_detail = ({formId, version}) => {
+  return http_post( 'airportcard.detailHistoryApplyRecord', {formId}, {}, version )
+}
+
+/** 网上预约-新机场证件-审核申请记录接口  */
+export const post_airportcard_approve_record = ({formId, signImage, applyAdviceText, operateType, version}) => {
+  return http_post( 'airportcard.approveRecord', {formId, signImage, operateType}, {applyAdviceText}, version )
 }
 
 /** 网上预约-申请部门单位列表接口 */
