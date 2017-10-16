@@ -58,8 +58,8 @@ class CFInspectView extends Component {
   renderSearchInput(){
     return(
       <View style={{padding:10, backgroundColor:'white', flexDirection:'row', alignItems:'center'}}>
-        <InputPlaceholder onChange={this._onSearchTextChanged} style={{paddingLeft:15, height:36, width:InputW, backgroundColor:mainBackColor, borderRadius:18, marginRight:10}} noBorder={true} placeholder={'请输入证件编号'}/>
-        <TouchableOpacity onPress={this._search.bind(this, this.state.searchContent)} activeOpacity={0.8} style={{backgroundColor:'rgb(245, 181, 97)', height:36, width:SearchButtonW, borderRadius:18, alignItems:'center', justifyContent:'center'}}>
+        <InputPlaceholder onChange={this._onSearchTextChanged} style={{paddingLeft:15, height:40, width:InputW, backgroundColor:mainBackColor, borderRadius:30, marginRight:10}} noBorder={true} placeholder={'请输入证件编号'}/>
+        <TouchableOpacity onPress={this._search.bind(this, this.state.searchContent)} activeOpacity={0.8} style={{backgroundColor:'rgb(245, 181, 97)', height:40, width:SearchButtonW, borderRadius:20, alignItems:'center', justifyContent:'center'}}>
           <Text style={{color:'white', fontSize:16}}>查询</Text>
         </TouchableOpacity>
       </View>

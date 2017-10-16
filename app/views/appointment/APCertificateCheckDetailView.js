@@ -175,7 +175,7 @@ class APCertificateCheckDetailView extends Component {
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核专办员：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyName}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{zbyPhone}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>专办员签字：</Text>
-            <Image source={{uri:zbySignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
+            <Image source={{uri:zbySignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', marginTop:10}}/>
           </View>
         )
       }
@@ -190,7 +190,7 @@ class APCertificateCheckDetailView extends Component {
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核保卫干部：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbName}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{bwgbPhone}</Text></Text>
             <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>保卫干部签字：</Text>
-            <Image source={{uri:bwgbSignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', backgroundColor:mainBackColor, marginTop:10}}/>
+            <Image source={{uri:bwgbSignPhoto.dataUrl, isStatic:true}} style={{width:SignW, height:SignH, resizeMode:'contain', marginTop:10}}/>
           </View>
         )
       }
@@ -260,15 +260,19 @@ class APCertificateCheckDetailView extends Component {
       if(checkResult.code == '2' && !reason) Toast.showShortCenter('请输入不通过理由')
       else if(!signImage) Toast.showShortCenter('请签名');
       else {
-        this.setState({loading:true})
-        let params = { formId:recordId, operateType:checkResult.code, signImage, applyAdviceText:reason }
-        this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
-          .then( res => {
-            if(res) this.setState({loading:false})
-            else this.setState({loading:false})
-          })
+        let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason }
+        Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, params) });
       }
     }
+  }
+
+  _submitCallback(params){
+    this.setState({loading:true})
+    this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
+      .then( res => {
+        this.setState({loading:false})
+        if(res) Actions.success({successType:'airportcardCheckDone', modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
+      })
   }
 
   _checkBigImage(source){

@@ -14,6 +14,8 @@ const OptionH = 50;
 const CloseIcon = require('./image/icon-close.png');
 const DeleteIcon = require('./image/icon-delete.png');
 
+const MarginTop = Platform.select({android:20, ios:0})
+
 class BigImageView extends React.Component {
 
   constructor(props){
@@ -22,7 +24,7 @@ class BigImageView extends React.Component {
         offset: new Animated.Value(H),
         source: props.source,
         operation: props.operation,
-        imageH: props.operation? (H - OptionH) : H
+        imageH: props.operation? (H - OptionH - MarginTop) : (H - MarginTop)
     };
 
     this._closeCallback = this._closeCallback.bind(this);

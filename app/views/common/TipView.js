@@ -18,7 +18,13 @@ const Types = {
     content:{color:mainTextGreyColor, fontSize:16, text:'请申请人对填报内容仔细核对，\n并对填写内容真实性负责', textAlign:'center'},
     left:{label:'返回修改', press:2},
     right:{label:'提交申请', press:0}
+  },
+  submitConfirm2:{
+    content:{color:mainTextGreyColor, fontSize:16, text:'请申请人对填报内容仔细核对，\n并对填写内容真实性负责', textAlign:'center'},
+    left:{label:'返回修改', press:2},
+    right:{label:'提交申请', press:0}
   }
+
 }
 
 class TipView extends React.Component {

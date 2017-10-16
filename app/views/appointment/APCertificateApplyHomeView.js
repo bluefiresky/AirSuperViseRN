@@ -33,9 +33,11 @@ class APCertificateApplyHomeView extends Component {
   }
 
   componentDidMount(){
-    let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
-    if(role) this.setState({data:'06'})
-    else this.setState({data:'00'})
+    if(global.profile){
+      let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
+      if(role) this.setState({data:'06'})
+      else this.setState({data:'00'})
+    }
     // this.setState({loading: true})
     // InteractionManager.runAfterInteractions(() => {
     //   this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_ROLE_LIST, {}))

@@ -177,7 +177,6 @@ class SVOAirCheckInView extends Component {
             placeholder={''}
             placeholderTextColor={placeholderColor}
             minHeight={AutoGrowingInputMinH}
-            maxHeight={100}
             editable={false}
           />
         }

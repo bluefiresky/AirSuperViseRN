@@ -9,7 +9,6 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { CheckBox } from 'react-native-elements';
-import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 import ImagePicker from 'react-native-image-picker';
 
 import { Version, W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
@@ -106,7 +105,7 @@ class SVOFireCheckInView extends Component {
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderSign(signImage, refuse)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            <Input label={'被检查人联系电话'} {...merchantPhone} labelWidth={150} maxLength={11}  placeholder={'请输入被检查人身份电话'} noBorder={true} style={{height:InputH, paddingLeft:16}}/>
+            <Input label={'被检查人联系电话'} {...merchantPhone} labelWidth={150} maxLength={11}  placeholder={'请输入被检查人联系电话'} noBorder={true} style={{height:InputH, paddingLeft:16}}/>
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderSending(currentSending)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -368,11 +367,14 @@ class SVOFireCheckInView extends Component {
 
   _goSelectPolice(){
     let self = this;
-    Actions.svoSearchPolice({callback:(data) => {
-      let { checkPolices } = self.state;
-      checkPolices.push(data);
-      this.setState({checkPolices})
-    }});
+    let { checkPolices } = this.state;
+    if(checkPolices.length == 4) Toast.showShortCenter('检查民警最多添加4人')
+    else{
+      Actions.svoSearchPolice({callback:(data) => {
+        checkPolices.push(data);
+        this.setState({checkPolices})
+      }});
+    }
   }
 
   _onDeletePolice(item, index){
