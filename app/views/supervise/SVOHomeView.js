@@ -3,7 +3,7 @@
 * 安全监管首页-官方(Official)
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -32,12 +32,15 @@ class SVOHomeView extends Component {
       loading: false,
       data: {}
     }
+
+    this._onRefresh = this._onRefresh.bind(this);
+    this._getProfile = this._getProfile.bind(this);
   }
 
   componentDidMount(){
     let self = this;
     self.setState({loading: true})
-
+    DeviceEventEmitter.addListener('refreshSVOHome', this._onRefresh)
     InteractionManager.runAfterInteractions(() => {
       this._getProfile();
     })
@@ -127,6 +130,7 @@ class SVOHomeView extends Component {
     }
   }
 
+  /** Method **/
   _getProfile(){
     // if(global.superviseProfile){
     //   this.setState({loading:false, data:global.superviseProfile})
@@ -140,6 +144,11 @@ class SVOHomeView extends Component {
           }
         })
     // }
+  }
+
+  _onRefresh(){
+    this.setState({loading:true})
+    this._getProfile();
   }
 
 }

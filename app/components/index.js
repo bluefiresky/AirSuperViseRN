@@ -8,6 +8,7 @@ export { RadioButton } from './custom/RadioButton.js';   /** 自定义单选按�
 export { Input } from './custom/Input.js';               /** 自定义TextInput组件，可以绑定fileds值 */
 export { InputWithIcon } from './custom/InputWithIcon.js'; /** 自定义TextInput组件，lable为Icon */
 export { InputPlaceholder } from './custom/InputPlaceholder.js'; /** 无lable输入组件 */
+export { InputAutoGrowing } from './custom/InputAutoGrowing.js';   /** 自定义TextInput 可以自动变高 */
 export { Picker } from './custom/Picker.js';             /** 自定义Picker组件，底部弹出单选框 */
 export { PickerText } from './custom/PickerText.js';     /** 自定义可点击的Picker，Text组件 */
 export { ObjectPicker } from './custom/ObjectPicker.js';   /** 自定义组件可传入对象数组 */

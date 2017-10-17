@@ -3,7 +3,7 @@
 * 安全监管首页-商户(Merchant)
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -35,12 +35,13 @@ class SVMHomeView extends Component {
     }
 
     this._getProfile = this._getProfile.bind(this);
+    this._onRefresh = this._onRefresh.bind(this);
   }
 
   componentDidMount(){
     let self = this;
     self.setState({loading:true})
-
+    DeviceEventEmitter.addListener('refreshSVMHome', this._onRefresh)
     InteractionManager.runAfterInteractions(() => {
       this._getProfile();
     })
@@ -132,6 +133,11 @@ class SVMHomeView extends Component {
           }
         })
     // }
+  }
+
+  _onRefresh(){
+    this.setState({loading:true})
+    this._getProfile();
   }
 
 }

@@ -159,6 +159,7 @@ class HomeTab extends Component {
       if(global.profile){
         if(this._verifyRole(global.profile.roleNums, ['02'])) Actions.svoHome();
         else if(this._verifyRole(global.profile.roleNums, ['03'])) Actions.svmHome();
+        else Toast.showShortCenter('暂无进入权限')
       }
     }
   }
@@ -167,9 +168,8 @@ class HomeTab extends Component {
     if(type === 0){
       if(global.profile){
         let role = this._verifyRole(global.profile.roleNums, ['04', '05']);
-        if(role){
-          Actions.cfHome({role});
-        }
+        if(role) Actions.cfHome({role});
+        else Toast.showShortCenter('暂无进入权限')
       }
     }else if(type === 1){
       Actions.policeNews();
@@ -231,10 +231,8 @@ class HomeTab extends Component {
         if(targetList.indexOf(r.roleNum) != -1) return r;
       }
 
-      Toast.showShortCenter('暂无进入权限')
       return false;
     }else{
-      Toast.showShortCenter('暂无进入权限')
       return false;
     }
   }

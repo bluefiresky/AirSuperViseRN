@@ -95,13 +95,14 @@ class ReportHomeView extends Component {
 
   /** Private **/
   _goPosting(){
+    this.setState({loading:true})
     NativeModules.BaiduMapModule.location().then(res => {
       this.setState({loading:false})
-      console.log(' the BaiduMapModule location res -->> ', res);
+      // console.log(' the BaiduMapModule location res -->> ', res);
       if(res && res.address){
         Actions.reportPosting({location:res})
       }else{
-        Toast.showShortCenter('定位失败')
+        Toast.showShortCenter('定位失败, 请确认手机的定位功能开启')
       }
     })
   }

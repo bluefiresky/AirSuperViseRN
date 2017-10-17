@@ -3,7 +3,7 @@
 * 证件管理-申请复议
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -89,6 +89,7 @@ class SVOCheckReasonView extends Component {
           this.setState({loading:false})
           if(res){
             Actions.success({successType:'superviseCheck', modalCallback:()=>{
+              DeviceEventEmitter.emit('refreshSVOHome');
               Actions.popTo('svoHome');
             }})
           }

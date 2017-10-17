@@ -3,7 +3,7 @@
 * 证件管理-首页
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -39,25 +39,17 @@ class CFHomeView extends Component {
       role: props.role,
       profile: InitProfile,
     }
+
+    this._getProfile = this._getProfile.bind(this);
+    this._onRefresh = this._onRefresh.bind(this);
   }
 
   componentDidMount(){
     let self = this;
     self.setState({loading: true})
-
+    DeviceEventEmitter.addListener('refreshCFHome', this._onRefresh)
     InteractionManager.runAfterInteractions(() => {
-      // if(global.certificateProfile){
-      //   this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
-      // }else{
-        this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
-          .then( res => {
-            if(res){
-              self.setState({loading:false, profile:this._convertData(res.entity)})
-            }else {
-              self.setState({loading:false})
-            }
-          })
-      // }
+      this._getProfile();
     })
   }
 
@@ -166,6 +158,26 @@ class CFHomeView extends Component {
   _convertData(data){
     let { occupation, paperworkStatus, realname, serialNumber, organizationName, score, passArea, deadline } = data;
     return {occupation, paperworkStatus:PaperWorkStatusName[paperworkStatus], realname, serialNumber, organizationName, score, passArea, deadline};
+  }
+
+  _getProfile(){
+    // if(global.certificateProfile){
+    //   this.setState({loading:false, profile:this._convertData(global.certificateProfile)})
+    // }else{
+      this.props.dispatch( create_service(Contract.POST_GET_CERTIFICATE_USER_INFO, {}))
+        .then( res => {
+          if(res){
+            this.setState({loading:false, profile:this._convertData(res.entity)})
+          }else {
+            this.setState({loading:false})
+          }
+        })
+    // }
+  }
+
+  _onRefresh(){
+    this.setState({loading:true})
+    this._getProfile();
   }
 
 }

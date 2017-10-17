@@ -163,7 +163,7 @@ class ReportPostingView extends Component {
     return(
       <View style={{flexDirection:'row', paddingHorizontal:PaddingHorizontal, paddingVertical:15, alignItems:'center'}}>
         <Text style={[styles.starStyle]}>*<Text style={styles.labelStyle}>举报地点：</Text></Text>
-        <Text style={{color:inputRightColor, fontSize:16, flex:1}}>{address}</Text>
+        <Text style={{color:inputRightColor, fontSize:16, flex:1, paddingRight:15}}>{address}</Text>
       </View>
     )
   }

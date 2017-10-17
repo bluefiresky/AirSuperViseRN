@@ -3,7 +3,7 @@
 * 安全监管首页-消防登记记录
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -356,8 +356,14 @@ class SVOFireCheckInView extends Component {
             Actions.success({
               successType:'superviseSubmit',
               modalCallback:()=>{
-                if(this._verifyEntryRole(global.profile.roleNums, ['02'])) Actions.popTo('svoHome');
-                else Actions.popTo('svmHome');
+                if(this._verifyEntryRole(global.profile.roleNums, ['02'])){
+                  DeviceEventEmitter.emit('refreshSVOHome');
+                  Actions.popTo('svoHome');
+                }
+                else {
+                  DeviceEventEmitter.emit('refreshSVMHome');
+                  Actions.popTo('svmHome');
+                }
               }
             });
           }
@@ -371,6 +377,14 @@ class SVOFireCheckInView extends Component {
     if(checkPolices.length == 4) Toast.showShortCenter('检查民警最多添加4人')
     else{
       Actions.svoSearchPolice({callback:(data) => {
+        for(let i=0; i<checkPolices.length; i++){
+          let cp = checkPolices[i];
+          if(cp.userid == data.userid) {
+            Toast.showShortCenter(`${cp.name}已添加`);
+            return;
+          }
+        }
+
         checkPolices.push(data);
         this.setState({checkPolices})
       }});

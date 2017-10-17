@@ -99,7 +99,7 @@ class CFScoreManagerView extends Component {
         <View style={{backgroundColor:borderColor, height:1}} />
 
         <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-          <Text style={{fontSize:14, color:mainTextGreyColor, flex:1}}>{item.legalProvisionContents}</Text>
+          <Text style={{fontSize:14, color:mainTextGreyColor, flex:1, paddingRight:15}} numberOfLines={2} >{item.legalProvisionContents}</Text>
           <Image source={ArrowRight} style={{width:25, height:25, resizeMode:'contain'}} />
         </View>
       </TouchableOpacity>

@@ -63,6 +63,7 @@ class CFApplyReInspectView extends Component {
           placeholderTextColor={placeholderColor}
           onChangeText={this._onReasonTextChange}
           minHeight={120}
+          maxLength={500}
         />
       </View>
     )

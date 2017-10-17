@@ -11,7 +11,7 @@ import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, formLeftText, commonText, placeholderColor, mainTextGreyColor, mainTextColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, Input, XButton, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, Input, XButton, form_connector, ValidateMethods, InputAutoGrowing } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -56,7 +56,7 @@ class SVOInspectedMerchantView extends Component {
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderLocationInput(location)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-            <Input label={'详细地址'} {...address} maxLength={50} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} style={{height:InputH}}/>
+            <InputAutoGrowing label={'详细地址'} {...address} maxLength={50} labelWidth={100} placeholder={'请输入详细地址'} noBorder={true} multiline={true} />
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
             {this.renderIntroduction(merchant.introduction)}
             <View style={{height:StyleSheet.hairlineWidth, backgroundColor:merchant.introduction?borderColor:'transparent'}} />

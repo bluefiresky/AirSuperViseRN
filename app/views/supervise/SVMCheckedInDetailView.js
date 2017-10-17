@@ -3,7 +3,7 @@
 * 安全监管-商户-历史检查记录详情
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -328,7 +328,10 @@ class SVMCheckedInDetailView extends Component {
           this.setState({loading:false})
           if(res) Actions.success({
             successType:'submit1',
-            modalCallback:()=>{ Actions.popTo('svmHome') }
+            modalCallback:()=>{
+              DeviceEventEmitter.emit('refreshSVMHome');
+              Actions.popTo('svmHome')
+            }
           });
         })
     }
