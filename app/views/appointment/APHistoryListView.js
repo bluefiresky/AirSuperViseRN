@@ -36,14 +36,16 @@ class APHistoryListView extends Component {
   }
 
   componentDidMount(){
-    this.setState({loading: true})
-    InteractionManager.runAfterInteractions(() => {
-      this.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS, {}))
-        .then( res => {
-          if(res) this.setState({loading:false, data:res.entity.reservationList})
-          else this.setState({loading:false})
-        })
-    })
+    if(global.profile){
+      this.setState({loading: true})
+      InteractionManager.runAfterInteractions(() => {
+        this.props.dispatch( create_service(Contract.POST_GET_FIRE_FIGHTING_HISTORY_RESERVATIONS, {phone:global.profile.phoneNum}))
+          .then( res => {
+            if(res) this.setState({loading:false, data:res.entity.reservationList})
+            else this.setState({loading:false})
+          })
+      })
+    }
   }
 
   componentWillUnmount(){

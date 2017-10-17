@@ -99,16 +99,18 @@ class APFireControlTempletView extends Component {
       return;
     }
 
-    this.setState({loading:true})
-    let params = { itemId: data.itemId, reservationDueDate: date, dayHalfType: this._convertTime(time) }
-    this.props.dispatch( create_service(Contract.POST_FIRE_FIGHTING_SUBMIT_RESERVATION, params) )
-      .then( res => {
-        if(res) {
-          Actions.appointmentSuccess({type:'replace', title:'提交成功', record:res.entity})
-        }else{
-          this.setState({loading:false})
-        }
-      })
+    if(global.profile){
+      this.setState({loading:true})
+      let params = { itemId: data.itemId, reservationDueDate: date, dayHalfType: this._convertTime(time), phone:global.profile.phoneNum }
+      this.props.dispatch( create_service(Contract.POST_FIRE_FIGHTING_SUBMIT_RESERVATION, params) )
+        .then( res => {
+          if(res) {
+            Actions.appointmentSuccess({type:'replace', title:'提交成功', record:res.entity})
+          }else{
+            this.setState({loading:false})
+          }
+        })
+    }
   }
 
   _convertTime(time){

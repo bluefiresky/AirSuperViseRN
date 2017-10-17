@@ -119,13 +119,13 @@ export const post_get_fire_fighting_list = ({version}) => {
 }
 
 /** 网上预约-消防预约接口 */
-export const post_fire_fighting_submit_reservation = ({itemId, reservationDueDate, dayHalfType, version}) => {
-  return http_post( 'firefighting.submitReservation', {itemId, reservationDueDate, dayHalfType}, {}, version )
+export const post_fire_fighting_submit_reservation = ({itemId, reservationDueDate, dayHalfType, phone, version}) => {
+  return http_post( 'firefighting.submitReservation', {itemId, reservationDueDate, dayHalfType, phone}, {}, version )
 }
 
 /** 网上预约-获取消防历史预约接口 */
-export const post_get_fire_fighting_history_reservations = ({version}) => {
-  return http_post( 'firefighting.getHistoryReservations', {}, {}, version )
+export const post_get_fire_fighting_history_reservations = ({phone, version}) => {
+  return http_post( 'firefighting.getHistoryReservations', {phone}, {}, version )
 }
 
 /** 网上预约-获取登录用户在新机场模块的角色列表 */
