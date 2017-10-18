@@ -3,7 +3,7 @@
 * 证件管理-违规登记
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -210,7 +210,10 @@ class CFInspectRegisterView extends Component {
         .then( res => {
           this.setState({loading:false})
           if(res){
-            Actions.success({successType:'submit1', modalCallback:Actions.pop});
+            Actions.success({successType:'submit1', modalCallback:()=>{
+              Actions.popTo('cfHome')
+              DeviceEventEmitter.emit('refreshCFHome');
+            }});
           }
         })
     }

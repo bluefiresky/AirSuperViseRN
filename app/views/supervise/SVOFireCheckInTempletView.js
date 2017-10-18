@@ -33,7 +33,7 @@ class SVOFireCheckInTempletView extends Component {
     return(
       <View style={styles.container}>
         <View style={{flexDirection:'row'}}>
-          {this.renderItem('2', '模板一', '消防监督检查记录', 'https://test.zhongchebaolian.com/airport-web-api/fire-report.html')}
+          {this.renderItem('2', '模板一', '消防监督检查记录', 'https://test.zhongchebaolian.com/airport-web-api/fire-onereport1.html')}
           {this.renderItem('3', '模板二', '消防监督检查记录', 'https://test.zhongchebaolian.com/airport-web-api/fire-report.html', '(其他形式消防监督检查适用)')}
         </View>
         <ProgressView show={loading} />

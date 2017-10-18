@@ -348,16 +348,31 @@ class SVOAirCheckInView extends Component {
     )
   }
 
-  _renderSendingCopySelect(content){
-    let show = content? {color:mainTextGreyColor, text:content.nameArray.toString()} : {color:'red', text:'请选择抄送单位'};
+  _renderSendingCopySelect(data){
     return(
-      <View style={{flexDirection:'row', paddingVertical:15, alignItems:'center', paddingHorizontal:PaddingHorizontal}}>
+      <View style={{flexDirection:'row', paddingVertical:7, alignItems:'center', paddingHorizontal:PaddingHorizontal}}>
         <Text style={[styles.starStyle, {color:'transparent'}]}>*<Text style={styles.labelStyle}>抄送单位</Text></Text>
-        <TouchableOpacity onPress={this._sendCopySearch} activeOpacity={0.8} style={{flex:1, justifyContent:'center'}}>
-          <Text style={{color:show.color, fontSize:16}}>{show.text}</Text>
+        <View style={{width:AddPoliceInputW, flexWrap:'wrap', flexDirection:'row'}}>
+          {
+            data && data.map((item, index) => {
+              return(
+                <View key={index} style={{flexDirection:'row', height:30, alignItems:'center', justifyContent:'center'}}>
+                  <View style={{paddingHorizontal:5, height:20, borderRadius:10, alignItems:'center', justifyContent:'center', backgroundColor:mainBackColor}}>
+                    <Text style={{fontSize:14, color:inputRightColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}>{item.ccCompanyName}</Text>
+                  </View>
+                  <TouchableOpacity onPress={this._onDeletePolice.bind(this, item, index)} style={{width:20, height:25}} >
+                    <Image source={DeleteIcon} style={{width:10, height:10, resizeMode:'contain'}} />
+                  </TouchableOpacity>
+                </View>
+              )
+            })
+          }
+        </View>
+        <TouchableOpacity onPress={this._sendCopySearch} activeOpacity={0.8} style={{width:AddPoliceButtonW, height:AddPoliceButtonW, alignItems:'center', justifyContent:'center'}}>
+          <Image source={AddIcon} style={{height:25, width:25, tintColor:mainColor}} />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   /** Private **/
@@ -497,15 +512,21 @@ class SVOAirCheckInView extends Component {
     Actions.svoCopySearch({searchResult:(merchant) => {
       let { sendCopyMerchant } = this.state;
       if(sendCopyMerchant){
-        let { nameArray, entity } = sendCopyMerchant;
-        entity.push({ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName})
-        nameArray.push(merchant.ccCompanyName)
+        for(let i=0; i<sendCopyMerchant.length; i++){
+          let scm = sendCopyMerchant[i];
+          if(scm.ccCompanyNum == merchant.ccCompanyNum) {
+            Toast.showShortCenter(`${scm.ccCompanyName}已添加`);
+            return;
+          }
+        }
+        sendCopyMerchant.push({ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName})
       }else{
-        sendCopyMerchant = {nameArray:[merchant.ccCompanyName], entity:[{ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName}]}
+        sendCopyMerchant = [{ccCompanyNum:merchant.ccCompanyNum, ccCompanyName:merchant.ccCompanyName}];
       }
       this.setState({sendCopyMerchant})
     }});
   }
+
 
   _convertStandardParams(){
     let { checkPolices, law, pickerPhotos, currentCheckResult, refuse, signImage, currentSending, address, location } = this.state;
@@ -553,7 +574,7 @@ class SVOAirCheckInView extends Component {
         listType:'1', checkResult:currentCheckResult.code, signData:signImage?signImage.uri.replace('data:image/jpeg;base64,',''):null, signType:refuse?'2':'1',
         checkPhoneNum:merchantPhone, circulationType:currentSending.code, templateType:'1', appVersion:Version, policeUserList:JSON.stringify(checkPolices),
         lawList:this._convertLawToSubmit(law.entity), photoList:this._convertPhotosUri(pickerPhotos),checkDetails:notStandStardDetail, urgentType:currentEmergentLevel.code,
-        timeLimit:changedDate, ccCompanyList:sendCopyMerchant?JSON.stringify(sendCopyMerchant.entity):null,
+        timeLimit:changedDate, ccCompanyList:sendCopyMerchant?JSON.stringify(sendCopyMerchant):null,
       };
     }
   }
