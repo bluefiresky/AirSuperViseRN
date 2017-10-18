@@ -44,6 +44,8 @@ class SVOHistoryCheckedInDetailView extends Component {
       loading: false,
       checkListNum:props.record.checkListNum,
       statusName: null,
+      merchantLinkName: null,
+      merchantLinkWay: null,
       data: null,
       pickerPhotos: [{photo:null},{photo:null},{photo:null}],
       measure: null
@@ -59,7 +61,8 @@ class SVOHistoryCheckedInDetailView extends Component {
       this.props.dispatch( create_service(Contract.POST_GET_SUPERVISE_CHECK_DETAIL, {checkListNum:this.state.checkListNum}))
         .then( res => {
           if(res){
-            this.setState({loading:false, data:res.entity, statusName:this._convertStatus(res.entity)})
+            let merchantLink = this._convertMerchantLink(res.entity);
+            this.setState({loading:false, data:res.entity, statusName:this._convertStatus(res.entity), ...merchantLink})
           }else{
             this.setState({loading:false})
           }
@@ -72,12 +75,12 @@ class SVOHistoryCheckedInDetailView extends Component {
   }
 
   render(){
-    let { loading, data, measure, pickerPhotos, statusName } = this.state;
+    let { loading, data, measure, pickerPhotos, statusName, merchantLinkName, merchantLinkWay } = this.state;
 
     return(
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderResult(data, statusName)}
+          {this.renderResult(data, statusName, merchantLinkName, merchantLinkWay)}
           {this.renderSumitData1(data)}
           {this.renderSumitData2(data)}
           {this.renderCheckResult(data)}
@@ -88,7 +91,7 @@ class SVOHistoryCheckedInDetailView extends Component {
     )
   }
 
-  renderResult(data, statusName){
+  renderResult(data, statusName, merchantLinkName, merchantLinkWay){
     if(!data) return null;
 
     return(
@@ -106,9 +109,9 @@ class SVOHistoryCheckedInDetailView extends Component {
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('被检查商户：', data.companyName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('商户联系人：', data.processorName)}
+          {this.renderHeightResultItem('商户联系人：', merchantLinkName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', data.processorPhone)}
+          {this.renderHeightResultItem('联系方式：', merchantLinkWay)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderHeightResultItem('情况描述：', data.checkDetails)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -196,7 +199,7 @@ class SVOHistoryCheckedInDetailView extends Component {
     return(
       <View style={{paddingVertical:15, flexDirection:'row'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
-        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{content}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, lineHeight:20}}>{content}</Text>
       </View>
     )
   }
@@ -273,6 +276,18 @@ class SVOHistoryCheckedInDetailView extends Component {
 
   _checkBigImage(source){
     Actions.bigImage({source})
+  }
+
+  _convertMerchantLink({companyUserList}){
+    let merchantLinkName = [];
+    let merchantLinkWay = [];
+    for(let i=0; i<companyUserList.length; i++){
+      let cu = companyUserList[i];
+      merchantLinkName.push(cu.companyUserName);
+      merchantLinkWay.push(cu.companyUserPhone);
+    }
+
+    return { merchantLinkName:merchantLinkName.toString().replace(/,/g, '、'), merchantLinkWay:merchantLinkWay.toString().replace(/,/g, '、') };
   }
 
 
