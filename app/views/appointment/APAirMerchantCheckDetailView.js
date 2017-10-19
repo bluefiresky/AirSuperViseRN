@@ -57,9 +57,11 @@ class APAirMerchantCheckDetailView extends Component {
               certificateTypeLabel += (c + '. ' + CertificateTypes[c] + '\n');
             }
             let certificatePhotoList = [];
-            for(let i=0; i<certificatePhotos.length; i++){
-              let c = certificatePhotos[i];
-              certificatePhotoList.push({uri:c, isStatic:true})
+            if(certificatePhotos){
+              for(let i=0; i<certificatePhotos.length; i++){
+                let c = certificatePhotos[i];
+                certificatePhotoList.push({uri:c, isStatic:true})
+              }
             }
             this.setState({loading:false, data:{certificatePhotoList, certificateTypeLabel, corporateName, rejectReason, contactName, contactWay, enterpriseName, examineStatus}})
           }else{
