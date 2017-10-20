@@ -33,6 +33,12 @@ const ApprveStatus = {
   '31':{text:'民警审核通过', color:'rgb(0,215,149)'},
 }
 
+const Checker = {
+  '10':{text:'专办员'},
+  '20':{text:'保卫干部'},
+  '30':{text:'民警'}
+}
+
 class APCertificateApplyDetailView extends Component {
 
   constructor(props){
@@ -165,6 +171,7 @@ class APCertificateApplyDetailView extends Component {
         <Text style={{color:mainTextColor, fontSize:18, alignSelf:'center', paddingVertical:15}}>审核进度</Text>
         {this.renderCheckResultItem1(data)}
         {this.renderCheckResultItem2(data)}
+        {this.renderCheckResultItem3(data)}
         {this.renderCheckResultFailItem(data)}
       </View>
     );
@@ -200,21 +207,61 @@ class APCertificateApplyDetailView extends Component {
     }
   }
 
-  renderCheckResultFailItem(data){
+  renderCheckResultItem3(data){
     let { approveStatus, applyAdviceText } = data;
-    if(approveStatus == '10' || approveStatus == '20' || approveStatus == '30'){
-      let checker = ApprveStatus[approveStatus].text;
-
+    if(approveStatus == '21'){
       return (
         <View style={{padding:PaddingHorizontal}}>
-          <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+checker}</Text></Text>
-          <View style={{flexDirection:'row'}}>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核不通过理由：</Text>
-            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, marginTop:15, lineHeight:20}}>{applyAdviceText+applyAdviceText+applyAdviceText+applyAdviceText}</Text>
-          </View>
+          <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+'民警审核通过'}</Text></Text>
         </View>
       )
     }
+  }
+
+
+  renderCheckResultFailItem(data){
+    let { approveStatus, applyAdviceText, zbyName, zbyPhone, zbySignPhoto, bwgbName, bwgbPhone, bwgbSignPhoto } = data;
+    if(approveStatus == '10' || approveStatus == '20' || approveStatus == '30'){
+      let checker = Checker[approveStatus].text;
+
+      let name, phone, signImage;
+      if(approveStatus == '10'){
+        name = zbyName;
+        phone = zbyPhone;
+        signImage = zbySignPhoto;
+      }else if(approveStatus == '20') {
+        name = bwgbName;
+        phone = bwgbPhone;
+        signImage = bwgbSignPhoto;
+      }
+
+      return (
+        <View style={{padding:PaddingHorizontal}}>
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+            <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+checker+'审核'}</Text></Text>
+            <Text style={{color:'red', fontSize:16, marginLeft:20}}>审核不通过</Text>
+          </View>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核不通过理由：</Text>
+            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, marginTop:15, lineHeight:20}}>{applyAdviceText}</Text>
+          </View>
+          {this._renderCheckResultFailItemSign(approveStatus, checker, name, phone, signImage)}
+        </View>
+      )
+    }
+  }
+
+  _renderCheckResultFailItemSign(status, checker, name, phone, signImage){
+    if(status == '30') return null;
+    let image = signImage? {uri:signImage.dataUrl, isStatic:true} : null;
+    return (
+      <View>
+        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>{`审核${checker}：`}<Text style={{color:mainTextGreyColor, fontSize:16}}>{name}</Text></Text>
+        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>联系方式：<Text style={{color:mainTextGreyColor, fontSize:16}}>{phone}</Text></Text>
+        <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>{`${checker}签字：`}</Text>
+        <Image source={image} style={{width:SignW, height:SignH, resizeMode:'contain', marginTop:10}}/>
+      </View>
+    );
   }
 
 
