@@ -215,7 +215,7 @@ class APCertificateCheckDetailView extends Component {
 
           {this.renderRadio('审核结果：', checkResult, CheckResults)}
           {
-            checkResult.code != '2'? null :
+            checkResult.code != '0'? null :
             <AutoGrowingTextInput
               style={styles.autoTextInput}
               value={reason}
@@ -257,7 +257,7 @@ class APCertificateCheckDetailView extends Component {
     let { recordId, signImage, reason, checkResult } = this.state;
     if(!checkResult.code) Toast.showShortCenter('请选择审核结果')
     else{
-      if(checkResult.code == '2' && !reason) Toast.showShortCenter('请输入不通过理由')
+      if(checkResult.code == '0' && !reason) Toast.showShortCenter('请输入不通过理由')
       else if(!signImage) Toast.showShortCenter('请签名');
       else {
         let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason }
