@@ -72,7 +72,7 @@ class SVOHomeView extends Component {
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
             <Text style={styles.headerTextMain}>警员姓名：{data.policeName}</Text>
-            <Text style={[styles.headerTextMain, {marginTop:10}]}>警员编号：{data.phoneNum}</Text>
+            <Text style={[styles.headerTextMain, {marginTop:10}]}>警员编号：{data.policeNum}</Text>
             <Text style={[styles.headerTextMain, {marginTop:10}]}>所属部门：{data.policeDeptName}</Text>
           </View>
         </View>
