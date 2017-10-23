@@ -48,7 +48,13 @@ class ReportHistoryView extends Component {
       this.props.dispatch( create_service(Contract.POST_GET_REPORT_HISTORY, {}))
         .then( res => {
           if(res){
-            this.setState({loading:false, data:res.entity.reportList})
+            let data = [];
+            for(let i=0; i<res.entity.reportList.length; i++){
+              let t = res.entity.reportList[i];
+              let reportTime = t.reportTime.split(' ');
+              data.push({...t, reportTime: reportTime[0]})
+            }
+            this.setState({loading:false, data})
           }else{
             this.setState({loading:false})
           }

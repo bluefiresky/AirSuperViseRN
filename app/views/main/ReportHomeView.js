@@ -54,7 +54,7 @@ class ReportHomeView extends Component {
   renderAD(){
     return(
       <View style={{height:ADH}}>
-        <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
+        <Swiper paginationStyle={{bottom:10}}  autoplay={true} autoplayTimeout={3}>
           <Image key={1} style={{width:W,height:ADH}} source={CoverAD}/>
           <Image key={2} style={{width:W,height:ADH}} source={CoverAD}/>
           <Image key={3} style={{width:W,height:ADH}} source={CoverAD}/>

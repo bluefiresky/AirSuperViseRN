@@ -34,6 +34,7 @@ const SecondaryIcon4 = require('./image/icon-advise.png');
 const AppType = Platform.select({android:1, ios:2});
 
 const RoleList = ['01'/** 普通用户 */, '02'/** 警员 */, '03'/** 商户管理员 */, '04'/** 证件监察员 */, '05'/** 持证人员 */, '06'/** 新机场证件审核人员 */];
+const ADCoverList = [CoverAD, CoverAD, CoverAD];
 
 class HomeTab extends Component {
 
@@ -41,7 +42,8 @@ class HomeTab extends Component {
     super(props);
     this.state = {
       loading: false,
-      weather: null
+      weather: null,
+      adCoverList: [],
     }
 
     this._forcedUpdate = this._forcedUpdate.bind(this);
@@ -54,13 +56,13 @@ class HomeTab extends Component {
   }
 
   render(){
-    let { loading, weather } = this.state;
+    let { loading, weather, adCoverList } = this.state;
 
     return(
       <View style={styles.container}>
         {this.renderTitle()}
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this.renderAD()}
+          {this.renderAD(adCoverList)}
           {this.renderWeather(weather)}
           {this.renderMainEntry()}
           {this.renderSecondaryEntry()}
@@ -78,17 +80,23 @@ class HomeTab extends Component {
     )
   }
 
-  renderAD(){
+  renderAD(adCoverList){
     return(
       <View style={{height:ADH}}>
-        <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
-          <Image key={1} style={{width:W,height:ADH}} source={CoverAD}/>
-          <Image key={2} style={{width:W,height:ADH}} source={CoverAD}/>
-          <Image key={3} style={{width:W,height:ADH}} source={CoverAD}/>
-        </Swiper>
+        {
+          adCoverList.length == 0? <Image style={{width:W,height:ADH}} source={CoverAD} />:
+          <Swiper paginationStyle={{bottom:10}} autoplay={true} autoplayTimeout={3}>
+            {
+              adCoverList.map((item, index) => {
+                return <Image key={index} style={{width:W,height:ADH}} source={item}/>
+              })
+            }
+          </Swiper>
+        }
       </View>
     )
   }
+
 
   renderWeather(data){
     if(!data) return <View style={{backgroundColor:'white', height:26}}/>
@@ -108,18 +116,18 @@ class HomeTab extends Component {
       <View style={{backgroundColor:'white', height:MainEntryH, marginVertical:20, marginHorizontal:PaddingHorizontal, flexDirection:'row'}}>
         <TouchableOpacity activeOpacity={0.8} style={{flex:2, alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 0)}>
           <Image source={MainIcon1} style={{height:60, width:60, resizeMode:'contain'}} />
-          <Text style={{fontSize:16, color:mainColor, marginTop:15, textAlign:'center'}}>网上预约大厅{`\n`}<Text style={{fontSize:14, color:mainTextGreyColor}}>网上预约大厅</Text></Text>
+          <Text style={{fontSize:18, color:mainColor, marginTop:15, textAlign:'center'}}>网上办公大厅<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
         </TouchableOpacity>
         <View style={{width:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
         <View style={{flex:3}}>
           <TouchableOpacity activeOpacity={0.8} style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 1)}>
             <Image source={MainIcon2} style={{height:40, width:40, resizeMode:'contain'}} />
-            <Text style={{fontSize:16, color:mainColor, marginLeft:20, textAlign:'center'}}>违法举报{`\n`}<Text style={{fontSize:14, color:mainTextGreyColor}}>违法举报</Text></Text>
+            <Text style={{fontSize:18, color:mainColor, marginLeft:20, textAlign:'center'}}>违法举报<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
           </TouchableOpacity>
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           <TouchableOpacity activeOpacity={0.8} style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 2)}>
             <Image source={MainIcon3} style={{height:40, width:40, resizeMode:'contain'}} />
-            <Text style={{fontSize:16, color:mainColor, marginLeft:20, textAlign:'center'}}>安全监管{`\n`}<Text style={{fontSize:14, color:mainTextGreyColor}}>安全监管</Text></Text>
+            <Text style={{fontSize:18, color:mainColor, marginLeft:20, textAlign:'center'}}>安全监管<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -213,7 +221,7 @@ class HomeTab extends Component {
   _getWeather(){
     this.props.dispatch( create_service(Contract.POST_GET_WEATHER, {cityName:'北京市'}))
       .then( res => {
-        this.setState({weather:res, loading:false})
+        this.setState({weather:res, loading:false, adCoverList:ADCoverList})
       })
   }
 

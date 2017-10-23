@@ -28,6 +28,7 @@ const HeaderSubPaddingTop = HeaderImageW/2 + 5;
 
 const EntryItemH = 50;
 
+const HeaderIcon = require('./image/icon-header.png');
 const ArrowRight = require('./image/icon-arrow-right.png');
 const OrdersIcon = require('./image/icon-my-orders.png');
 const CertificateIcon = require('./image/icon-my-certificate-records.png');
@@ -67,13 +68,13 @@ class PersonalTab extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           {this.renderHeader(data)}
           <View style={{height:10}} />
-          {this.renderEntryItem(OrdersIcon, '我的检查单')}
-          {this.renderEntryItem(CertificateIcon, '证件审核记录')}
-          {this.renderEntryItem(ScoreIcon, '证件扣分记录')}
-          {this.renderEntryItem(AppointmentIcon, '消防网上预约记录')}
-          {this.renderEntryItem(AirportIcon, '新机场入场单位资质审核记录')}
-          {this.renderEntryItem(null, '空防新入场单位资质审核记录')}
-          {this.renderEntryItem(ReportIcon, '历史违法举报')}
+          {this.renderEntryItem(OrdersIcon, '历史检查记录', 0, ['02'])}
+          {this.renderEntryItem(CertificateIcon, '证件审核记录', 1, ['04'])}
+          {this.renderEntryItem(ScoreIcon, '证件扣分记录', 2, ['04', '05'])}
+          {this.renderEntryItem(AppointmentIcon, '消防网上预约记录', 3, ['01'])}
+          {this.renderEntryItem(AirportIcon, '新机场入场单位资质审核', 4, ['06'])}
+          {this.renderEntryItem(null, '空防新入场单位资质审核记录', 5, ['01'])}
+          {this.renderEntryItem(ReportIcon, '历史违法举报', 6, ['01'])}
           {this.renderLoginButton()}
         </ScrollView>
         <ProgressView show={loading} />
@@ -97,15 +98,14 @@ class PersonalTab extends Component {
         <View style={{position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal, backgroundColor:'white', height:HeaderSubH, borderRadius:5, alignItems:'center', paddingTop:HeaderSubPaddingTop}}>
           <Text style={{fontSize:16, color:mainTextGreyColor}}>{global.profile?global.profile.phoneNum:null}</Text>
         </View>
-        <View style={{position:'absolute', width:HeaderImageW, height:HeaderImageW, left:HeaderImageL, borderRadius:HeaderImageRadius, backgroundColor:'lightskyblue'}}>
-        </View>
+        <Image source={HeaderIcon} style={{position:'absolute', width:HeaderImageW, height:HeaderImageW, left:HeaderImageL, resizeMode:'contain'}} />
       </View>
     )
   }
 
-  renderEntryItem(icon, title){
+  renderEntryItem(icon, title, type, roleNums){
     return(
-      <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:'white'}}>
+      <TouchableOpacity onPress={this._onPressEntry.bind(this, type, roleNums)} activeOpacity={0.8} style={{backgroundColor:'white'}}>
         <View style={{height:EntryItemH, flexDirection:'row', paddingHorizontal:PaddingHorizontal, alignItems:'center'}}>
           <Image source={icon} style={{marginLeft:20, width:20, height:20, resizeMode:'contain'}} />
           <Text style={{marginLeft:20, fontSize:16, color:mainTextGreyColor, flex:1}}>{title}</Text>
@@ -133,6 +133,33 @@ class PersonalTab extends Component {
         this.setState({loading:false});
         Actions.login({type:'reset'});
       })
+  }
+
+  _onPressEntry(type, roleNums){
+    if(!global.profile) return null;
+
+    let role = this._verifyEntryRole(global.profile.roleNums, roleNums)
+    if(!role) Toast.showShortCenter('您暂无权限')
+    else if(type == 0) Actions.svoHistoryCheckIn();
+    else if(type == 1) Actions.cfInspectedRecords();
+    else if(type == 2) Actions.cfScoreManager();
+    else if(type == 3) Actions.apHistoryList();
+    else if(type == 4) Actions.apCertificateCheckRecords();
+    else if(type == 5) Actions.apCertificateApplyHistory();
+    else if(type == 6)  Actions.reportHistory();
+  }
+
+  _verifyEntryRole(source, targetList){
+    if(source && source.length > 0){
+      for(let i=0; i<source.length; i++){
+        let r = source[i];
+        if(targetList.indexOf(r.roleNum) != -1) return r;
+      }
+
+      return false;
+    }else{
+      return false;
+    }
   }
 
 }

@@ -8,6 +8,7 @@ export { MainView } from './tab/MainView.js';
 export { HomeTab } from './tab/HomeTab.js';
 export { TabIcon } from './tab/TabIcon.js';
 export { PersonalTab } from './tab/PersonalTab.js';
+export { MessageTab } from './tab/MessageTab.js';
 
 /** auth */
 export { LoginView } from './auth/LoginView.js';

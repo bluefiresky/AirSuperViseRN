@@ -20,6 +20,7 @@ const HeaderIconW = W/3 - 60;
 const EntryItemIconW = 40;
 const EntryItemH = 80;
 
+const HeaderIcon = require('./image/icon-header.png');
 const Icon1 = require('./image/icon-to-feedback.png')
 const Icon2 = require('./image/icon-generate-check-record.png')
 const Icon3 = require('./image/icon-done.png')
@@ -66,7 +67,7 @@ class SVMHomeView extends Component {
       <View style={{backgroundColor:mainColor, height:HeaderH}}>
         <View style={{flex:1, flexDirection:'row'}}>
           <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
+            <Image source={HeaderIcon} style={{height:HeaderIconW, width:HeaderIconW, resizeMode:'contain'}} />
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
             <Text style={styles.headerTextMain}>姓名：{data.userName}</Text>
@@ -78,7 +79,7 @@ class SVMHomeView extends Component {
           <View style={{width:1, backgroundColor:'white'}} />
           <Text style={styles.headerTextSub}>{data.userYearCounts}<Text style={styles.headerTextSubTitle}>{'\n'}年度被检查</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
-          <Text style={styles.headerTextSub}>{data.userModifyCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待反馈</Text></Text>
+          <Text style={styles.headerTextSub}>{data.userModifyCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待整改</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
           <Text style={styles.headerTextSub}>{data.userReviewCounts}<Text style={styles.headerTextSubTitle}>{'\n'}待复查</Text></Text>
           <View style={{width:1, backgroundColor:'white'}} />
@@ -92,7 +93,7 @@ class SVMHomeView extends Component {
     return (
       <View style={{backgroundColor:'white', marginTop:10}}>
         <View style={{flexDirection:'row'}}>
-          {this.renderEntryItem(Icon1, '待反馈', 1)}
+          {this.renderEntryItem(Icon1, '待整改', 1)}
           <View style={{width:1, backgroundColor:borderColor}} />
           {this.renderEntryItem(Icon2, '待复查', 2)}
         </View>

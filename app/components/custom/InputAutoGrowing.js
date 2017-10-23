@@ -131,7 +131,7 @@ export class InputAutoGrowing extends Component {
           selectTextOnFocus={selectTextOnFocus}
           underlineColorAndroid={'transparent'}
           maxLength={maxLength}
-          multiline={multiline}
+          multiline={true}
         />
         {ClearButton}
       </View>

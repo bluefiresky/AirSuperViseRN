@@ -20,6 +20,7 @@ const HeaderIconW = W/3 - 60;
 const EntryPaddingHorizontal = 30;
 const EntryImageW = (W - EntryPaddingHorizontal*2)/3 - 60;
 
+const HeaderIcon = require('./image/icon-header.png');
 const EntryImage1 = require('./image/icon-certificate-entry1.png');
 const EntryImage2 = require('./image/icon-certificate-entry2.png');
 const EntryImage3 = require('./image/icon-certificate-entry3.png');
@@ -74,7 +75,7 @@ class CFHomeView extends Component {
       <View style={{backgroundColor:mainColor, paddingVertical:20}}>
         <View style={{flexDirection:'row'}}>
           <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
+            <Image source={HeaderIcon} style={{height:HeaderIconW, width:HeaderIconW, resizeMode:'contain'}} />
             <View style={{marginTop:-5, height:16, backgroundColor:'rgb(255, 166, 77)', borderRadius:8, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
               <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{data.occupation}</Text>
             </View>

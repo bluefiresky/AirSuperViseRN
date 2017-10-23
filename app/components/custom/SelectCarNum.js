@@ -72,7 +72,7 @@ export class SelectCarNum extends Component {
     // console.log(' itemClick and the value -->> ', value);
     // console.log(' itemClick and the plateNum -->> ', plateNum);
     if(plateNum){
-      if(plateNum.length >= 7) this.props.onChangeValue(plateNum);
+      if(plateNum.length >= 8) this.props.onChangeValue(plateNum);
       else {
         this.props.onChangeValue(plateNum + value);
         if(this.currSeleIndex == 0){

@@ -17,6 +17,7 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
 import { HomeTab } from './HomeTab.js';
 import { PersonalTab } from './PersonalTab.js';
+import { MessageTab } from './MessageTab.js';
 
 const HomeIcon = require('./image/tab-home.png');
 const HomeSelectIcon = require('./image/tab-home-selected.png');
@@ -71,11 +72,11 @@ class MainView extends Component {
             renderIcon={() => <Image style={styles.icon} source={MessageIcon} />}
             renderSelectedIcon={() => <Image style={styles.icon} source={MessageSelectIcon} />}
             onPress={() => {
-              Toast.showShortCenter('待开发')
-              // if(this.state.selectedTab === 'messages') return;
-              // this.setState({ selectedTab: 'messages' })
+              // Toast.showShortCenter('待开发')
+              if(this.state.selectedTab === 'messages') return;
+              this.setState({ selectedTab: 'messages' })
             }}>
-            <PersonalTab />
+            <MessageTab />
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={this.state.selectedTab === 'personal'}

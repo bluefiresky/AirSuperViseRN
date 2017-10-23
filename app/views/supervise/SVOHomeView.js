@@ -20,6 +20,7 @@ const HeaderIconW = W/3 - 60;
 const EntryItemH = 70;
 const EntryItemIconW = 40;
 
+const HeaderIcon = require('./image/icon-header.png');
 const MainIcon1 = require('./image/icon-check-data.png')
 const MainIcon2 = require('./image/icon-generate-check-record.png')
 const MainIcon3 = require('./image/icon-history.png')
@@ -65,7 +66,7 @@ class SVOHomeView extends Component {
       <View style={{backgroundColor:mainColor, height:HeaderH}}>
         <View style={{flex:1, flexDirection:'row'}}>
           <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <View style={{height:HeaderIconW, width:HeaderIconW, borderRadius:HeaderIconW/2, backgroundColor:'white'}} />
+            <Image source={HeaderIcon} style={{height:HeaderIconW, width:HeaderIconW, resizeMode:'contain'}} />
             <View style={{marginTop:-5, height:16, backgroundColor:'rgb(255, 166, 77)', borderRadius:8, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
               <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>民警</Text>
             </View>
@@ -113,7 +114,7 @@ class SVOHomeView extends Component {
   /** Private **/
   _onPress(type){
     if(type === 0){
-      Toast.showShortCenter('待开发')
+      Actions.commonWeb({url:'https://test.zhongchebaolian.com/airport-web-api/law-rate.html', title:'数据统计'})
     }else if(type === 1){
       this.setState({loading:true});
       NativeModules.BaiduMapModule.location().then(res => {

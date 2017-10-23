@@ -404,7 +404,9 @@ class APCertificateApplySubmitView extends Component {
   _commonVerify(){
     let { applyerType, carNumber, carType, carUsingWay, startDate, endDate, validDate, carMerchantRelation, applyType, certificateType, applyReason, pickerPhotos } = this.state;
     let { vin, insurancePolicyNumber, linkName, linkWay, applyDeptOrUnit } = this.props.form.getData();
+
     if(!carNumber) Toast.showShortCenter('请输入牌照号码');
+    else if(!(carNumber.length == 7 || carNumber.length == 8)) Toast.showShortCenter('车牌号位数不正确')
     else if(!carType.code) Toast.showShortCenter('请选择车辆类型');
     else if(!carUsingWay.code) Toast.showShortCenter('请选择车辆使用性质');
     else if(!carType.code) Toast.showShortCenter('请输入牌照号码');
@@ -412,6 +414,7 @@ class APCertificateApplySubmitView extends Component {
     else if(!insurancePolicyNumber) Toast.showShortCenter('请输入交强险保单号');
     else if(!startDate) Toast.showShortCenter('请选择交强险有效期开始时间');
     else if(!endDate) Toast.showShortCenter('请选择交强险有效期结束时间');
+    else if(!(new Date(startDate.replace(/\-/g, '\/')) < new Date(endDate.replace(/\-/g, '\/')))) Toast.showShortCenter('交强险有效期结束日期要大于开始日期')
     else if(!validDate) Toast.showShortCenter('请选择年检有效期');
     else if(!carMerchantRelation.code) Toast.showShortCenter('请选择车辆与申请单位关系');
     else if(!applyType.code) Toast.showShortCenter('请选择申请类型');

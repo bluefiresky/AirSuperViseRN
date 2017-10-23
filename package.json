@@ -20,7 +20,7 @@
     "react-native-router-flux": "3.40.1",
     "react-native-scrollable-tab-view": "0.6.7",
     "react-native-signature-capture": "https://github.com/bluefiresky/react-native-signature-capture.git#mine",
-    "react-native-swiper": "1.5.12",
+    "react-native-swiper": "1.5.13",
     "react-native-tab-navigator": "0.3.3",
     "react-native-vector-icons": "4.1.1",
     "react-native-wheel-picker": "https://github.com/bluefiresky/react-native-wheel-picker.git#mine",

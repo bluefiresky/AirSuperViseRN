@@ -11,7 +11,7 @@ import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, Input } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, Input, InputAutoGrowing } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
@@ -82,7 +82,7 @@ class ReportHistoryDetailView extends Component {
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
         <Input label={'紧急程度：'} value={data.urgentTypeName} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'举报地点：'} value={data.reportAddress} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <InputAutoGrowing label={'举报地点：'} value={data.reportAddress} editable={false} mult labelWidth={LabelW} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
       </View>
     )
   }
@@ -121,7 +121,7 @@ class ReportHistoryDetailView extends Component {
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
         <Input label={'举报人姓名：'} value={data.reporterName} editable={false} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <Input label={'举报人身份证号：'} value={data.reporterId} editable={false} labelWidth={140} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <InputAutoGrowing label={'举报人身份证号：'} value={data.reporterId} editable={false} labelWidth={140} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
       </View>
     )
   }

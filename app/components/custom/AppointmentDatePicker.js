@@ -10,6 +10,7 @@ import { XButton } from '../../components/index.js';  /** 自定义组件 */
 
 import {Actions} from "react-native-router-flux";
 import Picker from 'react-native-wheel-picker'
+import Toast from '@remobile/react-native-toast';
 
 const MarginTop = W/3;
 const ComponentW = W - 60;
@@ -35,6 +36,7 @@ class AppointmentDatePicker extends React.Component {
         daySelectIndex:0,
         dayArray: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
         timeSelectIndex:0,
+        today: props.today,
     };
 
     this._closeCallback = this._closeCallback.bind(this);
@@ -113,7 +115,7 @@ class AppointmentDatePicker extends React.Component {
 
           <View style={{justifyContent:'center', paddingBottom:ButtonPadding, flexDirection:'row'}} >
             <XButton title={'取消'} onPress={this._closeModal.bind(this, this._closeCallback)} style={{width:ButtonW, height:ButtonH, backgroundColor:'transparent', borderColor:borderColor, borderWidth:StyleSheet.hairlineWidth}} textStyle={{color:mainColor}}/>
-            <XButton title={'确认'} onPress={this._closeModal.bind(this, this._confirm)} style={{width:ButtonW, height:ButtonH, marginLeft:10}}/>
+            <XButton title={'确认'} onPress={this._confirm.bind(this)} style={{width:ButtonW, height:ButtonH, marginLeft:10}}/>
           </View>
         </View>
       </Animated.View>
@@ -133,12 +135,16 @@ class AppointmentDatePicker extends React.Component {
   }
 
   _confirm(){
-    Actions.pop();
     let year = YearKeys[this.state.yearSelectIndx];
     let month = MonthKeys[this.state.monthSelectIndex];
     let day = this.state.dayArray[this.state.daySelectIndex];
     let time = TimeKeys[this.state.timeSelectIndex]
-    if(this.props.modalCallback) this.props.modalCallback(`${year}-${month}-${day}`, time);
+
+    if(new Date(`${year}/${month}/${day}`) < new Date()) Toast.showShortCenter('预约日期不能选择今天之前')
+    else{
+      this._closeModal(Actions.pop)
+      if(this.props.modalCallback) this.props.modalCallback(`${year}-${month}-${day}`, time);
+    }
   }
 
   _getDayData(source, yearIndex, monthIndex){

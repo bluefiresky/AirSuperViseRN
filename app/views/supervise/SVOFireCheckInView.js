@@ -335,7 +335,7 @@ class SVOFireCheckInView extends Component {
                   <View style={{paddingHorizontal:5, height:20, borderRadius:10, alignItems:'center', justifyContent:'center', backgroundColor:mainBackColor}}>
                     <Text style={{fontSize:14, color:inputRightColor, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}>{item.ccCompanyName}</Text>
                   </View>
-                  <TouchableOpacity onPress={this._onDeletePolice.bind(this, item, index)} style={{width:20, height:25}} >
+                  <TouchableOpacity activeOpacity={0.6} onPress={this._onDeleteSendCopyMerchant.bind(this, item, index)} style={{width:20, height:25}} >
                     <Image source={DeleteIcon} style={{width:10, height:10, resizeMode:'contain'}} />
                   </TouchableOpacity>
                 </View>
@@ -493,6 +493,12 @@ class SVOFireCheckInView extends Component {
       }
       this.setState({sendCopyMerchant})
     }});
+  }
+
+  _onDeleteSendCopyMerchant(item, index){
+    let { sendCopyMerchant } = this.state;
+    sendCopyMerchant.splice(index, 1);
+    this.setState({sendCopyMerchant})
   }
 
   _convertStandardParams(){
