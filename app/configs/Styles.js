@@ -7,7 +7,7 @@ import { Platform, Dimensions, AsyncStorage } from "react-native"
 
 const { width, height } = Dimensions.get("window")
 
-export const Version = '2.5';
+export const Version = '1.0';
 export const W = width
 export const H = height
 export const InputH = 50
