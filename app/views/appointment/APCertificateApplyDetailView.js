@@ -80,7 +80,7 @@ class APCertificateApplyDetailView extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           {this.renderDetail(data)}
           {this.renderCheckResult(data)}
-          <View style={{height:100}} />
+          <View style={{height:10}} />
         </ScrollView>
         <ProgressView show={loading}/>
       </View>

@@ -68,7 +68,7 @@ class SVOHomeView extends Component {
           <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
             <Image source={HeaderIcon} style={{height:HeaderIconW, width:HeaderIconW, resizeMode:'contain'}} />
             <View style={{marginTop:-5, height:16, backgroundColor:'rgb(255, 166, 77)', borderRadius:8, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>民警</Text>
+              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{data.policeJob}</Text>
             </View>
           </View>
           <View style={{flex:2, justifyContent:'center', paddingRight:20}}>
