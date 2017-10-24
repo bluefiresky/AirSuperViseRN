@@ -18,11 +18,11 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 const TitleH = Platform.select({ android: 50, ios: 70 });
 const TitleMarginTop = Platform.select({ android: 0, ios: 20 });
 const PaddingHorizontal = 10;
-const ADH = W*320/750;
+const ADH = W*434/750;
 const MainEntryH = 150;
 const SecondaryEntryH = 100;
 
-const CoverAD = require('./image/cover-home-ad.jpg');
+const CoverAD = require('./image/cover-home-ad1.png');
 const MainIcon1 = require('./image/icon-appointment.png');
 const MainIcon2 = require('./image/icon-report.png');
 const MainIcon3 = require('./image/icon-supervise.png');
@@ -34,7 +34,7 @@ const SecondaryIcon4 = require('./image/icon-advise.png');
 const AppType = Platform.select({android:1, ios:2});
 
 const RoleList = ['01'/** 普通用户 */, '02'/** 警员 */, '03'/** 商户管理员 */, '04'/** 证件监察员 */, '05'/** 持证人员 */, '06'/** 新机场证件审核人员 */];
-const ADCoverList = [CoverAD, CoverAD, CoverAD];
+const ADCoverList = [CoverAD, CoverAD];
 
 class HomeTab extends Component {
 
