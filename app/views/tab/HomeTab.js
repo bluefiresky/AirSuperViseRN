@@ -66,6 +66,7 @@ class HomeTab extends Component {
           {this.renderWeather(weather)}
           {this.renderMainEntry()}
           {this.renderSecondaryEntry()}
+          <View style={{height:50}} />
         </ScrollView>
         <ProgressView show={loading} />
       </View>

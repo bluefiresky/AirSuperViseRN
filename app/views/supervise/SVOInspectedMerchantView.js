@@ -84,7 +84,7 @@ class SVOInspectedMerchantView extends Component {
 
   renderLocationInput(location){
     return(
-      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal, paddingVertical:15}}>
+      <TouchableOpacity activeOpacity={1} style={{flexDirection:'row', alignItems:'center', paddingRight:InputPaddingHorizontal, paddingVertical:15}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100, marginLeft:20}}>{'检查地点'}</Text>
         <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{location.address}</Text>
         <Image source={NavIcon} style={{height:20, width:20, resizeMode:'contain'}} />

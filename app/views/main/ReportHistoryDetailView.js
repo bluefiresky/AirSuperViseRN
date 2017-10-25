@@ -82,7 +82,7 @@ class ReportHistoryDetailView extends Component {
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
         <Input label={'紧急程度：'} value={data.urgentTypeName} editable={false} labelWidth={LabelW} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        <InputAutoGrowing label={'举报地点：'} value={data.reportAddress} editable={false} mult labelWidth={LabelW} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
+        <InputAutoGrowing label={'举报地点：'} value={data.reportAddress} editable={false} labelWidth={LabelW} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
       </View>
     )
   }
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   autoTextInput:{
     fontSize:15,
     padding:5,
-    marginHorizontal:17,
+    marginHorizontal:7,
     borderWidth:StyleSheet.hairlineWidth,
     borderColor:borderColor,
     backgroundColor:'#FBFBFE',

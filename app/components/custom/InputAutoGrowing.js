@@ -8,6 +8,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback, TouchableNativeFeedback, TouchableOpacity, Platform, Image  } from 'react-native';
 import { InputH, W, borderColor, inputLeftColor, inputRightColor, commonText, placeholderColor } from '../../configs/index.js';
 
+import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+
 const clearButtonW = InputH/2
 export class InputAutoGrowing extends Component {
 
@@ -119,19 +121,20 @@ export class InputAutoGrowing extends Component {
     return(
       <View style={ [{paddingLeft: 20, flexDirection: 'row', paddingVertical:15, backgroundColor: 'white', paddingRight:15}, border, style] }>
         {this.renderLabelView(l, labelWidth, label)}
-        <TextInput
-          style={{flex: 1, fontSize: 16, color: inputRightColor, paddingLeft: 0, paddingTop:0, includeFontPadding:false, textAlign:'justify', textAlignVertical:'center'}}
-          onChangeText={ (text) => { this._onChangeText(text) } }
+        <AutoGrowingTextInput
+          style={styles.autoTextInput}
+          onChangeText={this._onChangeText}
           value={value}
           autoFocus={autoFocus}
           editable={editable === false? false : true}
           keyboardType={keyboardType? keyboardType : 'default'}
-          placeholder={placeholder}
-          placeholderTextColor={placeholderColor}
-          selectTextOnFocus={selectTextOnFocus}
           underlineColorAndroid={'transparent'}
+          placeholder={placeholder}
+          selectTextOnFocus={selectTextOnFocus}
+          placeholderTextColor={placeholderColor}
           maxLength={maxLength}
-          multiline={true}
+          initialHeight={23}
+          minHeight={23}
         />
         {ClearButton}
       </View>
@@ -141,7 +144,7 @@ export class InputAutoGrowing extends Component {
   renderLabelView(l, labelWidth, label){
     if (!l) {
       return(
-        <View style={{width: labelWidth? labelWidth : 80}}>
+        <View style={{width: labelWidth? labelWidth : 80, paddingTop:1}}>
           <Text style={{ color: inputLeftColor, fontSize:16 }}>{ label }</Text>
         </View>
       )
@@ -190,5 +193,18 @@ const styles = {
 
   close: {
 
+  },
+  autoTextInput:{
+    flex:1,
+    fontSize:16,
+    padding:0,
+    paddingTop:0,
+    paddingBottom:0,
+    color: inputRightColor,
+    borderWidth:0,
+    borderColor:'transparent',
+    includeFontPadding:false,
+    textAlign:'left',
+    textAlignVertical:'top'
   }
 }
