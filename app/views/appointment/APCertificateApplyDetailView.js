@@ -179,7 +179,7 @@ class APCertificateApplyDetailView extends Component {
 
   renderCheckResultItem1(data){
     let { approveStatus, zbySignPhoto, zbyName, zbyPhone } = data;
-    if(zbySignPhoto){
+    if(zbySignPhoto && approveStatus != '10'){
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t专办员审核'}</Text></Text>
@@ -194,7 +194,7 @@ class APCertificateApplyDetailView extends Component {
 
   renderCheckResultItem2(data){
     let { approveStatus, bwgbSignPhoto, bwgbName, bwgbPhone } = data;
-    if(bwgbSignPhoto){
+    if(bwgbSignPhoto && approveStatus != '20'){
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t保卫干部审核'}</Text></Text>
@@ -209,7 +209,7 @@ class APCertificateApplyDetailView extends Component {
 
   renderCheckResultItem3(data){
     let { approveStatus, applyAdviceText } = data;
-    if(approveStatus == '21'){
+    if(approveStatus == '31'){
       return (
         <View style={{padding:PaddingHorizontal}}>
           <Text style={{color:mainColor, fontSize:16}}>●<Text style={{color:mainTextColor, fontSize:16}}>{'\t'+'民警审核通过'}</Text></Text>
@@ -242,7 +242,7 @@ class APCertificateApplyDetailView extends Component {
             <Text style={{color:'red', fontSize:16, marginLeft:20}}>审核不通过</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={{color:mainTextColor, fontSize:16, marginTop:15}}>审核不通过理由：</Text>
+            <Text style={{color:mainTextColor, fontSize:16, marginTop:15, lineHeight:20}}>审核不通过理由：</Text>
             <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, marginTop:15, lineHeight:20}}>{applyAdviceText}</Text>
           </View>
           {this._renderCheckResultFailItemSign(approveStatus, checker, name, phone, signImage)}

@@ -19,7 +19,7 @@ const ADH = W*320/750;
 const PaddingHorizontal = 10;
 const MainEntryItemPadding = W/6;
 
-const ADIcon = require('./image/cover-home-ad.jpg');
+const CoverAD = require('./image/cover-home-ad.jpg');
 const MainIcon1 = require('./image/icon-xiaofang-appointment.png');
 const MainIcon2 = require('./image/icon-kongfang-auditing.png');
 const MainIcon3 = require('./image/icon-new-apply.png');
@@ -50,10 +50,10 @@ class APHomeView extends Component {
   renderAD(){
     return(
       <View style={{height:ADH}}>
-        <Swiper showsButtons={false} paginationStyle={{bottom:10}}>
-          <Image style={{width:W,height:ADH}} source={ADIcon}/>
-          <Image style={{width:W,height:ADH}} source={ADIcon}/>
-          <Image style={{width:W,height:ADH}} source={ADIcon}/>
+        <Swiper paginationStyle={{bottom:10}}  autoplay={true} autoplayTimeout={3}>
+          <Image key={1} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={2} style={{width:W,height:ADH}} source={CoverAD}/>
+          <Image key={3} style={{width:W,height:ADH}} source={CoverAD}/>
         </Swiper>
       </View>
     )
