@@ -86,6 +86,7 @@ class SVMCheckedInDetailView extends Component {
           {this.renderSumitData2(data, checkListStatus)}
           {this.renderCheckResult(data, checkListStatus)}
           {this.renderSubmitButton(data, checkListStatus)}
+          <View style={{height:10}} />
         </ScrollView>
         <ProgressView show={loading} />
       </View>
@@ -108,11 +109,11 @@ class SVMCheckedInDetailView extends Component {
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('警员编号：', data.policeNum)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('被检查商户：', data.companyName)}
+          {this.renderHeightResultItem('被检查商户：', data.companyName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('商户联系人：', merchantLinkName)}
+          {this.renderHeightResultItem('商户联系人：', merchantLinkName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('联系方式：', merchantLinkWay)}
+          {this.renderHeightResultItem('联系方式：', merchantLinkWay)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderHeightResultItem('情况描述：', data.checkDetails)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -122,7 +123,7 @@ class SVMCheckedInDetailView extends Component {
     )
   }
 
-  renderSumitData1(data, measure, pickerPhotos, checkListStatus){
+  renderSumitData1(data, measure, pickerPhotos, checkListStatus, checkResult){
     if(!data) return null;
     else if(checkListStatus == '1') {
       return(
@@ -145,7 +146,7 @@ class SVMCheckedInDetailView extends Component {
 
   renderSumitData2(data, checkListStatus){
     if(!data) return null;
-    else if(checkListStatus != '1') {
+    else if(checkListStatus != '1' && data.checkResult == '2') {
       return(
         <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
           <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>商户反馈</Text>
@@ -166,7 +167,7 @@ class SVMCheckedInDetailView extends Component {
 
   renderCheckResult(data, checkListStatus){
     if(!data) return null;
-    else if(checkListStatus != '1' && checkListStatus != '2' && data.finalAuditStatus == '2'){
+    else if(checkListStatus == '3' && data.finalAuditStatus == '2'){
       return (
         <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
           <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>审核不通过原因</Text>
@@ -195,7 +196,7 @@ class SVMCheckedInDetailView extends Component {
     return(
       <View style={{height:ItemH, flexDirection:'row', alignItems:'center'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
-        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{content}</Text>
       </View>
     )
   }
@@ -277,8 +278,7 @@ class SVMCheckedInDetailView extends Component {
 
   renderSubmitButton(data, checkListStatus){
     if(!data) return null;
-    else if(checkListStatus != '1') return null;
-    else{
+    else if(checkListStatus == '1') {
       return(
         <View style={{alignItems:'center', justifyContent:'center', paddingVertical:20}}>
           <XButton onPress={this._submit} title='确认提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20}} />

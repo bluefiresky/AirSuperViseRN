@@ -85,6 +85,7 @@ class SVOHistoryCheckedInDetailView extends Component {
           {this.renderSumitData2(data)}
           {this.renderCheckResult(data)}
           {this.renderSubmitButton(data)}
+          <View style={{height:10}} />
         </ScrollView>
         <ProgressView show={loading} />
       </View>
@@ -107,7 +108,7 @@ class SVOHistoryCheckedInDetailView extends Component {
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderResultItem('警员编号：', data.policeNum)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('被检查商户：', data.companyName)}
+          {this.renderHeightResultItem('被检查商户：', data.companyName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderHeightResultItem('商户联系人：', merchantLinkName)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
@@ -123,14 +124,15 @@ class SVOHistoryCheckedInDetailView extends Component {
 
   renderSumitData1(data, measure, pickerPhotos){
     if(!data) return null;
-    if(data.checkListStatus == '1'){
+    if(data.checkListStatus == '1' && data.signRecordList && data.signRecordList.length > 0){
       return(
         <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10, paddingVertical:15}}>
           {data.signRecordList.map((item, index) => {
             return (
-              <Text key={index} style={{color:mainColor, fontSize:16, marginTop:5, flex:1, paddingHorizontal:PaddingHorizontal}}>{item.signUserName+'\t'}
-                <Text style={{color:mainTextGreyColor, fontSize:16}}>{item.signDetails}</Text>
-              </Text>
+              <View key={index} style={{flexDirection:'row', paddingHorizontal:PaddingHorizontal, marginTop:5}}>
+                <Text style={{color:mainColor, fontSize:16}}>{item.signUserName}</Text>
+                <Text style={{color:mainTextGreyColor, fontSize:16, marginLeft:10, flex:1}}>{item.signDetails}</Text>
+              </View>
             );
           })}
         </View>
@@ -140,7 +142,7 @@ class SVOHistoryCheckedInDetailView extends Component {
 
   renderSumitData2(data){
     if(!data) return null;
-    else if(data.checkListStatus == '2'){
+    else if(data.checkListStatus != '1' && data.checkResult == '2'){
       return(
         <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
           <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>商户反馈</Text>
@@ -161,7 +163,7 @@ class SVOHistoryCheckedInDetailView extends Component {
 
   renderCheckResult(data){
     if(!data) return null;
-    else if(data.checkListStatus != '1' && data.checkListStatus != '2' && data.finalAuditStatus == '2'){
+    else if(data.checkListStatus == '3' && data.finalAuditStatus == '2'){
       return (
         <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', marginTop:10}}>
           <Text style={{fontSize:17, color:mainTextColor, alignSelf:'center', marginVertical:15}}>审核不通过原因</Text>
@@ -190,7 +192,7 @@ class SVOHistoryCheckedInDetailView extends Component {
     return(
       <View style={{height:ItemH, flexDirection:'row', alignItems:'center'}}>
         <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
-        <Text style={{color:mainTextGreyColor, fontSize:16}}>{content}</Text>
+        <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{content}</Text>
       </View>
     )
   }
@@ -198,7 +200,7 @@ class SVOHistoryCheckedInDetailView extends Component {
   renderHeightResultItem(label, content){
     return(
       <View style={{paddingVertical:15, flexDirection:'row'}}>
-        <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
+        <Text style={{color:mainTextColor, fontSize:16, width:100, lineHeight:20}}>{label}</Text>
         <Text style={{color:mainTextGreyColor, fontSize:16, flex:1, lineHeight:20}}>{content}</Text>
       </View>
     )
@@ -255,22 +257,14 @@ class SVOHistoryCheckedInDetailView extends Component {
   }
 
   _convertStatus({checkResult, checkResultName, finalAuditStatus, finalAuditStatusName, checkListStatus, checkListStatusName, circulationType}){
-    if(circulationType == '1'){
-      if(checkResult == '2'){
-        if(checkListStatus == '3'){
-          return finalAuditStatusName;
-        }else{
-          return checkListStatusName;
-        }
-      }else{
-        return checkResultName;
-      }
-    }else{
+    if(checkResult == '2'){
       if(checkListStatus == '3'){
-        return checkResultName;
+        return finalAuditStatusName;
       }else{
         return checkListStatusName;
       }
+    }else{
+      return checkResultName;
     }
   }
 

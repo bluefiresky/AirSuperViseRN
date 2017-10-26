@@ -73,7 +73,7 @@ class PersonalTab extends Component {
           {this.renderEntryItem(ScoreIcon, '证件扣分记录', 2, ['04', '05'])}
           {this.renderEntryItem(AppointmentIcon, '消防网上预约记录', 3, ['01'])}
           {this.renderEntryItem(AirportIcon, '新机场入场单位资质审核', 4, ['06'])}
-          {this.renderEntryItem(AirportMerchantIcon, '空防新入场单位资质审核记录', 5, ['01'])}
+          {this.renderEntryItem(AirportMerchantIcon, '空防新入场单位资质申请记录', 5, ['01'])}
           {this.renderEntryItem(ReportIcon, '历史违法举报', 6, ['01'])}
           {this.renderLoginButton()}
         </ScrollView>
