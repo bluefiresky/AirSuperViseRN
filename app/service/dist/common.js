@@ -17,5 +17,5 @@ export const post_forced_update = ({appType, appVer, version}) => {
 
 /** 获取天气信息 */
 export const post_get_weather = ({cityName, version}) => {
-  return http_post( 'getWeather', {cityName}, {}, version )
+  return http_post( 'getWeatherAndBannerList', {cityName}, {}, version )
 }

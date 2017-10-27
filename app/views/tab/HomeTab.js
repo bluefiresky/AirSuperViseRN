@@ -19,8 +19,8 @@ const TitleH = Platform.select({ android: 50, ios: 70 });
 const TitleMarginTop = Platform.select({ android: 0, ios: 20 });
 const PaddingHorizontal = 10;
 const ADH = W*434/750;
-const MainEntryH = 150;
-const SecondaryEntryH = 100;
+const MainEntryH = 130;
+const SecondaryEntryH = 80;
 
 const CoverAD = require('./image/cover-home-ad1.png');
 const MainIcon1 = require('./image/icon-appointment.png');
@@ -89,7 +89,11 @@ class HomeTab extends Component {
           <Swiper paginationStyle={{bottom:10}} autoplay={true} autoplayTimeout={3}>
             {
               adCoverList.map((item, index) => {
-                return <Image key={index} style={{width:W,height:ADH}} source={item}/>
+                return (
+                  <TouchableOpacity key={index} onPress={this._adEntryPress.bind(this, item.linkUrl)} activeOpacity={item.activeOpacity} >
+                    <Image style={{width:W,height:ADH}} source={item.image}/>
+                  </TouchableOpacity>
+                )
               })
             }
           </Swiper>
@@ -114,7 +118,7 @@ class HomeTab extends Component {
 
   renderMainEntry(){
     return(
-      <View style={{backgroundColor:'white', height:MainEntryH, marginVertical:20, marginHorizontal:PaddingHorizontal, flexDirection:'row'}}>
+      <View style={{backgroundColor:'white', height:MainEntryH, marginVertical:10, flexDirection:'row'}}>
         <TouchableOpacity activeOpacity={0.8} style={{flex:2, alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 0)}>
           <Image source={MainIcon1} style={{height:60, width:60, resizeMode:'contain'}} />
           <Text style={{fontSize:18, color:mainColor, marginTop:15, textAlign:'center'}}>网上办公大厅<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
@@ -137,7 +141,7 @@ class HomeTab extends Component {
 
   renderSecondaryEntry(){
     return(
-      <View style={{backgroundColor:'white', height:SecondaryEntryH, flexDirection:'row', marginHorizontal:PaddingHorizontal}}>
+      <View style={{backgroundColor:'white', height:SecondaryEntryH, flexDirection:'row'}}>
         <TouchableOpacity onPress={this._secondEntryPress.bind(this, 0)} activeOpacity={0.8} style={styles.secondaryEntryItem}>
           <Image source={SecondaryIcon1} style={styles.secondaryEntryItemImage} />
           <Text style={styles.secondaryEntryItemText}>证件管理</Text>
@@ -159,6 +163,10 @@ class HomeTab extends Component {
   }
 
   /** Private **/
+  _adEntryPress(url){
+    if(url && url.indexOf('http') != -1) Actions.commonWeb({url})
+  }
+
   _mainEntryPress(type){
     if(type === 0){
       Actions.apHome();
@@ -222,7 +230,14 @@ class HomeTab extends Component {
   _getWeather(){
     this.props.dispatch( create_service(Contract.POST_GET_WEATHER, {cityName:'北京市'}))
       .then( res => {
-        this.setState({weather:res, loading:false, adCoverList:ADCoverList})
+        let adCoverList = [];
+        if(res.bannerList){
+          for(let i=0; i<res.bannerList.length; i++){
+            let { imageUrl, linkUrl, linkFlag } = res.bannerList[i];
+            adCoverList.push({image:{uri:imageUrl, isStatic:true}, linkUrl, activeOpacity:linkFlag == '02'?1:0.8})
+          }
+        }
+        this.setState({weather:res, loading:false, adCoverList})
       })
   }
 

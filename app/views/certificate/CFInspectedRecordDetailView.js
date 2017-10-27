@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 证件管理-
+* 证件管理-检查详情
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -19,7 +19,12 @@ const ItemH = 50;
 const PhotoWT = (W - PaddingHorizontal*4 - 20)/3;
 const PhotoW = PhotoWT > 100? 100 : PhotoWT;
 
-const CheckStatusName = {'1':'已扣分', '2':'复议审核中', '3':'复议成功', '9':'复议失败'}
+const CheckStatusName = {
+  '1':{label:'已扣分', color:mainTextGreyColor, id:'1'},
+  '2':{label:'复议审核中', color:'red', id:'2'},
+  '3':{label:'复议成功', color:'red', id:'3'},
+  '9':{label:'复议失败', color:'red', id:'9'}
+}
 
 class CFInspectedRecordDetailView extends Component {
 
@@ -67,6 +72,9 @@ class CFInspectedRecordDetailView extends Component {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {this.renderResult(data)}
+          {this.renderReApplyReason(data)}
+          {this.renderReApplyFailReason(data)}
+          <View style={{height:10}} />
         </ScrollView>
         <ProgressView show={loading} />
       </View>
@@ -92,7 +100,7 @@ class CFInspectedRecordDetailView extends Component {
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderHeightResultItem('扣分内容：', data.legalProvisionContents)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
-          {this.renderResultItem('状态：', data.checkStatus)}
+          {this.renderCheckStatusResultItem('状态：', data.checkStatus.label, data.checkStatus.color)}
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           {this.renderPhotoItem(data.livePhotos)}
         </View>
@@ -118,6 +126,15 @@ class CFInspectedRecordDetailView extends Component {
     )
   }
 
+  renderCheckStatusResultItem(label, content, contentColor){
+    return(
+      <View style={{height:ItemH, flexDirection:'row', alignItems:'center'}}>
+        <Text style={{color:mainTextColor, fontSize:16, width:100}}>{label}</Text>
+        <Text style={{color:contentColor, fontSize:16, flex:1}}>{content}</Text>
+      </View>
+    )
+  }
+
   renderPhotoItem(photos){
     if(photos){
       return(
@@ -134,6 +151,33 @@ class CFInspectedRecordDetailView extends Component {
             </View>
         </View>
       )
+    }
+  }
+
+  renderReApplyReason(data){
+    if(!data) return null;
+    else if(data.checkStatus.id != '1'){
+      return (
+        <View style={{paddingVertical:15, flexDirection:'row', alignItems:'center', backgroundColor:'white', paddingHorizontal:PaddingHorizontal, marginTop:10}}>
+          <Text style={{color:mainTextColor, fontSize:16, width:150}}>申请复议理由：</Text>
+          <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{data.reconsiderReason}</Text>
+        </View>
+      );
+    }
+  }
+
+  renderReApplyFailReason(data){
+    if(!data) return null;
+    else if(data.checkStatus.id == '9'){
+      return (
+        <View style={{backgroundColor:'white', paddingHorizontal:PaddingHorizontal}}>
+          <View style={{height:1, backgroundColor:borderColor}} />
+          <View style={{paddingVertical:15, flexDirection:'row', alignItems:'center'}}>
+            <Text style={{color:mainTextColor, fontSize:16, width:150}}>审核不通过理由：</Text>
+            <Text style={{color:mainTextGreyColor, fontSize:16, flex:1}}>{data.reconsiderReply}</Text>
+          </View>
+        </View>
+      );
     }
   }
 
