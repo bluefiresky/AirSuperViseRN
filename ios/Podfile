@@ -7,6 +7,7 @@ target 'AirSuperViseRN' do
   # Fixes required for pod specs to work with rn 0.42
 
   pod 'IQKeyboardManager'
+  pod 'SAMKeychain'
   pod 'BaiduMapKit' #百度地图SDK
 
 # when not using frameworks  we can do this instead of including the source files in our project (1/4):

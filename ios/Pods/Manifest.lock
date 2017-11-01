@@ -1,15 +1,18 @@
 PODS:
   - BaiduMapKit (3.3.0)
   - IQKeyboardManager (4.0.9)
+  - SAMKeychain (1.5.2)
 
 DEPENDENCIES:
   - BaiduMapKit
   - IQKeyboardManager
+  - SAMKeychain
 
 SPEC CHECKSUMS:
   BaiduMapKit: 6517f84bdca032170ee9da39985bb64eba8ed900
   IQKeyboardManager: 322c7405df3eb5f7e50dede32ea937bf3d4364e0
+  SAMKeychain: 1865333198217411f35327e8da61b43de79b635b
 
-PODFILE CHECKSUM: 53ac392ee6a4c0fc2cd9e8a372b6d3c90656d797
+PODFILE CHECKSUM: 5567df270c165a24665b9dcc24fad4db84b65508
 
 COCOAPODS: 1.2.1

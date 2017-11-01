@@ -16,6 +16,7 @@ public class ModuleManagerPackage implements ReactPackage {
         List<NativeModule> modules = new ArrayList<NativeModule>();
         modules.add(new BaiduMapModule(reactContext));
         modules.add(new ImageToBase64(reactContext));
+        modules.add(new Device(reactContext));
         return modules;
     }
 

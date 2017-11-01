@@ -22,6 +22,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		161CCA45B5E64C5D9DCFABB0 /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E11630897B041B3ABC896C6 /* libRSSignatureCapture.a */; };
+		33362A0F1FA96E7E004C5142 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 333629EA1FA96E7D004C5142 /* Device.m */; };
+		33362A451FA978D4004C5142 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33362A211FA978D4004C5142 /* Security.framework */; };
 		33AACE061F7BBD1600445F1E /* BaiduMapModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE031F7BBD1600445F1E /* BaiduMapModule.m */; };
 		33AACE071F7BBD1600445F1E /* ImageToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE051F7BBD1600445F1E /* ImageToBase64.m */; };
 		33B302FC9A2847529B3EE178 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 084F9440744D4A1F810FBAAF /* EvilIcons.ttf */; };
@@ -315,6 +317,9 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		241B288F0CED4243A0B849F4 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		326BEDEE194341A6A7AA3536 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		333629EA1FA96E7D004C5142 /* Device.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
+		33362A0E1FA96E7E004C5142 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
+		33362A211FA978D4004C5142 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		33AACE021F7BBD1600445F1E /* BaiduMapModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduMapModule.h; sourceTree = "<group>"; };
 		33AACE031F7BBD1600445F1E /* BaiduMapModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaiduMapModule.m; sourceTree = "<group>"; };
 		33AACE041F7BBD1600445F1E /* ImageToBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageToBase64.h; sourceTree = "<group>"; };
@@ -367,6 +372,7 @@
 				161CCA45B5E64C5D9DCFABB0 /* libRSSignatureCapture.a in Frameworks */,
 				F5665CF8C8614C44A710D29E /* libRCTOrientation.a in Frameworks */,
 				AD0C4CAF3F73852820AEF4DF /* libPods-AirSuperViseRN.a in Frameworks */,
+				33362A451FA978D4004C5142 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,6 +557,8 @@
 				33AACE011F7BBD1600445F1E /* BaiduMap */,
 				33AACE041F7BBD1600445F1E /* ImageToBase64.h */,
 				33AACE051F7BBD1600445F1E /* ImageToBase64.m */,
+				33362A0E1FA96E7E004C5142 /* Device.h */,
+				333629EA1FA96E7D004C5142 /* Device.m */,
 			);
 			name = Modules;
 			path = AirSuperViseRN/Modules;
@@ -586,6 +594,7 @@
 		5F7EB1AE48AA61BA6F408BA8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				33362A211FA978D4004C5142 /* Security.framework */,
 				A2B88FFCA3BD3C28A0D10B69 /* libPods-AirSuperViseRN.a */,
 			);
 			name = Frameworks;
@@ -1140,6 +1149,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				33AACE071F7BBD1600445F1E /* ImageToBase64.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				33362A0F1FA96E7E004C5142 /* Device.m in Sources */,
 				33AACE061F7BBD1600445F1E /* BaiduMapModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

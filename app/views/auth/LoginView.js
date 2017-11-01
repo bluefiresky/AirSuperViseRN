@@ -116,14 +116,18 @@ class LoginView extends Component {
       Toast.showShortCenter(this.props.form.getErrors()[0]);
     }else {
       this.setState({loading:true})
-      let { mobile, code } = this.props.form.getData();
-      this.props.dispatch( create_service(Contract.POST_USER_LOGIN_ACCOUNT, {phoneNum:mobile, smsCode:code, deviceId:'uerqpiueonvuqh378r93h9uhn', appType:AppType}))
-        .then( res => {
-          this.setState({loading:false})
-          if(res){
-            Actions.main({type:'reset'})
-          }
-        })
+      NativeModules.Device.getDeviceId()
+      .then( res => {
+        console.log(' deviceId -->> ', res);
+        let { mobile, code } = this.props.form.getData();
+        this.props.dispatch( create_service(Contract.POST_USER_LOGIN_ACCOUNT, {phoneNum:mobile, smsCode:code, deviceId:res, appType:AppType}))
+          .then( res => {
+            this.setState({loading:false})
+            if(res){
+              Actions.main({type:'reset'})
+            }
+          })
+      })
     }
   }
 
