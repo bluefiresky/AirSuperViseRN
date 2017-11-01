@@ -70,7 +70,7 @@ class APCertificateApplySubmitView extends Component {
         {photo:null, cover:Cover2, label:'行驶证副本', type:'2'},
         {photo:null, cover:Cover3, label:'车辆正面', type:'3'},
         {photo:null, cover:Cover4, label:'车辆侧面', type:'4'},
-        {photo:null, cover:Cover5, label:'道路运输许可证', type:'5'}
+        {photo:null, cover:Cover5, label:'道路运输许可证（仅货车）', type:'5'}
       ],
       applyerType:ApplyerTypes[1],
       idAddress: null, // 户籍地

@@ -94,7 +94,7 @@ class RootView extends Component {
               <Scene key="policeNews" component={Scenes.PoliceNewsView} title='警务新闻' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="policeNewsDetail" component={Scenes.PoliceNewsDetailView} title='警务新闻详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
-              <Scene key="reportHome" component={Scenes.ReportHomeView} title='违法举报' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="reportHome" component={Scenes.ReportHomeView} title='我要举报' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="reportPosting" component={Scenes.ReportPostingView} title='我要举报' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="reportHistory" component={Scenes.ReportHistoryView} title='举报历史' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="reportHistoryDetail" component={Scenes.ReportHistoryDetailView} title='举报历史详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>

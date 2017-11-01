@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 网上预约-新机场证件申请Home
+* 网上预约-新机场车辆通行证申办Home
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -61,15 +61,21 @@ class APCertificateApplyHomeView extends Component {
 
   renderEntry(data){
     if(!data) return null;
-
     let checker = (data == '06');
-    return (
-      <View style={{marginTop:10}}>
-        {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}
-        {checker?this.renderItem(DetailIcon, '审核证件信息', borderColor, 2):null}
-        {this.renderItem(HistoryIcon, '历史申请记录', 'transparent', 3)}
-      </View>
-    );
+    if(checker){
+      return (
+        <View style={{marginTop:10}}>
+          {this.renderItem(DetailIcon, '审核证件信息', borderColor, 2)}
+        </View>
+      );
+    }else{
+      return (
+        <View style={{marginTop:10}}>
+          {this.renderItem(ApplyIcon, '证件申请', borderColor, 1)}
+          {this.renderItem(HistoryIcon, '历史申请记录', 'transparent', 3)}
+        </View>
+      );
+    }
   }
 
   renderItem(icon, label, bc, type){

@@ -87,7 +87,7 @@ class APAirMerchantCheckView extends Component {
 
     return(
       <View style={{backgroundColor:'white', marginTop:10}}>
-        <Input label={'企业名称'} {...enterpriseName} maxLength={50} labelWidth={LabelW} placeholder={'请输入企业名称'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        <Input label={'企业名称（全称）'} {...enterpriseName} maxLength={50} labelWidth={150} placeholder={'请输入企业名称'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
         <Input label={'企业法人'} {...corporateName} maxLength={20} labelWidth={LabelW} placeholder={'请输入企业法人'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
@@ -102,7 +102,7 @@ class APAirMerchantCheckView extends Component {
   renderCertificateTypes(current){
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH}}>
-        <Text style={[styles.starStyle,{marginTop:12}]}><Text style={styles.labelStyle}>证件类型</Text></Text>
+        <Text style={[styles.starStyle,{marginTop:12}]}><Text style={styles.labelStyle}>需提交材料（可勾选）</Text></Text>
         {this._renderCertificateTypesItem(current)}
       </View>
     )
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   starStyle:{
     color:'red',
     fontSize:14,
-    width:LabelW
+    width:200
   },
   labelStyle:{
     color:inputLeftColor,

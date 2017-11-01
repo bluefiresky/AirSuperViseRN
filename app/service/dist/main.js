@@ -98,17 +98,17 @@ export const post_supervise_submit_audit = ({checkListNum, auditStatus, auditDet
   return http_post( 'supervision.submitAudit', {checkListNum, auditStatus}, {auditDetails}, version )
 }
 
-/** 违法举报-提交我要举报*/
+/** 我要举报-提交我要举报*/
 export const post_report_submit_report = ({phoneNum, reportType, illegalDetails, urgentType, reportAddress, longitude, latitude, reporterName, reporterId, photoList, version}) => {
   return http_post( 'report.submitReport', {phoneNum, reportType, illegalDetails, urgentType, reportAddress}, {longitude, latitude, reporterName, reporterId, photoList}, version )
 }
 
-/** 违法举报-历史举报信息 */
+/** 我要举报-历史举报信息 */
 export const post_get_report_history = ({version}) => {
   return http_post( 'report.getReportHistory', {}, {}, version )
 }
 
-/** 违法举报-历史举报信息 */
+/** 我要举报-历史举报信息 */
 export const post_get_report_detail = ({reportNum, version}) => {
   return http_post( 'report.getReportDetails', {reportNum}, {}, version )
 }

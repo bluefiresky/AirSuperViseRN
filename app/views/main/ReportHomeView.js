@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 违法举报-首页
+* 我要举报-首页
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -69,7 +69,7 @@ class ReportHomeView extends Component {
         <View style={{flexDirection:'row', marginBottom:20}}>
           {this._renderEntryItem(EntryIcon1, '我要举报', this._goPosting)}
           {this._renderEntryItem(EntryIcon2, '历史举报', this._goHistory)}
-          {this._renderEntryItem(EntryIcon3, '举报排名', null)}
+          {this._renderEntryItem(EntryIcon3, '奖励公示', null)}
         </View>
         <View style={{height:1, backgroundColor:borderColor, marginHorizontal:20}} />
         <XButton onPress={this._makePhone110} title='紧急情况，请点击此处，直接拨打110' textStyle={{color:'red'}} style={{height:40, borderColor:'red', width:ButtonW, borderRadius:20, backgroundColor:'transparent', borderWidth:StyleSheet.hairlineWidth, alignSelf:'center', marginTop:20}} />

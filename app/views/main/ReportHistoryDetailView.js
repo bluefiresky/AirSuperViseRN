@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 违法举报-举报历史详情
+* 我要举报-举报历史详情
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";

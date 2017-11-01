@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 违法举报-我要举报
+* 我要举报-我要举报
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -83,8 +83,7 @@ class ReportPostingView extends Component {
         {this.renderTypes(postingType)}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
         {this.renderAutoGrowing(illegalDetails)}
-        <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
-        {this.renderEmergentLevel(emergentLevel)}
+        {/*this.renderEmergentLevel(emergentLevel)*/}
         <View style={{backgroundColor:borderColor, height:StyleSheet.hairlineWidth, marginHorizontal:PaddingHorizontal }} />
         {this.renderCurrentAddress(address)}
       </View>
@@ -125,7 +124,7 @@ class ReportPostingView extends Component {
           style={[styles.autoTextInput, {color:inputRightColor}]}
           value={content}
           underlineColorAndroid={'transparent'}
-          placeholder={'请输入违法举报信息'}
+          placeholder={'请输入举报的信息'}
           placeholderTextColor={placeholderColor}
           minHeight={AutoGrowingInputMinH}
           onChangeText={this._onIllegalDetailTextChanged}
@@ -282,13 +281,13 @@ class ReportPostingView extends Component {
   _convertToSubmit(){
     let { postingType, illegalDetails, emergentLevel, pickerPhotos, location } = this.state;
     if(!postingType.code) Toast.showShortCenter('请选择举报类型');
-    else if(!illegalDetails) Toast.showShortCenter('请输入违法举报信息');
-    else if(!emergentLevel.code) Toast.showShortCenter('请选择紧急程度');
+    else if(!illegalDetails) Toast.showShortCenter('请输入举报的信息');
+    // else if(!emergentLevel.code) Toast.showShortCenter('请选择紧急程度');
     else {
       let { reporterName, reporterId } = this.props.form.getData();
 
       let params = {
-        phoneNum:global.profile.phoneNum, reportType:postingType.code, illegalDetails, urgentType:emergentLevel.code, reportAddress:location.address,
+        phoneNum:global.profile.phoneNum, reportType:postingType.code, illegalDetails, urgentType:'3', reportAddress:location.address,
         longitude:location.longitude, latitude:location.latitude, reporterName, reporterId, photoList:this._convertPhotosUri(pickerPhotos)
       }
 

@@ -127,7 +127,7 @@ class HomeTab extends Component {
         <View style={{flex:3}}>
           <TouchableOpacity activeOpacity={0.8} style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 1)}>
             <Image source={MainIcon2} style={{height:40, width:40, resizeMode:'contain'}} />
-            <Text style={{fontSize:18, color:mainColor, marginLeft:20, textAlign:'center'}}>违法举报<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
+            <Text style={{fontSize:18, color:mainColor, marginLeft:20, textAlign:'center'}}>我要举报<Text style={{fontSize:14, color:mainTextGreyColor}}></Text></Text>
           </TouchableOpacity>
           <View style={{height:StyleSheet.hairlineWidth, backgroundColor:borderColor}} />
           <TouchableOpacity activeOpacity={0.8} style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}} onPress={this._mainEntryPress.bind(this, 2)}>
@@ -152,7 +152,7 @@ class HomeTab extends Component {
         </TouchableOpacity>
         <TouchableOpacity onPress={this._secondEntryPress.bind(this, 2)} activeOpacity={0.8} style={styles.secondaryEntryItem}>
           <Image source={SecondaryIcon3} style={styles.secondaryEntryItemImage} />
-          <Text style={styles.secondaryEntryItemText}>网上培训</Text>
+          <Text style={styles.secondaryEntryItemText}>群众监督</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this._secondEntryPress.bind(this, 3)} activeOpacity={0.8} style={styles.secondaryEntryItem}>
           <Image source={SecondaryIcon4} style={styles.secondaryEntryItemImage} />

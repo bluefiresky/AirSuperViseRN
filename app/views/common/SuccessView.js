@@ -22,7 +22,7 @@ const ShowContent = {
   submit:{ icon:require('./image/icon-submit-success.png'), title:'举报成功', content:'提交成功，请耐心等待审核', textAlign:'left' },
   certificateLost:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的临时证件挂失申请已经提交成功，相应的证件状态已经变更为挂失', textAlign:'center' },
   applyReInspect:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的复议申请已经提交成功\n请等待审核', textAlign:'center' },
-  reportPosting:{ icon:require('./image/icon-submit-success.png'), title:'', content:'恭喜您！您的违法举报已经提交成功\n感谢您的参与', textAlign:'center' },
+  reportPosting:{ icon:require('./image/icon-submit-success.png'), title:'', content:'恭喜您！您的举报已经提交成功\n感谢您的参与', textAlign:'center' },
   submit1:{ icon:require('./image/icon-submit-success.png'), title:'提交成功', content:'', textAlign:'center' },
   superviseSubmit:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经提交成功', textAlign:'center' },
   superviseCheck:{ icon:require('./image/icon-submit-success.png'), title:'恭喜您！', content:'您的案件已经审核成功', textAlign:'center' },

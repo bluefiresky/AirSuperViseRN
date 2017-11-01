@@ -74,7 +74,7 @@ class APHomeView extends Component {
         <View style={{height:1, backgroundColor:borderColor, marginHorizontal:20}}/>
         <TouchableOpacity activeOpacity={0.8} style={styles.mainEntryItem} onPress={this._mainEntryPress.bind(this, 2)}>
           <Image source={MainIcon3} style={styles.mainEntryItemImage} />
-          <Text style={styles.mainEntryItemText}>新机场证件申请</Text>
+          <Text style={styles.mainEntryItemText}>新机场车辆通行证申办</Text>
         </TouchableOpacity>
       </View>
     )

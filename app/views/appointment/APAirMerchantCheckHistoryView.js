@@ -20,7 +20,7 @@ const EmptyW = (2*W)/3;
 const EmptyImageW = W/3;
 const EmptyMarginTop = W/10;
 
-const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'审核通过'}, '9':{color:'red', text:'审核不通过'}}
+const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'预审核通过'}, '9':{color:'red', text:'审核不通过'}}
 
 const ArrowRight = require('./image/icon-arrow-right-blue.png');
 
