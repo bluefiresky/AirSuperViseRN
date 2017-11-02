@@ -30,7 +30,11 @@ const CertificateTypes = {
   '6':'企业法人营业执照及副本',
   '7':'营业许可证',
   '8':'航空运营人云行许可证',
-  '9':'本单位制定的通行证管理规定'};
+  '9':'本单位制定的通行证管理规定',
+  '10':'与机场管理机构签订的房屋租赁合同',
+  '11':'与已办证甲方签订的合同',
+  '12':'其他申请资料'
+};
 
 class APAirMerchantCheckDetailView extends Component {
 
@@ -50,7 +54,7 @@ class APAirMerchantCheckDetailView extends Component {
       this.props.dispatch( create_service(Contract.POST_GET_AIRPORTCARD_APPLY_DETAIL, {id:this.state.recordId}))
         .then( res => {
           if(res) {
-            let { certificateTypes, certificatePhotos, corporateName, rejectReason, contactName, contactWay, enterpriseName, examineStatus } = res.entity;
+            let { certificateTypes, certificatePhotos, corporateName, rejectReason, contactName, contactWay, enterpriseName, examineStatus, applyReason, companyAddr } = res.entity;
             let certificateTypeLabel = '';
             for(let i=0; i<certificateTypes.length; i++){
               let c = certificateTypes[i];
@@ -63,7 +67,7 @@ class APAirMerchantCheckDetailView extends Component {
                 certificatePhotoList.push({uri:c, isStatic:true})
               }
             }
-            this.setState({loading:false, data:{certificatePhotoList, certificateTypeLabel, corporateName, rejectReason, contactName, contactWay, enterpriseName, examineStatus}})
+            this.setState({loading:false, data:{certificatePhotoList, certificateTypeLabel, corporateName, rejectReason, contactName, contactWay, enterpriseName, examineStatus, applyReason, companyAddr}})
           }else{
             this.setState({loading:false})
           }
@@ -99,6 +103,8 @@ class APAirMerchantCheckDetailView extends Component {
         <View style={{height:1, backgroundColor:borderColor}} />
         {this.renderMerchantName(data.enterpriseName, ExamineStatus[data.examineStatus].text)}
         {this.renderItem('企业法人：', data.corporateName)}
+        {this.renderItem('申请事由：', data.applyReason)}
+        {this.renderItem('公司地址：', data.companyAddr)}
         {this.renderItem('联系人：', data.contactName)}
         {this.renderItem('联系方式：', data.contactWay)}
         {this.renderItem('证件类型：', data.certificateTypeLabel)}

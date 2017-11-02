@@ -1,6 +1,6 @@
 /**
 * Created by wuran on 17/06/26.
-* 首页
+* 网上预约大厅-空防新入场单位资质审核
 */
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
@@ -12,13 +12,13 @@ import { CheckBox } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor, inputLeftColor, inputRightColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
-import { ProgressView, Input, XButton, form_connector, ValidateMethods } from '../../components/index.js';  /** 自定义组件 */
+import { ProgressView, Input, XButton, form_connector, ValidateMethods, InputAutoGrowing } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
 const LabelW = 100;
 const PaddingHorizontal = 20;
-const InputH = 45;
+const InputH = 50;
 const PhotoViewW = (W - PaddingHorizontal*2)/3
 const PhotoW = PhotoViewW - 20;
 const SubmitButtonW = W - (30 * 2);
@@ -45,7 +45,10 @@ const CertificateTypes = [
   {label:'企业法人营业执照及副本', code:6},
   {label:'营业许可证', code:7},
   {label:'航空运营人云行许可证', code:8},
-  {label:'本单位制定的通行证管理规定', code:9}
+  {label:'本单位制定的通行证管理规定', code:9},
+  {label:'与机场管理机构签订的房屋租赁合同', code:10},
+  {label:'与已办证甲方签订的合同', code:11},
+  {label:'其他申请资料', code:12}
 ];
 
 class APAirMerchantCheckView extends Component {
@@ -83,13 +86,17 @@ class APAirMerchantCheckView extends Component {
   }
 
   renderInput(){
-    let { enterpriseName, corporateName, contactName, contactWay } = this.props.fields;
+    let { enterpriseName, corporateName, contactName, contactWay, applyReason, companyAddr } = this.props.fields;
 
     return(
       <View style={{backgroundColor:'white', marginTop:10}}>
         <Input label={'企业名称（全称）'} {...enterpriseName} maxLength={50} labelWidth={150} placeholder={'请输入企业名称'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
         <Input label={'企业法人'} {...corporateName} maxLength={20} labelWidth={LabelW} placeholder={'请输入企业法人'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
+        {this.renderLine()}
+        <InputAutoGrowing label={'申请事由：'} {...applyReason} labelWidth={LabelW} placeholder={'请输入申请事由'} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
+        {this.renderLine()}
+        <InputAutoGrowing label={'公司地址：'} {...companyAddr} labelWidth={LabelW} placeholder={'请输入公司地址'} noBorder={true} style={{paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
         <Input label={'联系人姓名'} {...contactName} maxLength={20} labelWidth={LabelW} placeholder={'请输入联系人姓名'} noBorder={true} style={{height:InputH, paddingLeft:PaddingHorizontal}}/>
         {this.renderLine()}
@@ -177,9 +184,9 @@ class APAirMerchantCheckView extends Component {
     }else {
       this.setState({loading:true})
       let { currentCertificateTypeCodes, pickerPhotos } = this.state;
-      let { enterpriseName, corporateName, contactName, contactWay } = this.props.form.getData();
+      let { enterpriseName, corporateName, contactName, contactWay, applyReason, companyAddr } = this.props.form.getData();
       let params = {
-        enterpriseName, corporateName, contactName, contactWay,
+        enterpriseName, corporateName, contactName, contactWay, applyReason, companyAddr,
         certificateTypes:JSON.stringify(currentCertificateTypeCodes),
         certificatePhotos:this._convertPhotosUri(pickerPhotos)
       }
@@ -275,11 +282,13 @@ const styles = StyleSheet.create({
 });
 
 /** post-提交所需数据配置 */
-const fields = ['enterpriseName', 'corporateName', 'contactName', 'contactWay']
+const fields = ['enterpriseName', 'corporateName', 'applyReason', 'companyAddr', 'contactName', 'contactWay']
 const validate = (assert, fields) => {
   assert("enterpriseName", ValidateMethods.required(), '请输入企业名称')
   assert("corporateName", ValidateMethods.required(), '请输入企业法人')
   assert("contactName", ValidateMethods.required(), '请输入联系人姓名')
+  assert("applyReason", ValidateMethods.required(), '请输入申请事由')
+  assert("companyAddr", ValidateMethods.required(), '请输入公司地址')
   assert("contactWay", ValidateMethods.required(), '请输入联系方式')
   assert("contactWay", ValidateMethods.min_length(11), '输入的手机号必须为11位')
 }

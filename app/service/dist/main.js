@@ -179,9 +179,9 @@ export const post_airportcard_approve_record = ({formId, signImage, applyAdviceT
   return http_post( 'airportcard.approveRecord', {formId, signImage, operateType}, {applyAdviceText}, version )
 }
 
-/** 网上预约-申请部门单位列表接口 */
-export const post_airportcard_apply = ({enterpriseName, corporateName, contactName, contactWay, certificateTypes, certificatePhotos, version}) => {
-  return http_post( 'airdefense.apply', {enterpriseName, corporateName, contactName, contactWay, certificateTypes}, {certificatePhotos}, version )
+/** 网上预约-空防新入场单位资质审核 */
+export const post_airportcard_apply = ({enterpriseName, corporateName, contactName, contactWay, certificateTypes, applyReason, companyAddr, certificatePhotos, version}) => {
+  return http_post( 'airdefense.apply', {enterpriseName, corporateName, contactName, contactWay, certificateTypes, applyReason, companyAddr}, {certificatePhotos}, version )
 }
 
 /** 网上预约-空防新入场单位资质审核记录查询接口  */
