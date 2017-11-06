@@ -3,7 +3,7 @@
 * 首页
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, RefreshControl } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -44,6 +44,7 @@ class HomeTab extends Component {
       loading: false,
       weather: null,
       adCoverList: [],
+      refresh: false
     }
 
     this._forcedUpdate = this._forcedUpdate.bind(this);
@@ -52,16 +53,18 @@ class HomeTab extends Component {
   }
 
   componentDidMount(){
-    this._forcedUpdate()
+    this._onRefresh(false);
   }
 
   render(){
-    let { loading, weather, adCoverList } = this.state;
+    let { loading, weather, adCoverList, refresh } = this.state;
 
     return(
       <View style={styles.container}>
         {this.renderTitle()}
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          refreshControl={<RefreshControl refreshing={refresh} onRefresh={this._onRefresh.bind(this, true)} tintColor='#999999' title='loading...' titleColor='#333333'/>}
+          showsVerticalScrollIndicator={false}>
           {this.renderAD(adCoverList)}
           {this.renderWeather(weather)}
           {this.renderMainEntry()}
@@ -72,6 +75,11 @@ class HomeTab extends Component {
       </View>
     )
   }
+
+  // renderRefreshControl(){
+  //   return (
+  //   );
+  // }
 
   renderTitle(){
     return(
@@ -197,19 +205,24 @@ class HomeTab extends Component {
     }
   }
 
+  _onRefresh(refresh){
+    if(refresh) this.setState({refresh:true})
+    else this.setState({loading:true})
+    this._forcedUpdate();
+  }
+
   _forcedUpdate(){
-    this.setState({loading:true});
     this.props.dispatch( create_service(Contract.POST_FORCED_UPDATE, {appType:AppType, appVer:Version}) )
       .then( res => {
         if(res){
           if(res.isUpgrade == '02'){
             this._goForcedUpdateTip(res.mustUpgradeReason, res.appAddress);
-            this.setState({loading:false});
+            this.setState({loading:false, refresh:false});
           }else{
             this._getRoleList();
           }
         }else{
-          this.setState({loading:false});
+          this.setState({loading:false, refresh:false});
         }
       })
   }
@@ -237,7 +250,7 @@ class HomeTab extends Component {
             adCoverList.push({image:{uri:imageUrl, isStatic:true}, linkUrl, activeOpacity:linkFlag == '02'?1:0.8})
           }
         }
-        this.setState({weather:res, loading:false, adCoverList})
+        this.setState({weather:res, loading:false, adCoverList, refresh:false})
       })
   }
 
