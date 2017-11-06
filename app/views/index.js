@@ -67,6 +67,10 @@ export { ReportPostingView } from './main/ReportPostingView.js';
 export { ReportHistoryView } from './main/ReportHistoryView.js';
 export { ReportHistoryDetailView } from './main/ReportHistoryDetailView.js';
 
+export { PeopelReportPostingView } from './main/PeopelReportPostingView.js';
+export { PeopelReportHistoryView } from './main/PeopelReportHistoryView.js';
+export { PeopelReportHistoryDetailView } from './main/PeopelReportHistoryDetailView.js';
+
 
 /** common */
 export { ErrorView } from './common/ErrorView.js';

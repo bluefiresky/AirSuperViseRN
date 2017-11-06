@@ -111,14 +111,14 @@ export class Input extends Component {
   }
 
   render() {
-    let { style, noLabel, label, labelWidth, noBorder, hasClearButton,/* TextInput properties */ type, autoFocus, editable, keyboardType, placeholder, selectTextOnFocus, maxLength, multiline,/* fields properties */ value } = this.props;
+    let { style, noLabel, label, labelWidth, noBorder, hasClearButton, star,/* TextInput properties */ type, autoFocus, editable, keyboardType, placeholder, selectTextOnFocus, maxLength, multiline,/* fields properties */ value } = this.props;
     const border = noBorder? null : { borderBottomColor :  borderColor, borderBottomWidth: 0.5 };
     const ClearButton = this.renderClearButton(false, value);
     const l = noLabel === true? true : false;
 
     return(
       <View style={ [{paddingLeft: 20, flexDirection: 'row', height: InputH, backgroundColor: 'white'}, border, style] }>
-        {this.renderLabelView(l, labelWidth, label)}
+        {this.renderLabelView(l, labelWidth, label, star)}
         <TextInput
           style={{flex: 1, fontSize: 16, color: inputRightColor, paddingLeft: 0}}
           onChangeText={ (text) => { this._onChangeText(text) } }
@@ -138,10 +138,11 @@ export class Input extends Component {
     );
   }
 
-  renderLabelView(l, labelWidth, label){
+  renderLabelView(l, labelWidth, label, star){
     if (!l) {
       return(
-        <View style={{width: labelWidth? labelWidth : 80, justifyContent: 'center'}}>
+        <View style={{width: labelWidth? labelWidth : 80, alignItems: 'center', flexDirection:'row'}}>
+          {star?<Text style={{color:'red', fontSize:16, alignItems:'center'}}>*</Text>:null}
           <Text style={{ color: inputLeftColor, fontSize: 16 }}>{ label }</Text>
         </View>
       )

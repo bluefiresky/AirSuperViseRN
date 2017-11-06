@@ -194,7 +194,16 @@ class HomeTab extends Component {
     }else if(type === 1){
       Actions.policeNews();
     }else if(type === 2){
-      Toast.showShortCenter('待开发');
+      this.setState({loading:true})
+      NativeModules.BaiduMapModule.location().then(res => {
+        this.setState({loading:false})
+        // console.log(' the location res -->> ', res);
+        if(res && res.address){
+          Actions.peopelReportPosting({location:res})
+        }else{
+          Toast.showShortCenter('定位失败, 请确认手机的定位功能开启')
+        }
+      })
     }else if(type === 3){
       Toast.showShortCenter('待开发');
     }

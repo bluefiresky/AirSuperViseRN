@@ -99,6 +99,10 @@ class RootView extends Component {
               <Scene key="reportHistory" component={Scenes.ReportHistoryView} title='举报历史' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="reportHistoryDetail" component={Scenes.ReportHistoryDetailView} title='举报历史详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
 
+              <Scene key="peopelReportPosting" component={Scenes.PeopelReportPostingView} title='群众监督' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="peopelReportHistory" component={Scenes.PeopelReportHistoryView} title='群众监督历史记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="peopelReportHistoryDetail" component={Scenes.PeopelReportHistoryDetailView} title='群众监督详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+
             </Scene>
 
             <Scene key="error" component={Scenes.ErrorView} />

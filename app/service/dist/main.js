@@ -203,3 +203,18 @@ export const post_get_airportcard_isexists_approve_lists_count = ({version}) => 
 export const post_get_news = ({newsType, version}) => {
   return http_post( 'news.getNewsHistory', {newsType}, {}, version )
 }
+
+/** 群众举报-提交举报信息  */
+export const post_report_submit_supervise = ({phoneNum, illegalDetails, reportAddress, longitude, latitude, reporterName, reporterId, version}) => {
+  return http_post( 'report.submitSupervise', {phoneNum, illegalDetails, reportAddress}, {longitude, latitude, reporterName, reporterId}, version )
+}
+
+/** 群众举报-获取历史举报信息  */
+export const post_get_report_supervise_history = ({version}) => {
+  return http_post( 'report.getSuperviseHistory', {}, {}, version )
+}
+
+/** 群众举报-获取群众监督详情接口  */
+export const post_get_report_supervise_detail = ({reportNum, version}) => {
+  return http_post( 'report.getSuperviseDetails', {reportNum}, {}, version )
+}
