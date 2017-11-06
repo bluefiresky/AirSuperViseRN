@@ -29,6 +29,8 @@ const ShowContent = {
   certificateApply:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的申请已提交成功，\n请耐心等待审核结果！', textAlign:'center' },
   airportcardApply:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您的申请已提交成功，\n请耐心等待审核结果！', textAlign:'center' },
   airportcardCheckDone:{ icon:require('./image/icon-submit-success.png'), title:'', content:'您已完成审核，\n感谢您的使用！', textAlign:'center' },
+  airportcardCheckDone01:{ icon:require('./image/icon-submit-success.png'), title:'', content:'请专办员仔细对申报内容审核确认，确保信息完整、准确。弄虚作假或失职渎职的，将严肃追责。', textAlign:'center' },
+  airportcardCheckDone11:{ icon:require('./image/icon-submit-success.png'), title:'', content:'请申请单位领导对申报内容审核确认，确保信息完整、准确。弄虚作假或失职渎职的，将严肃追责。', textAlign:'center' },
 }
 
 class SuccessView extends React.Component {

@@ -51,13 +51,17 @@ const CertificateTypes = [
   {label:'其他申请资料', code:12}
 ];
 
+const DefaultCertificateTypeCodes = [1,2,3,4,6,7,9]
+
 class APAirMerchantCheckView extends Component {
 
   constructor(props){
     super(props);
     this.state = {
       loading: false,
-      currentCertificateTypeCodes:[CertificateTypes[0].code],
+      currentCertificateTypeCodes:[
+        CertificateTypes[0].code, CertificateTypes[1].code, CertificateTypes[2].code,
+        CertificateTypes[3].code, CertificateTypes[5].code, CertificateTypes[6].code, CertificateTypes[8].code],
       pickerPhotos: [{photo:null},{photo:null},{photo:null},{photo:null},{photo:null},{photo:null}],
     }
 
@@ -201,6 +205,8 @@ class APAirMerchantCheckView extends Component {
 
   _changeCertificateType(item, index){
     let code = item.code;
+    if(DefaultCertificateTypeCodes.indexOf(code) != -1) return;
+    
     let { currentCertificateTypeCodes } = this.state;
     let codeIndex = this.state.currentCertificateTypeCodes.indexOf(code);
     if(codeIndex != -1){

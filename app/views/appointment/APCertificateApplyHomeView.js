@@ -83,7 +83,7 @@ class APCertificateApplyHomeView extends Component {
         <View style={{flexDirection:'row', alignItems:'center', width:ItemContentW}}>
           <Image source={icon} style={{height:30, width:30, resizeMode:'contain'}} />
           <Text style={{color:mainTextColor, fontSize:18, marginLeft:20}}>{label}</Text>
-          {(num || num == 0)? <Text style={{color:'red', fontSize:16, marginLeft:10}}>{`(${num})`}</Text> : null}
+          {(num || num == 0)? <Text style={{color:'red', fontSize:16, marginLeft:5}}>{`（${num}）`}</Text> : null}
         </View>
         <View style={{backgroundColor:bc, height:1, position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal}} />
       </TouchableOpacity>

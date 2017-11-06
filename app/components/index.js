@@ -15,6 +15,7 @@ export { ObjectPicker } from './custom/ObjectPicker.js';   /** 自定义组件�
 export { UploadImageView } from './custom/UploadImage.js'; /** 自定义可上传服务器并返回上传后地址的ImageView */
 export { EmptyView } from './custom/EmptyView.js'; /** 自定义可上传服务器并返回上传后地址的ImageView */
 export { DatePicker } from './custom/DatePicker.js'; /** 自定义 时间插件，仅到日 */
+export { DatePicker2 } from './custom/DatePicker2.js'; /** 自定义 时间插件，仅到月 */
 export { CommonPickerView } from './custom/CommonPickerView.js'; /** 自定义 picker */
 export { AppointmentDatePicker } from './custom/AppointmentDatePicker.js'; /** 自定义 日期选择 picker，含上下午 */
 export { SelectCarNum } from './custom/SelectCarNum.js';   /** 自定义 车牌选择 */

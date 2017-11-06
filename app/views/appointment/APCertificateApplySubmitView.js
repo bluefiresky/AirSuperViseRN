@@ -341,7 +341,7 @@ class APCertificateApplySubmitView extends Component {
     }else if(type == 7){
       Actions.datePicker({modalCallback:(date)=>{ this.setState({endDate:date}) }});
     }else if(type == 8){
-      Actions.datePicker({modalCallback:(date)=>{ this.setState({validDate:date}) }});
+      Actions.datePicker2({modalCallback:(date)=>{ this.setState({validDate:date}) }});
     }
   }
 

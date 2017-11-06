@@ -20,7 +20,7 @@ const LabelW = 90;
 const PhotoViewW = (W - PaddingHorizontal*2)/3
 const PhotoW = PhotoViewW - 20;
 
-const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'审核通过'}, '9':{color:'red', text:'审核不通过'}}
+const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'预审核通过'}, '9':{color:'red', text:'审核不通过'}}
 const CertificateTypes = {
   '1':'申请证件办理的函件',
   '2':'组织筹建及运营情况说明',
@@ -107,7 +107,7 @@ class APAirMerchantCheckDetailView extends Component {
         {this.renderItem('公司地址：', data.companyAddr)}
         {this.renderItem('联系人：', data.contactName)}
         {this.renderItem('联系方式：', data.contactWay)}
-        {this.renderItem('证件类型：', data.certificateTypeLabel)}
+        {this.renderItem('需提交材料（可勾选）', data.certificateTypeLabel)}
         {this.renderPhotoPicker(data.certificatePhotoList)}
       </View>
     )

@@ -227,7 +227,7 @@ class APCertificateCheckDetailView extends Component {
             />
           }
 
-          <XButton onPress={this._submit} title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20, marginTop:20}} />
+          <XButton onPress={this._submit.bind(this, approveStatus)} title='提交' style={{backgroundColor:mainColor, width:SubmitButtonW, height:40, borderRadius:20, marginTop:20}} />
         </View>
       )
     }
@@ -253,7 +253,7 @@ class APCertificateCheckDetailView extends Component {
 
 
   /** Private **/
-  _submit(){
+  _submit(approveStatus){
     let { recordId, signImage, reason, checkResult } = this.state;
     if(!checkResult.code) Toast.showShortCenter('请选择审核结果')
     else{
@@ -261,17 +261,18 @@ class APCertificateCheckDetailView extends Component {
       else if(!signImage) Toast.showShortCenter('请签名');
       else {
         let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason }
-        Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, params) });
+        let successType = approveStatus == '01'? 'airportcardCheckDone01':'airportcardCheckDone11';
+        Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, params, successType) });
       }
     }
   }
 
-  _submitCallback(params){
+  _submitCallback(params, successType){
     this.setState({loading:true})
     this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
       .then( res => {
         this.setState({loading:false})
-        if(res) Actions.success({successType:'airportcardCheckDone', modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
+        if(res) Actions.success({successType, modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
       })
   }
 
