@@ -76,11 +76,6 @@ class HomeTab extends Component {
     )
   }
 
-  // renderRefreshControl(){
-  //   return (
-  //   );
-  // }
-
   renderTitle(){
     return(
       <View style={{height:TitleH, backgroundColor:mainColor, justifyContent:'center', alignItems:'center', paddingHorizontal:PaddingHorizontal, paddingTop:TitleMarginTop}}>

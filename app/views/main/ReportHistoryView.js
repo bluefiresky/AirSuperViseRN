@@ -96,9 +96,11 @@ class ReportHistoryView extends Component {
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
           <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.reportTime}</Text>
           <Text style={{fontSize:16, color:mainColor, flex:1, marginLeft:20}}>{item.reportTypeName}</Text>
-          <View style={{marginRight:10, backgroundColor:UrgentColor[item.urgentType], height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
-            <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
-          </View>
+          {/*
+            <View style={{marginRight:10, backgroundColor:UrgentColor[item.urgentType], height:18, borderRadius:9, paddingHorizontal:8, justifyContent:'center', alignItems:'center'}}>
+              <Text style={{fontSize:12, color:'white', includeFontPadding:false, textAlignVertical:'center', textAlign:'justify'}}>{item.urgentTypeName}</Text>
+            </View>
+          */}
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />
