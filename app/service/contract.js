@@ -63,6 +63,7 @@ export const POST_GET_AIRPORTCARD_HISTORY_APPROVE_LIST = 'post_get_airportcard_h
 export const POST_GET_AIRPORTCARD_APPROVE_HISTORY_DETAIL = 'post_get_airportcard_approve_history_detail';  // 网上预约-新机场证件-历史记录详情接口
 export const POST_AIRPORTCARD_APPROVE_RECORD = 'post_airportcard_approve_record';             // 网上预约-新机场证件-审核申请记录接口
 export const POST_GET_NEWS = 'post_get_news';                                                 // 警务新闻-获取警务新闻
+export const POST_GET_AIRPORTCARD_ISEXISTS_APPROVE_LISTS_COUNT = 'post_get_airportcard_isexists_approve_lists_count';     // 网上预约-新机场证件-待用户审核的案件申请数量                                            // 警务新闻-获取警务新闻
 
 
 /*

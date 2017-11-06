@@ -194,6 +194,11 @@ export const post_get_airportcard_apply_detail = ({id, version}) => {
   return http_post( 'airdefense.apply.detail.get', {id}, {}, version )
 }
 
+/** 网上预约-新机场证件-待用户审核的案件申请数量  */
+export const post_get_airportcard_isexists_approve_lists_count = ({version}) => {
+  return http_post( 'airportcard.isExistsToApproveListsCounts', {}, {}, version )
+}
+
 /** 警务新闻-获取警务新闻  */
 export const post_get_news = ({newsType, version}) => {
   return http_post( 'news.getNewsHistory', {newsType}, {}, version )

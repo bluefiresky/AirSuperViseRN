@@ -16,7 +16,7 @@ import { create_service } from '../../redux/index.js'; /** 调用api的Action */
 
 const PaddingHorizontal = 30;
 const ItemH = 90;
-const ItemContentW = 150;
+const ItemContentW = 200;
 
 const ApplyIcon = require('./image/icon-certificate-apply.png');
 const DetailIcon = require('./image/icon-check-detail.png');
@@ -29,43 +29,42 @@ class APCertificateApplyHomeView extends Component {
     this.state = {
       loading: false,
       data: null,
+      num: null,
     }
   }
 
   componentDidMount(){
     if(global.profile){
       let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
-      if(role) this.setState({data:'06'})
+      if(role) {
+        this.setState({data:'06', loading:true})
+        this.props.dispatch(create_service(Contract.POST_GET_AIRPORTCARD_ISEXISTS_APPROVE_LISTS_COUNT, {}))
+          .then( res => {
+            this.setState({loading:false, num:res.entity.counts})
+          })
+      }
       else this.setState({data:'00'})
     }
-    // this.setState({loading: true})
-    // InteractionManager.runAfterInteractions(() => {
-    //   this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_GET_ROLE_LIST, {}))
-    //     .then( res => {
-    //       if(res) this.setState({loading:false, data:res.entity.rsUserType})
-    //       else this.setState({loading:false, data:'04'})
-    //     })
-    // })
   }
 
   render(){
-    let { loading, data } = this.state;
+    let { loading, data, num } = this.state;
 
     return(
       <View style={styles.container}>
-        {this.renderEntry(data)}
+        {this.renderEntry(data, num)}
         <ProgressView show={loading}/>
       </View>
     )
   }
 
-  renderEntry(data){
+  renderEntry(data, num){
     if(!data) return null;
     let checker = (data == '06');
     if(checker){
       return (
         <View style={{marginTop:10}}>
-          {this.renderItem(DetailIcon, '审核证件信息', borderColor, 2)}
+          {this.renderItem(DetailIcon, '审核证件信息', 'transparent', 2, num)}
         </View>
       );
     }else{
@@ -78,12 +77,13 @@ class APCertificateApplyHomeView extends Component {
     }
   }
 
-  renderItem(icon, label, bc, type){
+  renderItem(icon, label, bc, type, num){
     return (
       <TouchableOpacity onPress={this._onItemPress.bind(this, type)} activeOpacity={0.8} style={{height:ItemH, justifyContent:'center', alignItems:'center', backgroundColor:'white'}}>
         <View style={{flexDirection:'row', alignItems:'center', width:ItemContentW}}>
           <Image source={icon} style={{height:30, width:30, resizeMode:'contain'}} />
           <Text style={{color:mainTextColor, fontSize:18, marginLeft:20}}>{label}</Text>
+          {(num || num == 0)? <Text style={{color:'red', fontSize:16, marginLeft:10}}>{`(${num})`}</Text> : null}
         </View>
         <View style={{backgroundColor:bc, height:1, position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal}} />
       </TouchableOpacity>
