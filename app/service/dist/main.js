@@ -193,3 +193,8 @@ export const post_get_airportcard_apply_record = ({version}) => {
 export const post_get_airportcard_apply_detail = ({id, version}) => {
   return http_post( 'airdefense.apply.detail.get', {id}, {}, version )
 }
+
+/** 警务新闻-获取警务新闻  */
+export const post_get_news = ({newsType, version}) => {
+  return http_post( 'news.getNewsHistory', {newsType}, {}, version )
+}

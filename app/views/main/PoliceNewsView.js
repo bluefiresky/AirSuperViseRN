@@ -34,38 +34,20 @@ class PoliceNewsView extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      loading: false,
-      data:null,
-      data1:null,
-      data2:null,
-    }
   }
 
   componentDidMount(){
-    let self = this;
-    self.setState({loading: true})
-
-    InteractionManager.runAfterInteractions(() => {
-      self.timer = setTimeout(function () {
-        self.setState({loading: false, data:ExampleList, data1:ExampleList1, data2:ExampleList2})
-      }, 100);
-    })
   }
 
   render(){
-    let { loading, data, data1, data2, data3 } = this.state;
-
     return(
       <View style={styles.container}>
         <ScrollableTabView
           renderTabBar={() => <TabBar />}
           initialPage={0}>
-          <SubView tabLabel='政策法规' data={data}/>
-          <SubView tabLabel='便民提示' data={data1}/>
-          <SubView tabLabel='警情通报' data={data2}/>
+          <SubView tabLabel='警务新闻' newsType='1' dispatch={this.props.dispatch}/>
+          <SubView tabLabel='安全提示' newsType='2' dispatch={this.props.dispatch}/>
         </ScrollableTabView>
-        <ProgressView show={loading} />
       </View>
     )
   }
@@ -74,13 +56,32 @@ class PoliceNewsView extends Component {
 
 class SubView extends Component{
 
+  constructor(props){
+    super(props);
+    this.state = {
+      loading: false,
+      data:null,
+    }
+  }
+
+
+  componentDidMount(){
+    this.setState({loading: true})
+    this.props.dispatch(create_service(Contract.POST_GET_NEWS, {newsType:this.props.newsType}))
+      .then( res => {
+        if(res) this.setState({loading:false, data:res.entity.newsList})
+        else this.setState({loading:false, data:[]})
+      })
+  }
+
   render(){
-    let { data } = this.props;
+    let { data, loading } = this.state;
 
     return(
       <View style={{flex:1}}>
         {this.renderList(data)}
         {this.renderEmptyView(data)}
+        <ProgressView show={loading} />
       </View>
     )
   }
@@ -104,12 +105,11 @@ class SubView extends Component{
   _renderListItem({item, index}){
     return(
       <TouchableOpacity onPress={this._goDetail} activeOpacity={0.8} style={{height:ItemH, backgroundColor:'white', paddingHorizontal:PaddingHorizontal, flexDirection:'row', alignItems:'center'}}>
-        <Image source={item.icon} style={{width:IconW, height:IconW, resizeMode:'contain', backgroundColor:'lightskyblue'}}/>
+        <Image source={{uri:item.imageUrl, isStatic:true}} style={{width:IconW, height:IconW, resizeMode:'contain'}}/>
         <View style={{height:IconW, flex:1, marginLeft:PaddingHorizontal}}>
-          <Text style={{color:mainTextColor, fontSize:16}} numberOfLines={1}>{item.title}</Text>
-          <Text style={{color:placeholderColor, fontSize:12}}>{item.date}</Text>
+          <Text style={{color:mainTextColor, fontSize:16}} numberOfLines={2}>{item.newsTitle}</Text>
           <View style={{flex:1}} />
-          <Text style={{color:mainTextGreyColor, fontSize:14, lineHeight:20}} numberOfLines={2}>{item.content}</Text>
+          <Text style={{color:placeholderColor, fontSize:12, alignSelf:'flex-end'}}>{item.createTime}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -119,8 +119,7 @@ class SubView extends Component{
     if(data && data.length === 0){
       return(
         <View style={{alignSelf:'center', width:EmptyW, alignItems:'center', marginTop:EmptyMarginTop}}>
-          <View style={{backgroundColor:'lightskyblue', width:EmptyImageW, height:EmptyImageW}} />
-          <Text style={{fontSize:18, color:mainTextColor, marginTop:30}}>暂无数据</Text>
+          <Text style={{fontSize:18, color:mainTextColor, marginTop:EmptyImageW}}>暂无数据</Text>
         </View>
       )
     }
@@ -128,7 +127,7 @@ class SubView extends Component{
 
   /** Private **/
   _goDetail(item, index){
-    Actions.policeNewsDetail();
+    Actions.commonWeb({url:item.detailUrl})
   }
 }
 
