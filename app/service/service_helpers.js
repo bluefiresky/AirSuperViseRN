@@ -71,8 +71,8 @@ function http_factory({method, paramsType}) {
         console.log('%c service_helpers response-jsonData -->> ', 'color:limegreen', jsonData);
 
         let code = parseInt(jsonData.code);
-        if(code != 200 && code != 21){
-          return { success: false, message: jsonData.message };
+        if(code != 200){
+          return { success: false, message: jsonData.message, code };
         }else {
           return { success: true, data: jsonData };
         }

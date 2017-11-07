@@ -124,7 +124,8 @@ class LoginView extends Component {
           .then( res => {
             this.setState({loading:false})
             if(res){
-              Actions.main({type:'reset'})
+              if(this.props.reLogin) Actions.pop();
+              else Actions.main({type:'reset'})
             }
           })
       })

@@ -24,6 +24,7 @@ const PhotoW = PhotoViewW - 20;
 const SubmitButtonW = W - (30 * 2);
 
 const CameraIcon = require('./image/camera.png');
+const AddIcon = require('./image/icon-add.png');
 const PhotoOption = {
   title: '选择照片', //选择器的标题，可以设置为空来不显示标题
   cancelButtonTitle: '取消',
@@ -62,7 +63,7 @@ class APAirMerchantCheckView extends Component {
       currentCertificateTypeCodes:[
         CertificateTypes[0].code, CertificateTypes[1].code, CertificateTypes[2].code,
         CertificateTypes[3].code, CertificateTypes[5].code, CertificateTypes[6].code, CertificateTypes[8].code],
-      pickerPhotos: [{photo:null},{photo:null},{photo:null},{photo:null},{photo:null},{photo:null}],
+      pickerPhotos: [{photo:null},{photo:null},{photo:'add'}],
     }
 
     this.currentPhotoIndex;
@@ -112,8 +113,11 @@ class APAirMerchantCheckView extends Component {
 
   renderCertificateTypes(current){
     return(
-      <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH}}>
-        <Text style={[styles.starStyle,{marginTop:12}]}><Text style={styles.labelStyle}>需提交材料（可勾选）</Text></Text>
+      <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH, paddingTop:5}}>
+        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+          <Text style={[styles.starStyle]}><Text style={styles.labelStyle}>需提交材料（可勾选）</Text></Text>
+          <Text style={{paddingHorizontal:15, paddingVertical:5, color:mainColor, fontSize:16}} onPress={()=>{ Toast.showShortCenter('还没有Url') }}>{`各材料填写说明>`}</Text>
+        </View>
         {this._renderCertificateTypesItem(current)}
       </View>
     )
@@ -155,7 +159,8 @@ class APAirMerchantCheckView extends Component {
                 <TouchableOpacity onPress={this._pickPhoto.bind(this, item, index, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
                   {
                     !item.photo?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
-                    <Image source={item.photo} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+                    item.photo != 'add'?<Image source={item.photo} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />:
+                    <Image source={AddIcon} style={{width:30, height:30, resizeMode:'contain'}} />
                   }
                 </TouchableOpacity>
               </View>
@@ -206,7 +211,7 @@ class APAirMerchantCheckView extends Component {
   _changeCertificateType(item, index){
     let code = item.code;
     if(DefaultCertificateTypeCodes.indexOf(code) != -1) return;
-    
+
     let { currentCertificateTypeCodes } = this.state;
     let codeIndex = this.state.currentCertificateTypeCodes.indexOf(code);
     if(codeIndex != -1){
@@ -223,7 +228,7 @@ class APAirMerchantCheckView extends Component {
   }
 
   _pickPhoto(item, index, rePick){
-    if(item.photo && !rePick){
+    if(item.photo && item.photo != 'add' && !rePick){
       this.currentPhotoIndex = index;
       Actions.bigImage({source:item.photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
     }else{
@@ -231,7 +236,9 @@ class APAirMerchantCheckView extends Component {
         if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
           // console.log(' CFTempCertificateLostView _pickPhoto and the response -->> ', response);
           item.photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
-          this.forceUpdate();
+          let { pickerPhotos } = this.state;
+          if(index != 0 && index != 1 && index < 11) pickerPhotos.push({photo:'add'});
+          this.setState({pickerPhotos});
         }
       });
     }
@@ -252,7 +259,7 @@ class APAirMerchantCheckView extends Component {
     let submit = [];
     for(let i=0; i<photos.length; i++){
       let p = photos[i];
-      if(p.photo) submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
+      if(p.photo && p.photo != 'add') submit.push(p.photo.uri.replace('data:image/jpeg;base64,',''))
     }
     return JSON.stringify(submit);
   }
@@ -296,7 +303,7 @@ const validate = (assert, fields) => {
   assert("applyReason", ValidateMethods.required(), '请输入申请事由')
   assert("companyAddr", ValidateMethods.required(), '请输入公司地址')
   assert("contactWay", ValidateMethods.required(), '请输入联系方式')
-  assert("contactWay", ValidateMethods.min_length(11), '输入的手机号必须为11位')
+  assert("contactWay", ValidateMethods.min_length(11), '输入的联系方式必须为11位')
 }
 
 const ExportView = connect()(form_connector(APAirMerchantCheckView, fields, validate));

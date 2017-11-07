@@ -20,6 +20,7 @@
  *  }
  */
 import Toast from '@remobile/react-native-toast';
+import { Actions } from 'react-native-router-flux';
 
 import { SERVICE_ENV } from "../../configs/index.js";
 import { getStore } from "../index.js";
@@ -68,26 +69,29 @@ function dispatch_reducers(dispatch, promise, name, params){
   dispatch({ type : name + "@Init", requestParams : params });
   const nPromise =
     promise.then( data => {
-      if (data.terminate){
+
+      /* filterName为true的访问名，返回全部的信息 */
+      if(filterName(name)) {
+        dispatch({ type : name, requestParams : params, data : data });
+        return data;
+      }
+
+      /* 正常返回逻辑，只返回data内容 */
+      if (data.success){
+        dispatch({ type : name, requestParams : params, data : data });
+        return data.data;
+      }
+
+      if(data.code == '21') {
         console.log('%c create_service terminate === true and doing ## LOGIN_FAIL ##', 'color:red');
         dispatch({ type : "LOGIN_FAIL" });
-        return null;
-      }else{
-        /* filterName为true的访问名，返回全部的信息 */
-        if(filterName(name)) {
-          dispatch({ type : name, requestParams : params, data : data });
-          return data;
-        }
-
-        /* 正常返回逻辑，只返回data内容 */
-        if (data.success){
-          dispatch({ type : name, requestParams : params, data : data });
-          return data.data;
-        }
-
-        Toast.showShortCenter(data.message)
+        Actions.login({reLogin:true});
         return null;
       }
+
+      Toast.showShortCenter(data.message)
+      return null;
+
     }).catch( error => {
       console.log('%c create_service && catch error -->> ', 'color:red', error);
       Toast.showShortCenter('网络连接异常，请稍后再试');
