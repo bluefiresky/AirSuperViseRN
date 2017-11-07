@@ -3,12 +3,13 @@
 * 网上预约-审核证件信息详情
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import ImagePicker from 'react-native-image-picker';
 
 import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, mainTextColor, mainTextGreyColor, placeholderColor  } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
@@ -21,6 +22,7 @@ const SignW = W - PaddingHorizontal*2;
 const SignH = 80;
 const SubmitButtonW = W - (30 * 2);
 
+const CameraIcon = require('./image/camera.png');
 const CheckResults = [{label:'通过', code:'1'}, {label:'不通过', code:'0'}];
 
 const OwnerType = {'1':'个人', '2':'企业'}
@@ -29,6 +31,15 @@ const CarUsingWay = {'1':'运营', '2':'非运营'}
 const CarMerchantRelation = {'1':'自由', '2':'租赁'}
 const ApplyType = {'1':'首次申领', '2':'补换发', '3':'失效重新申领'}
 const IDTypes = {'1':'C类（施工现场）'}
+
+const PhotoOption = {
+  cameraType:'front',
+  mediaType: 'photo',
+  maxWidth: 750,
+  maxHeight: 1000,
+  quality: 0.5,
+  storageOptions: { cameraRoll:true, skipBackup: true, path: 'images' }
+}
 
 class APCertificateCheckDetailView extends Component {
 
@@ -42,10 +53,14 @@ class APCertificateCheckDetailView extends Component {
       checkResult: {},
       reason: null,
       signImage: null,
+      personalPhoto: null,
     }
 
     this._goSign = this._goSign.bind(this);
     this._submit = this._submit.bind(this);
+    this._deletePhotoCallback = this._deletePhotoCallback.bind(this);
+    this._rePickCallback = this._rePickCallback.bind(this);
+
   }
 
   componentDidMount(){
@@ -200,7 +215,7 @@ class APCertificateCheckDetailView extends Component {
     let { approveStatus } = data;
     if(approveStatus == '01' || approveStatus == '11'){
       let label = approveStatus == '01'? '专办员审核' : '保卫干部审核';
-      let { checkResult, reason, signImage } = this.state;
+      let { checkResult, reason, signImage, personalPhoto } = this.state;
 
       return (
         <View style={{padding:PaddingHorizontal}}>
@@ -212,6 +227,16 @@ class APCertificateCheckDetailView extends Component {
               <Image source={signImage} style={{width:SignW, height:SignH, resizeMode:'contain'}} />
             }
           </TouchableOpacity>
+
+          <View style={{flexDirection:'row', paddingVertical:10}}>
+            <Text style={{color:mainTextColor, fontSize:16}}>个人头像照片：</Text>
+            <TouchableOpacity onPress={this._pickPhoto.bind(this, personalPhoto, false)} activeOpacity={0.8} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor, borderColor, borderWidth:1, borderRadius:10, justifyContent:'center', alignItems:'center'}}>
+              {
+                !personalPhoto?<Image source={CameraIcon} style={{width:30, height:25, resizeMode:'contain'}} />:
+                <Image source={personalPhoto} style={{width:PhotoW, height:PhotoW, backgroundColor:mainBackColor}} />
+              }
+            </TouchableOpacity>
+          </View>
 
           {this.renderRadio('审核结果：', checkResult, CheckResults)}
           {
@@ -254,13 +279,14 @@ class APCertificateCheckDetailView extends Component {
 
   /** Private **/
   _submit(approveStatus){
-    let { recordId, signImage, reason, checkResult } = this.state;
+    let { recordId, signImage, reason, checkResult, personalPhoto } = this.state;
     if(!checkResult.code) Toast.showShortCenter('请选择审核结果')
     else{
       if(checkResult.code == '0' && !reason) Toast.showShortCenter('请输入不通过理由')
       else if(!signImage) Toast.showShortCenter('请签名');
+      else if(!personalPhoto) Toast.showShortCenter('请拍摄个人照片')
       else {
-        let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason }
+        let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason, photoImage:personalPhoto.uri.replace('data:image/jpeg;base64,','') }
         let successType = approveStatus == '01'? 'airportcardCheckDone01':'airportcardCheckDone11';
         Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, params, successType) });
       }
@@ -272,7 +298,14 @@ class APCertificateCheckDetailView extends Component {
     this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
       .then( res => {
         this.setState({loading:false})
-        if(res) Actions.success({successType, modalCallback:()=>{ Actions.popTo('apCertificateApplyHome')}})
+        if(res)
+          Actions.success({
+            successType,
+            modalCallback:()=>{
+              Actions.popTo('apCertificateApplyHome')
+              DeviceEventEmitter.emit('refreshAPCertificateApplyHomeView')
+            }
+          })
       })
   }
 
@@ -291,6 +324,30 @@ class APCertificateCheckDetailView extends Component {
       }
     })
   }
+
+  _pickPhoto(photo, rePick){
+    if(photo && !rePick){
+      Actions.bigImage({source:photo, operation:{rePick:this._rePickCallback, clear:this._deletePhotoCallback}})
+    }else{
+      ImagePicker.launchCamera(PhotoOption, (response) => {
+        // console.log(' APCertificateCheckDetailView _pickPhoto and the response -->> ', response);
+        if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+          photo = {uri:`data:image/jpeg;base64,${response.data}`, isStatic:true}
+          this.setState({personalPhoto:photo});
+        }
+      });
+    }
+  }
+
+  _deletePhotoCallback(){
+    this.setState({personalPhoto:null})
+    this.forceUpdate();
+  }
+
+  _rePickCallback(){
+    this._pickPhoto(this.state.personalPhoto, true);
+  }
+
 
 }
 

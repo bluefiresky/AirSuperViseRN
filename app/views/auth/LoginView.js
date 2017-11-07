@@ -3,7 +3,7 @@
 * 登录页面
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, DeviceEventEmitter } from "react-native";
 
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
@@ -124,7 +124,10 @@ class LoginView extends Component {
           .then( res => {
             this.setState({loading:false})
             if(res){
-              if(this.props.reLogin) Actions.pop();
+              if(this.props.reLogin) {
+                Actions.pop();
+                DeviceEventEmitter.emit('reLogin');
+              }
               else Actions.main({type:'reset'})
             }
           })

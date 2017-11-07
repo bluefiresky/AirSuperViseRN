@@ -3,7 +3,7 @@
 * 网上预约-新机场车辆通行证申办Home
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -34,17 +34,8 @@ class APCertificateApplyHomeView extends Component {
   }
 
   componentDidMount(){
-    if(global.profile){
-      let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
-      if(role) {
-        this.setState({data:'06', loading:true})
-        this.props.dispatch(create_service(Contract.POST_GET_AIRPORTCARD_ISEXISTS_APPROVE_LISTS_COUNT, {}))
-          .then( res => {
-            this.setState({loading:false, num:res.entity.counts})
-          })
-      }
-      else this.setState({data:'00'})
-    }
+    DeviceEventEmitter.addListener('refreshAPCertificateApplyHomeView', this._onRefresh)
+    this._onRefresh();
   }
 
   render(){
@@ -83,7 +74,7 @@ class APCertificateApplyHomeView extends Component {
         <View style={{flexDirection:'row', alignItems:'center', width:ItemContentW}}>
           <Image source={icon} style={{height:30, width:30, resizeMode:'contain'}} />
           <Text style={{color:mainTextColor, fontSize:18, marginLeft:20}}>{label}</Text>
-          {(num || num == 0)? <Text style={{color:'red', fontSize:16, marginLeft:5}}>{`（${num}）`}</Text> : null}
+          {(num || num == 0)? <Text style={{color:'red', fontSize:16}}>{`（${num}）`}</Text> : null}
         </View>
         <View style={{backgroundColor:bc, height:1, position:'absolute', bottom:0, left:PaddingHorizontal, right:PaddingHorizontal}} />
       </TouchableOpacity>
@@ -111,6 +102,21 @@ class APCertificateApplyHomeView extends Component {
       return false;
     }else{
       return false;
+    }
+  }
+
+  _onRefresh(refresh){
+    if(global.profile){
+      let role = this._verifyEntryRole(global.profile.roleNums, ['06'])
+      if(role) {
+        this.setState({data:'06', loading:true})
+        this.props.dispatch(create_service(Contract.POST_GET_AIRPORTCARD_ISEXISTS_APPROVE_LISTS_COUNT, {}))
+          .then( res => {
+            if(res) this.setState({loading:false, num:res.entity.counts})
+            else this.setState({loading:false})
+          })
+      }
+      else this.setState({data:'00'})
     }
   }
 

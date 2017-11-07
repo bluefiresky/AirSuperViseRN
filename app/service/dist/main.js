@@ -175,8 +175,8 @@ export const post_get_airportcard_approve_history_detail = ({formId, version}) =
 }
 
 /** 网上预约-新机场证件-审核申请记录接口  */
-export const post_airportcard_approve_record = ({formId, signImage, applyAdviceText, operateType, version}) => {
-  return http_post( 'airportcard.approveRecord', {formId, signImage, operateType}, {applyAdviceText}, version )
+export const post_airportcard_approve_record = ({formId, signImage, applyAdviceText, operateType, photoImage, version}) => {
+  return http_post( 'airportcard.approveRecord', {formId, signImage, operateType}, {applyAdviceText, photoImage}, version )
 }
 
 /** 网上预约-空防新入场单位资质审核 */

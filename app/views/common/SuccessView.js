@@ -64,7 +64,7 @@ class SuccessView extends React.Component {
         <View style={{ width:ComponentW, height:ComponentH, alignItems:'center', justifyContent:'flex-end', marginTop:MarginTop}}>
           <View style={{width:ComponentW, height:ContentH, backgroundColor:'white', borderRadius:10, paddingTop:ContentPaddingTop, paddingHorizontal:15}}>
             <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-              <Text style={{fontSize:18, color:mainTextColor}}>{IconSource.title}</Text>
+              {IconSource.title?<Text style={{fontSize:18, color:mainTextColor}}>{IconSource.title}</Text>:null}
               <Text style={{fontSize:15, color:mainTextGreyColor, marginTop:15, textAlign:IconSource.textAlign, lineHeight:20}}>{IconSource.content}</Text>
             </View>
             <View style={{flex:1, justifyContent:'flex-end', paddingBottom:10}} >

@@ -3,7 +3,7 @@
 * 首页
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, InteractionManager, RefreshControl, DeviceEventEmitter } from "react-native";
 
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -53,6 +53,7 @@ class HomeTab extends Component {
   }
 
   componentDidMount(){
+    DeviceEventEmitter.addListener('reLogin', this._onRefresh.bind(this, true))
     this._onRefresh(false);
   }
 
