@@ -78,7 +78,7 @@ class CFTempCertificateLostView extends Component {
   renderAutoGrowing(reason){
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, paddingVertical:15, backgroundColor:'white'}}>
-        <Text style={{width: 150, color: inputLeftColor, fontSize: 16 }}><Text style={{color:'red', fontSize:16}}>*</Text>被检查简介：</Text>
+        <Text style={{width: 150, color: inputLeftColor, fontSize: 16 }}><Text style={{color:'red', fontSize:16}}>*</Text>挂失理由：</Text>
         <AutoGrowingTextInput
           style={styles.autoTextInput}
           value={reason}

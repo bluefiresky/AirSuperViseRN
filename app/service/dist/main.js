@@ -204,6 +204,11 @@ export const post_get_news = ({newsType, version}) => {
   return http_post( 'news.getNewsHistory', {newsType}, {}, version )
 }
 
+/** 警务新闻-统计警务新闻  */
+export const post_news_count = ({newsNum, version}) => {
+  return http_post( 'news.newsCounts', {newsNum}, {}, version )
+}
+
 /** 群众举报-提交举报信息  */
 export const post_report_submit_supervise = ({phoneNum, illegalDetails, reportAddress, longitude, latitude, reporterName, reporterId, version}) => {
   return http_post( 'report.submitSupervise', {phoneNum, illegalDetails, reportAddress}, {longitude, latitude, reporterName, reporterId}, version )

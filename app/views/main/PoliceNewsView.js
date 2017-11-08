@@ -104,7 +104,7 @@ class SubView extends Component{
 
   _renderListItem({item, index}){
     return(
-      <TouchableOpacity onPress={this._goDetail} activeOpacity={0.8} style={{height:ItemH, backgroundColor:'white', paddingHorizontal:PaddingHorizontal, flexDirection:'row', alignItems:'center'}}>
+      <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, backgroundColor:'white', paddingHorizontal:PaddingHorizontal, flexDirection:'row', alignItems:'center'}}>
         <Image source={{uri:item.imageUrl, isStatic:true}} style={{width:IconW, height:IconW, resizeMode:'contain'}}/>
         <View style={{height:IconW, flex:1, marginLeft:PaddingHorizontal}}>
           <Text style={{color:mainTextColor, fontSize:16}} numberOfLines={2}>{item.newsTitle}</Text>
@@ -127,7 +127,9 @@ class SubView extends Component{
 
   /** Private **/
   _goDetail(item, index){
-    Actions.commonWeb({url:item.detailUrl})
+    let { detailUrl, newsTypeName, newsNum } = item;
+    Actions.commonWeb({url:detailUrl, title:newsTypeName})
+    this.props.dispatch(create_service(Contract.POST_GET_COUNT, {newsNum}))
   }
 }
 

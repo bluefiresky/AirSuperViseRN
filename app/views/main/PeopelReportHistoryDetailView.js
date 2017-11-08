@@ -39,7 +39,7 @@ class PeopelReportHistoryDetailView extends Component {
     self.setState({loading: true})
 
     InteractionManager.runAfterInteractions(() => {
-      this.props.dispatch( create_service(Contract.POST_GET_REPORT_DETAIL, {reportNum:this.state.reportNum}))
+      this.props.dispatch( create_service(Contract.POST_GET_REPORT_SUPERVISE_DETAIL, {reportNum:this.state.reportNum}))
         .then( res => {
           if(res){
             this.setState({loading:false, data:res.entity})

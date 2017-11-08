@@ -23,8 +23,17 @@ const Types = {
     content:{color:mainTextGreyColor, fontSize:16, text:'请申请人对填报内容仔细核对，\n并对填写内容真实性负责', textAlign:'center'},
     left:{label:'返回修改', press:2},
     right:{label:'提交申请', press:0}
+  },
+  airportcardCheckDone01:{
+    content:{color:mainTextGreyColor, fontSize:16, text:'请专办员仔细对申报内容审核确认，确保信息完整、准确。弄虚作假或失职渎职的，将严肃追责。', textAlign:'center'},
+    left:{label:'返回修改', press:2},
+    right:{label:'提交申请', press:0}
+  },
+  airportcardCheckDone11:{
+    content:{color:mainTextGreyColor, fontSize:16, text:'请申请单位领导对申报内容审核确认，确保信息完整、准确。弄虚作假或失职渎职的，将严肃追责。', textAlign:'center'},
+    left:{label:'返回修改', press:2},
+    right:{label:'提交申请', press:0}
   }
-
 }
 
 class TipView extends React.Component {
@@ -69,7 +78,7 @@ class TipView extends React.Component {
   renderContent(content){
     return(
       <View style={{flex:1, alignItems:'center', justifyContent:'center', paddingHorizontal:20}}>
-        <Text style={{color:content.color, fontSize:content.fontSize, textAlign:content.textAlign, lineHeight:30}}>{content.text}</Text>
+        <Text style={{color:content.color, fontSize:content.fontSize, textAlign:content.textAlign, lineHeight:20}}>{content.text}</Text>
       </View>
     )
   }

@@ -52,7 +52,8 @@ const CertificateTypes = [
   {label:'其他申请资料', code:12}
 ];
 
-const DefaultCertificateTypeCodes = [1,2,3,4,6,7,9]
+// const DefaultCertificateTypeCodes = [1,2,3,4,6,7,9]
+const DefaultCertificateTypeCodes = []
 
 class APAirMerchantCheckView extends Component {
 

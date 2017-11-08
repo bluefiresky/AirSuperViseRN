@@ -72,9 +72,9 @@ class PersonalTab extends Component {
           {this.renderEntryItem(CertificateIcon, '证件审核记录', 1, ['04'])}
           {this.renderEntryItem(ScoreIcon, '证件扣分记录', 2, ['04', '05'])}
           {this.renderEntryItem(AppointmentIcon, '消防网上预约记录', 3, ['01'])}
-          {this.renderEntryItem(AirportIcon, '新机场入场单位资质审核', 4, ['06'])}
-          {this.renderEntryItem(AirportMerchantIcon, '空防新入场单位资质申请记录', 5, ['01'])}
-          {this.renderEntryItem(ReportIcon, '历史我要举报', 6, ['01'])}
+          {this.renderEntryItem(AirportIcon, '新机场证件审核', 4, ['06'])}
+          {this.renderEntryItem(AirportMerchantIcon, '新机场证件申请记录', 5, ['01'])}
+          {this.renderEntryItem(ReportIcon, '历史举报', 6, ['01'])}
           {this.renderLoginButton()}
         </ScrollView>
         <ProgressView show={loading} />

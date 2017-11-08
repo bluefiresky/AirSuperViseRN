@@ -34,7 +34,7 @@ class APCertificateApplyHomeView extends Component {
   }
 
   componentDidMount(){
-    DeviceEventEmitter.addListener('refreshAPCertificateApplyHomeView', this._onRefresh)
+    DeviceEventEmitter.addListener('refreshAPCertificateApplyHomeView', this._onRefresh.bind(this))
     this._onRefresh();
   }
 

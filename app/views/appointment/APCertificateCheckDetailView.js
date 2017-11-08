@@ -287,20 +287,20 @@ class APCertificateCheckDetailView extends Component {
       else if(!personalPhoto) Toast.showShortCenter('请拍摄个人照片')
       else {
         let params = { formId:recordId, operateType:checkResult.code, signImage:signImage.uri.replace('data:image/jpeg;base64,',''), applyAdviceText:reason, photoImage:personalPhoto.uri.replace('data:image/jpeg;base64,','') }
-        let successType = approveStatus == '01'? 'airportcardCheckDone01':'airportcardCheckDone11';
-        Actions.tip({ tipType:'submitConfirm', callback:this._submitCallback.bind(this, params, successType) });
+        let tipType = approveStatus == '01'? 'airportcardCheckDone01':'airportcardCheckDone11';
+        Actions.tip({ tipType, callback:this._submitCallback.bind(this, params) });
       }
     }
   }
 
-  _submitCallback(params, successType){
+  _submitCallback(params){
     this.setState({loading:true})
     this.props.dispatch( create_service(Contract.POST_AIRPORTCARD_APPROVE_RECORD, params))
       .then( res => {
         this.setState({loading:false})
         if(res)
           Actions.success({
-            successType,
+            successType:'airportcardCheckDone',
             modalCallback:()=>{
               Actions.popTo('apCertificateApplyHome')
               DeviceEventEmitter.emit('refreshAPCertificateApplyHomeView')
