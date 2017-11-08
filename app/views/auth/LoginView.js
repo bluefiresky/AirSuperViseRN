@@ -3,7 +3,7 @@
 * 登录页面
 */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, DeviceEventEmitter } from "react-native";
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, NativeModules, DeviceEventEmitter, BackHandler } from "react-native";
 
 import { connect } from 'react-redux';
 import Toast from '@remobile/react-native-toast';
@@ -44,8 +44,15 @@ class LoginView extends Component {
     this._onSubmit = this._onSubmit.bind(this);
   }
 
+  componentWillMount(){
+    this.back = BackHandler.addEventListener('hardwareBackPress', ()=>{
+      return true;
+    });
+  }
+
   componentWillUnmount(){
     this.timer && clearInterval(this.timer);
+    this.back.remove()
   }
 
   render(){
