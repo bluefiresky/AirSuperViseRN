@@ -30,6 +30,8 @@ const InitSeconds = 61;
 
 const AppType = Platform.select({android:1, ios:2})
 
+const CloseIcon = require('./image/icon-close.png');
+
 class LoginView extends Component {
 
   constructor(props){
@@ -45,14 +47,14 @@ class LoginView extends Component {
   }
 
   componentWillMount(){
-    this.back = BackHandler.addEventListener('hardwareBackPress', ()=>{
-      return true;
-    });
+    // this.back = BackHandler.addEventListener('hardwareBackPress', ()=>{
+    //   return true;
+    // });
   }
 
   componentWillUnmount(){
     this.timer && clearInterval(this.timer);
-    this.back.remove()
+    // this.back.remove()
   }
 
   render(){
@@ -101,6 +103,9 @@ class LoginView extends Component {
         <View style={{position:'absolute', bottom:0, alignItems:'center', width:W}}>
           <Image source={MainIcon} style={{width:MainIconW, height:MainIconW, resizeMode:'contain'}} />
         </View>
+        <TouchableOpacity onPress={this._onClosePress} activeOpacity={0.8} style={{height:50, width:50, position:'absolute', top:0, left:0, alignItems:'center', justifyContent:'center'}}>
+          <Image source={CloseIcon} style={{width:20, height:20, resizeMode:'contain'}} />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -171,6 +176,10 @@ class LoginView extends Component {
     }else{
       Toast.showShortCenter('请输入正确手机号');
     }
+  }
+
+  _onClosePress(){
+    Actions.pop();
   }
 }
 

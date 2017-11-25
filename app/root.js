@@ -31,6 +31,7 @@ class RootView extends Component {
   render(){
     let { statusBackColor } = this.state;
     let { guide, isAuth } = this.props;
+
     console.log('the ROOT view props -->> ', this.props);
     return(
       <View style={styles.container}>
@@ -41,7 +42,7 @@ class RootView extends Component {
             <Scene key="root" navigationBarStyle={styles.navigationBarStyle} titleStyle={styles.titleStyle} leftButtonStyle={styles.leftButtonStyle} leftButtonIconStyle={styles.backButtonImage} backButtonImage={backIcon} backButtonTextStyle={styles.backButtonTextStyle} rightButtonTextStyle={styles.rightButtonTextStyle} hideTabBar backTitle='返回'>
 
               <Scene key="main" component={Scenes.MainView} hideNavBar panHandlers={null}/>
-              <Scene key="login" component={Scenes.LoginView} title='登录' direction="vertical" hideNavBar={true} initial={!isAuth} panHandlers={null}/>
+              <Scene key="login" component={Scenes.LoginView} title='登录' direction="vertical" hideNavBar={true} panHandlers={null}/>
               <Scene key="commonWeb" component={Scenes.CommonWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="signature" component={Scenes.SignatureView} hideNavBar={true} backTitle='返回' panHandlers={null}/>
               <Scene key="lawWeb" component={Scenes.LawWebView} hideNavBar={false} backTitle='返回' panHandlers={null}/>

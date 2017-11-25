@@ -53,8 +53,8 @@ class HomeTab extends Component {
   }
 
   componentDidMount(){
-    DeviceEventEmitter.addListener('reLogin', this._onRefresh.bind(this, true))
-    this._onRefresh(false);
+    DeviceEventEmitter.addListener('reLogin', this._onRefresh.bind(this, false))
+    global.auth.isLogin && this._onRefresh(false);
   }
 
   render(){
@@ -172,6 +172,11 @@ class HomeTab extends Component {
   }
 
   _mainEntryPress(type){
+    if(!global.auth.isLogin){
+      Actions.login({reLogin:true});
+      return;
+    }
+
     if(type === 0){
       Actions.apHome();
     }else if(type === 1){
@@ -186,6 +191,11 @@ class HomeTab extends Component {
   }
 
   _secondEntryPress(type){
+    if(type != 1 && !global.auth.isLogin){
+      Actions.login({reLogin:true});
+      return;
+    }
+
     if(type === 0){
       if(global.profile){
         let role = this._verifyRole(global.profile.roleNums, ['04', '05']);

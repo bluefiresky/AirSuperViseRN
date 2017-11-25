@@ -131,7 +131,8 @@ class PersonalTab extends Component {
     this.props.dispatch( create_service(Contract.POST_USER_LOGOUT, {}))
       .then( res => {
         this.setState({loading:false});
-        Actions.login({type:'reset'});
+        this.props.dispatch({type:'LOGIN_FAIL'});
+        this.props.changeTab('home')
       })
   }
 

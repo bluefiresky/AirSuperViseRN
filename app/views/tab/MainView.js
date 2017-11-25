@@ -86,14 +86,22 @@ class MainView extends Component {
             renderIcon={() => <Image style={styles.icon} source={PersonalIcon} />}
             renderSelectedIcon={() => <Image style={styles.icon} source={PersonalSelectIcon} />}
             onPress={() => {
+              if(!global.auth.isLogin) {
+                  Actions.login({reLogin:true});
+                  return;
+              }
               if(this.state.selectedTab === 'personal') return;
               this.setState({ selectedTab: 'personal' })
             }}>
-            <PersonalTab />
+            <PersonalTab changeTab={this._onChangeTab.bind(this)} />
           </TabNavigator.Item>
         </TabNavigator>
       </View>
     )
+  }
+
+  _onChangeTab(selectedTab){
+    this.setState({selectedTab})
   }
 
 }
