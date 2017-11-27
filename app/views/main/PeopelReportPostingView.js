@@ -73,7 +73,7 @@ class PeopelReportPostingView extends Component {
           style={[styles.autoTextInput, {color:inputRightColor}]}
           value={content}
           underlineColorAndroid={'transparent'}
-          placeholder={'请输入详细的违法信息'}
+          placeholder={'请输入详细信息'}
           placeholderTextColor={placeholderColor}
           minHeight={AutoGrowingInputMinH}
           onChangeText={this._onIllegalDetailTextChanged}
