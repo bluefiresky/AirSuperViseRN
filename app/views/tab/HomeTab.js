@@ -54,7 +54,7 @@ class HomeTab extends Component {
 
   componentDidMount(){
     DeviceEventEmitter.addListener('reLogin', this._onRefresh.bind(this, false))
-    global.auth.isLogin && this._onRefresh(false);
+    this._onRefresh(false);
   }
 
   render(){
@@ -243,16 +243,20 @@ class HomeTab extends Component {
   }
 
   _getRoleList(){
-    this.props.dispatch( create_service(Contract.POST_USER_ROLE_LIST, {}))
-      .then( res => {
-        if(res) {
-          global.profile = {
-            roleNums:res.list,
-            phoneNum:res.phoneNum,
+    if(global.auth.isLogin){
+      this.props.dispatch( create_service(Contract.POST_USER_ROLE_LIST, {}))
+        .then( res => {
+          if(res) {
+            global.profile = {
+              roleNums:res.list,
+              phoneNum:res.phoneNum,
+            }
           }
-        }
-        this._getWeather();
-      })
+          this._getWeather();
+        })
+    }else{
+      this._getWeather();
+    }
   }
 
   _getWeather(){

@@ -72,7 +72,10 @@ class MainView extends Component {
             renderIcon={() => <Image style={styles.icon} source={MessageIcon} />}
             renderSelectedIcon={() => <Image style={styles.icon} source={MessageSelectIcon} />}
             onPress={() => {
-              // Toast.showShortCenter('待开发')
+              if(!global.auth.isLogin) {
+                  Actions.login({reLogin:true});
+                  return;
+              }
               if(this.state.selectedTab === 'messages') return;
               this.setState({ selectedTab: 'messages' })
             }}>
