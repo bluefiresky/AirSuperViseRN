@@ -114,7 +114,7 @@ class SVOHomeView extends Component {
   /** Private **/
   _onPress(type){
     if(type === 0){
-      Actions.commonWeb({url:'https://test.zhongchebaolian.com/airport-web-api/law-rate.html', title:'数据统计'})
+      Actions.commonWeb({url:'https://app.sdjcgafj.gov.cn/airport-backend/law-chart.jsp', title:'数据统计'})
     }else if(type === 1){
       this.setState({loading:true});
       NativeModules.BaiduMapModule.location().then(res => {
