@@ -28,7 +28,7 @@ const CheckResults = [{label:'通过', code:'1'}, {label:'不通过', code:'0'}]
 const OwnerType = {'1':'个人', '2':'企业'}
 const CarType = {'1':'小型客车', '2':'中型客车', '3':'大型客车', '4':'小型货车', '5':'中型货车', '6':'重型货车', '7':'专项作业车'}
 const CarUsingWay = {'1':'运营', '2':'非运营'}
-const CarMerchantRelation = {'1':'自由', '2':'租赁'}
+const CarMerchantRelation = {'1':'自有', '2':'租赁'}
 const ApplyType = {'1':'首次申领', '2':'补换发', '3':'失效重新申领'}
 const IDTypes = {'1':'C类（施工现场）'}
 
