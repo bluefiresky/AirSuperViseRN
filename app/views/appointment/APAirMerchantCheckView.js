@@ -115,13 +115,13 @@ class APAirMerchantCheckView extends Component {
   renderCertificateTypes(current){
     return(
       <View style={{paddingHorizontal:PaddingHorizontal, backgroundColor:'white', paddingBottom:10, minHeight:InputH, paddingTop:5}}>
-        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', paddingVertical:5}}>
           <Text style={[styles.starStyle]}><Text style={styles.labelStyle}>需提交材料（可勾选）</Text></Text>
-          <Text style={{paddingHorizontal:15, paddingVertical:5, color:mainColor, fontSize:16}} onPress={()=>{ Toast.showShortCenter('还没有Url') }}>{`各材料填写说明>`}</Text>
         </View>
         {this._renderCertificateTypesItem(current)}
       </View>
     )
+    // <Text style={{paddingHorizontal:15, paddingVertical:5, color:mainColor, fontSize:16}} onPress={()=>{ Toast.showShortCenter('还没有Url') }}>{`各材料填写说明>`}</Text>
   }
 
   _renderCertificateTypesItem(current){
