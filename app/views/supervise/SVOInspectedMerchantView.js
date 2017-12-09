@@ -125,7 +125,7 @@ class SVOInspectedMerchantView extends Component {
           style={styles.autoTextInput}
           value={point.checkDescribe}
           underlineColorAndroid={'transparent'}
-          placeholder={'请输入检查要点'}
+          placeholder={''}
           placeholderTextColor={placeholderColor}
           minHeight={AutoGrowingInputMinH}
           editable={false}
