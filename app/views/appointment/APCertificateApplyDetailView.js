@@ -103,7 +103,7 @@ class APCertificateApplyDetailView extends Component {
         {this.renderDetailItem('交强险保单号：', data.insurancePolicyNumber)}
         {this.renderDetailItem('交强险起止日期：', data.insuranceValidityStartDay + '  至  ' + data.insuranceValidityEndDay)}
         {this.renderDetailItem('年检日期：', data.annualInspectionPeriodEndDay)}
-        {this.renderDetailItem('车辆与申请单位类型：', CarMerchantRelation[data.relationshipBetweenVehicleAndApplyUnit])}
+        {this.renderDetailItem('车辆与申请单位关系：', CarMerchantRelation[data.relationshipBetweenVehicleAndApplyUnit])}
         {this.renderDetailItem('申请类型：', ApplyType[data.applyType])}
         {this.renderDetailItem('联系人姓名：', data.linkName)}
         {this.renderDetailItem('联系方式：', data.linkWay)}
