@@ -38,18 +38,16 @@ const PhotoOption = {
 }
 
 const CertificateTypes = [
-  {label:'申请证件办理的函件', code:1},
-  {label:'组织筹建及运营情况说明', code:2},
-  {label:'拟申请证件人员情况报告', code:3},
-  {label:'与机场管理机构签订的合同及安全协议', code:4},
-  {label:'航空公司申请的首都机场座位运营基地的复函', code:5},
-  {label:'企业法人营业执照及副本', code:6},
-  {label:'营业许可证', code:7},
-  {label:'航空运营人云行许可证', code:8},
-  {label:'本单位制定的通行证管理规定', code:9},
-  {label:'与机场管理机构签订的房屋租赁合同', code:10},
-  {label:'与已办证甲方签订的合同', code:11},
-  {label:'其他申请资料', code:12}
+  {label:'申请办理首都机场控制区通行证函件（包括:申请函，组织筹建、保卫机构设置及运营情况说明，拟申请办证人员及区域情况报告，并加盖申请单位公章）', code:1},
+  {label:'与机场管理机构签订的合同及安全协议（包括但不限于服务结算协议、房屋租赁合同等，原件及复印件，加盖申请单位公章）', code:2},
+  {label:'企业法人营业执照及副本（原件及复印件，加盖申请单位公章）', code:3},
+  {label:'营业许可证（原件及复印件，加盖申请单位公章）', code:4},
+  {label:'航空运营人许可证（原件及复印件，加盖申请单位公章）', code:5},
+  {label:'航线批复许可（原件及复印件，加盖申请单位公章）', code:6},
+  {label:'合约商与甲方签订的合同（原件及复印件，加盖申请单位公章）', code:7},
+  {label:'本单位制定的通行证管理规定（加盖申请单位公章）', code:8},
+  {label:'空防安全承诺书（加盖申请单位公章）', code:9},
+  {label:'其他说明材料', code:10}
 ];
 
 // const DefaultCertificateTypeCodes = [1,2,3,4,6,7,9]
@@ -63,7 +61,7 @@ class APAirMerchantCheckView extends Component {
       loading: false,
       currentCertificateTypeCodes:[
         CertificateTypes[0].code, CertificateTypes[1].code, CertificateTypes[2].code,
-        CertificateTypes[3].code, CertificateTypes[5].code, CertificateTypes[6].code, CertificateTypes[8].code],
+        CertificateTypes[3].code, CertificateTypes[7].code, CertificateTypes[8].code],
       pickerPhotos: [{photo:null},{photo:null},{photo:'add'}],
     }
 
@@ -126,11 +124,11 @@ class APAirMerchantCheckView extends Component {
 
   _renderCertificateTypesItem(current){
     return(
-      <View style={{flex:1, paddingTop:10}}>
+      <View style={{flex:1, paddingTop:5}}>
         {CertificateTypes.map((item, index) => {
           let checked = current.indexOf(item.code) != -1;
           return(
-            <CheckBox key={index} title={item.label} onPress={this._changeCertificateType.bind(this, item)} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:1, color: mainTextGreyColor}} checkedColor={mainColor} uncheckedColor={mainColor} />
+            <CheckBox key={index} title={item.label} onPress={this._changeCertificateType.bind(this, item)} checked={checked} containerStyle={styles.checkbox} textStyle={{marginLeft:5, marginRight:15, color: mainTextGreyColor}} checkedColor={mainColor} uncheckedColor={mainColor} />
           )
         })}
       </View>
@@ -286,12 +284,12 @@ const styles = StyleSheet.create({
     margin: 1,
     marginLeft: 1,
     marginRight: 1,
+    marginTop:5,
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     borderWidth: 1,
     padding: 1,
     borderRadius: 1,
-    height:30,
   },
 });
 
