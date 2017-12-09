@@ -149,11 +149,11 @@ class APCertificateApplySubmitView extends Component {
 
       return (
         <View>
-          <Input label={'姓名：'} {...ownerName} maxLength={10} labelWidth={LabelW} placeholder={'请输入您的姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Input label={'姓名：'} {...ownerName} maxLength={10} labelWidth={LabelW} placeholder={'请输入车主的姓名'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
           <Line />
-          <Input label={'身份证号：'} {...ownerIdCard} maxLength={18} labelWidth={LabelW} placeholder={'请输入您的身份证号码'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Input label={'身份证号：'} {...ownerIdCard} maxLength={18} labelWidth={LabelW} placeholder={'请输入车主的身份证号码'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
           <Line />
-          <Input label={'手机号：'} {...ownerPhoneNo} maxLength={11} keyboardType='numeric' labelWidth={LabelW} placeholder={'请输入您的手机号'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
+          <Input label={'手机号：'} {...ownerPhoneNo} maxLength={11} keyboardType='numeric' labelWidth={LabelW} placeholder={'请输入车主的手机号'} noBorder={true} style={{height:ItemH, paddingLeft:PaddingHorizontal}}/>
           <Line />
           {this.renderPicker('户籍地：', idAddress, '请选择户籍地', Provinces, 1)}
         </View>

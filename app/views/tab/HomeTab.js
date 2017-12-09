@@ -156,7 +156,7 @@ class HomeTab extends Component {
         </TouchableOpacity>
         <TouchableOpacity onPress={this._secondEntryPress.bind(this, 2)} activeOpacity={0.8} style={styles.secondaryEntryItem}>
           <Image source={SecondaryIcon3} style={styles.secondaryEntryItemImage} />
-          <Text style={styles.secondaryEntryItemText}>群众监督</Text>
+          <Text style={styles.secondaryEntryItemText}>社会监督</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this._secondEntryPress.bind(this, 3)} activeOpacity={0.8} style={styles.secondaryEntryItem}>
           <Image source={SecondaryIcon4} style={styles.secondaryEntryItemImage} />

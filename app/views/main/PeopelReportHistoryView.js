@@ -93,7 +93,7 @@ class PeopelReportHistoryView extends Component {
       <TouchableOpacity onPress={this._goDetail.bind(this, item, index)} activeOpacity={0.8} style={{height:ItemH, paddingHorizontal:PaddingHorizontal, backgroundColor:'white'}}>
         <View style={{height:50, flexDirection:'row', alignItems:'center'}}>
           <Text style={{fontSize:16, color:mainTextGreyColor}}>{item.reportTime}</Text>
-          <Text style={{fontSize:16, color:mainColor, flex:1, marginLeft:20}}>{'群众监督'}</Text>
+          <Text style={{fontSize:16, color:mainColor, flex:1, marginLeft:20}}>{'社会监督'}</Text>
         </View>
 
         <View style={{backgroundColor:borderColor, height:1}} />

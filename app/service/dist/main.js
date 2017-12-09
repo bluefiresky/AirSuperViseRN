@@ -219,7 +219,7 @@ export const post_get_report_supervise_history = ({version}) => {
   return http_post( 'report.getSuperviseHistory', {}, {}, version )
 }
 
-/** 群众举报-获取群众监督详情接口  */
+/** 群众举报-获取社会监督详情接口  */
 export const post_get_report_supervise_detail = ({reportNum, version}) => {
   return http_post( 'report.getSuperviseDetails', {reportNum}, {}, version )
 }
