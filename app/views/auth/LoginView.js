@@ -115,8 +115,7 @@ class LoginView extends Component {
       <View style={{alignItems:'center', marginTop:50}}>
         <XButton onPress={this._onSubmit} title={'登录'} onPress={this._onSubmit} style={{width:SubmitButtonW, height:40, borderRadius:20}}/>
         <Text style={{color:placeholderColor, fontSize:13, marginTop:20}}>点击登录代表您已经阅读并同意
-          <Text style={{color:mainColor}}>《协议和声明》
-          </Text>
+          <Text style={{color:mainColor}} onPress={Actions.commonWeb.bind(this, {url:'https://static.zhongchebaolian.com/message/airport-info.html'})}>《协议和声明》 </Text>
         </Text>
       </View>
     )
