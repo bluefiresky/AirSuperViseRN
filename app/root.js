@@ -70,7 +70,7 @@ class RootView extends Component {
               <Scene key="svoAirCheckIn" component={Scenes.SVOAirCheckInView} title='空防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoFireCheckIn" component={Scenes.SVOFireCheckInView} title='消防登记记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoFireCheckInTemplet" component={Scenes.SVOFireCheckInTempletView} title='消防检查模板' hideNavBar={false} backTitle='返回' panHandlers={null}/>
-              <Scene key="svoFireCheckInTempletWeb" component={Scenes.SVOFireCheckInTempletWebView} title='消防检查模板Web' hideNavBar={false} backTitle='返回' panHandlers={null}/>
+              <Scene key="svoFireCheckInTempletWeb" component={Scenes.SVOFireCheckInTempletWebView} title='消防检查' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoHistoryCheckIn" component={Scenes.SVOHistoryCheckInView} title='历史检查记录' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoHistoryCheckInDetail" component={Scenes.SVOHistoryCheckedInDetailView} title='历史检查详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>
               <Scene key="svoCheckInDetail" component={Scenes.SVOCheckInDetailView} title='历史检查记录详情' hideNavBar={false} backTitle='返回' panHandlers={null}/>

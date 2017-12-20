@@ -72,7 +72,12 @@ class SVOFireCheckInTempletWebView extends Component {
 
   /** Private Method **/
   _onNavigationStateChange(navState){
-    console.log('ApplyContract onNavigationStateChange -->> navState: ', navState);
+    // console.log('ApplyContract onNavigationStateChange -->> navState: ', navState);
+    let title = navState.title;
+    if(this.title != title){
+      this.title = title;
+      Actions.refresh({title})
+    }
   }
 
   _onMessage(event){
