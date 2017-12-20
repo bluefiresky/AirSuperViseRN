@@ -717,7 +717,8 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 8DED4FBNTQ;
+						DevelopmentTeam = TN3XPTCQTG;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1174,9 +1175,11 @@
 			baseConfigurationReference = 68F83D3C69540C8519443D7A /* Pods-AirSuperViseRN.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 8DED4FBNTQ;
+				DEVELOPMENT_TEAM = TN3XPTCQTG;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1199,8 +1202,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zcbl.airport;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zcbl.newairport;
 				PRODUCT_NAME = AirSuperViseRN;
+				PROVISIONING_PROFILE = "0f1cb1be-9f28-4999-a6a8-c52582da2032";
+				PROVISIONING_PROFILE_SPECIFIER = NewAirportDistribution;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1210,8 +1215,10 @@
 			baseConfigurationReference = B0181A51ED9308E9A53F763B /* Pods-AirSuperViseRN.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8DED4FBNTQ;
+				DEVELOPMENT_TEAM = TN3XPTCQTG;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1234,8 +1241,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zcbl.airport;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zcbl.newairport;
 				PRODUCT_NAME = AirSuperViseRN;
+				PROVISIONING_PROFILE = "0f1cb1be-9f28-4999-a6a8-c52582da2032";
+				PROVISIONING_PROFILE_SPECIFIER = NewAirportDistribution;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -12,7 +12,7 @@ import { CheckBox } from 'react-native-elements';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 import ImagePicker from 'react-native-image-picker';
 
-import { W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
+import { HOST, W/** 屏宽*/, H/** 屏高*/, mainBackColor/** 背景 */, mainColor/** 项目主色 */, borderColor, inputLeftColor, inputRightColor, mainTextGreyColor, placeholderColor } from '../../configs/index.js';/** 自定义配置参数 */
 import { ProgressView, XButton } from '../../components/index.js';  /** 自定义组件 */
 import * as Contract from '../../service/contract.js'; /** api方法名 */
 import { create_service } from '../../redux/index.js'; /** 调用api的Action */
@@ -183,7 +183,7 @@ class CFInspectRegisterView extends Component {
   /** Private **/
   _goSelectLaw(){
     Actions.lawWeb({
-      url:'https://test.zhongchebaolian.com/airport-web-api/certify.html',
+      url:`https://${HOST}/airport-web-api/certify.html`,
       lawCallback:(law) => {
         let lawText = '';
         let score = 0;
