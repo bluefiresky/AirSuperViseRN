@@ -127,9 +127,9 @@ class SubView extends Component{
 
   /** Private **/
   _goDetail(item, index){
-    let { detailUrl, newsTypeName, newsNum } = item;
-    Actions.commonWeb({url:detailUrl, title:newsTypeName})
-    this.props.dispatch(create_service(Contract.POST_GET_COUNT, {newsNum}))
+    let { detailUrl, newsTypeName, newsNum, newsTitle } = item;
+    Actions.commonWeb({url:detailUrl, title:newsTitle})
+    // this.props.dispatch(create_service(Contract.POST_GET_COUNT, {newsNum}))
   }
 }
 

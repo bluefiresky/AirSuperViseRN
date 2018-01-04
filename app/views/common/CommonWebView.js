@@ -62,6 +62,7 @@ class CommonWebView extends Component {
         javaScriptEnabled={true}
         source={{uri:url}}
         style={{flex: 1}}
+        renderError={e => { if(e === 'WebKitErrorDomain') return; }}
         onNavigationStateChange={this._onNavigationStateChange}
         startInLoadingState={true}
         onLoadEnd={() => this.setState({loading:false}) }/>

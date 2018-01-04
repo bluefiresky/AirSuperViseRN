@@ -39,7 +39,7 @@
   
   [BMKMapManager setCoordinateTypeUsedInBaiduMapSDK:BMK_COORDTYPE_BD09LL];
   BMKMapManager* mapManager = [[BMKMapManager alloc] init];
-  BOOL flag = [mapManager start:@"RSpNsSnG5SmiZOOH1DFVNXnjT4WVrDgh" generalDelegate:nil];
+  BOOL flag = [mapManager start:@"0iEbSOxBzKS4WrqkAkOGuNjHqU8LNlKc" generalDelegate:nil];
   NSLog(@" Baidu manager start flag -->> %@", flag?@"start":@"failed");
 
   return YES;
