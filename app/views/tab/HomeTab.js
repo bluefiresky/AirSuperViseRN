@@ -216,7 +216,7 @@ class HomeTab extends Component {
         }
       })
     }else if(type === 3){
-      Toast.showShortCenter('待开发');
+      Actions.commonWeb({url:'https://bjjj.zhongchebaolian.com/BJCMS/jsp/advance.jsp'});
     }
   }
 
