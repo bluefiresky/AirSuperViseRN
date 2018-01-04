@@ -69,7 +69,7 @@ class ReportHomeView extends Component {
         <View style={{flexDirection:'row', marginBottom:20}}>
           {this._renderEntryItem(EntryIcon1, '我要举报', this._goPosting)}
           {this._renderEntryItem(EntryIcon2, '历史举报', this._goHistory)}
-          {this._renderEntryItem(EntryIcon3, '奖励公示', null)}
+          {this._renderEntryItem(EntryIcon3, '奖励公示', this._goRewardShow)}
         </View>
         <View style={{height:1, backgroundColor:borderColor, marginHorizontal:20}} />
         <XButton onPress={this._makePhone110} title='紧急情况，请点击此处，直接拨打110' textStyle={{color:'red'}} style={{height:40, borderColor:'red', width:ButtonW, borderRadius:20, backgroundColor:'transparent', borderWidth:StyleSheet.hairlineWidth, alignSelf:'center', marginTop:20}} />
@@ -113,6 +113,10 @@ class ReportHomeView extends Component {
 
   _makePhone110(){
     Actions.tip({tipType:'makePhone110'})
+  }
+
+  _goRewardShow(){
+    Actions.commonWeb({url:'https://bjjj.zhongchebaolian.com/BJCMS/jsp/reportpublish.jsp'});
   }
 
 }
