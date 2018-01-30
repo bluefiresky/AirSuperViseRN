@@ -97,8 +97,8 @@ android {
         applicationId "com.zcbl.airport"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 12
-        versionName "1.2"
+        versionCode 13
+        versionName "1.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
