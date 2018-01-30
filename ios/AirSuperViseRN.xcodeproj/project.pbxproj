@@ -24,6 +24,8 @@
 		161CCA45B5E64C5D9DCFABB0 /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E11630897B041B3ABC896C6 /* libRSSignatureCapture.a */; };
 		33362A0F1FA96E7E004C5142 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 333629EA1FA96E7D004C5142 /* Device.m */; };
 		33362A451FA978D4004C5142 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33362A211FA978D4004C5142 /* Security.framework */; };
+		339154B420204D0F0095B65C /* UMCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 339154B220204D0F0095B65C /* UMCommon.framework */; };
+		339154B520204D0F0095B65C /* UMAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 339154B320204D0F0095B65C /* UMAnalytics.framework */; };
 		33AACE061F7BBD1600445F1E /* BaiduMapModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE031F7BBD1600445F1E /* BaiduMapModule.m */; };
 		33AACE071F7BBD1600445F1E /* ImageToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AACE051F7BBD1600445F1E /* ImageToBase64.m */; };
 		33B302FC9A2847529B3EE178 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 084F9440744D4A1F810FBAAF /* EvilIcons.ttf */; };
@@ -320,6 +322,8 @@
 		333629EA1FA96E7D004C5142 /* Device.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
 		33362A0E1FA96E7E004C5142 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		33362A211FA978D4004C5142 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		339154B220204D0F0095B65C /* UMCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMCommon.framework; sourceTree = "<group>"; };
+		339154B320204D0F0095B65C /* UMAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMAnalytics.framework; sourceTree = "<group>"; };
 		33AACE021F7BBD1600445F1E /* BaiduMapModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduMapModule.h; sourceTree = "<group>"; };
 		33AACE031F7BBD1600445F1E /* BaiduMapModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaiduMapModule.m; sourceTree = "<group>"; };
 		33AACE041F7BBD1600445F1E /* ImageToBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageToBase64.h; sourceTree = "<group>"; };
@@ -359,6 +363,7 @@
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
+				339154B420204D0F0095B65C /* UMCommon.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
@@ -370,6 +375,7 @@
 				C9D26757AE95471CA0105352 /* libRNVectorIcons.a in Frameworks */,
 				5054804B86F64A6CAA36611A /* libRNImagePicker.a in Frameworks */,
 				161CCA45B5E64C5D9DCFABB0 /* libRSSignatureCapture.a in Frameworks */,
+				339154B520204D0F0095B65C /* UMAnalytics.framework in Frameworks */,
 				F5665CF8C8614C44A710D29E /* libRCTOrientation.a in Frameworks */,
 				AD0C4CAF3F73852820AEF4DF /* libPods-AirSuperViseRN.a in Frameworks */,
 				33362A451FA978D4004C5142 /* Security.framework in Frameworks */,
@@ -538,6 +544,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3391547B20204CCA0095B65C /* UM */ = {
+			isa = PBXGroup;
+			children = (
+				339154B320204D0F0095B65C /* UMAnalytics.framework */,
+				339154B220204D0F0095B65C /* UMCommon.framework */,
+			);
+			path = UM;
+			sourceTree = "<group>";
+		};
 		339286711F8CE5DC0049A382 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -554,6 +569,7 @@
 		33AACE001F7BBD1600445F1E /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3391547B20204CCA0095B65C /* UM */,
 				33AACE011F7BBD1600445F1E /* BaiduMap */,
 				33AACE041F7BBD1600445F1E /* ImageToBase64.h */,
 				33AACE051F7BBD1600445F1E /* ImageToBase64.m */,
@@ -1181,6 +1197,10 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TN3XPTCQTG;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AirSuperViseRN/Modules/UM",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/@remobile/react-native-toast/ios/RCTToast",
@@ -1220,6 +1240,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TN3XPTCQTG;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AirSuperViseRN/Modules/UM",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/@remobile/react-native-toast/ios/RCTToast",

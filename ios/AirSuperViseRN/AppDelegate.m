@@ -13,6 +13,8 @@
 #import <React/RCTRootView.h>
 #import "Orientation.h"
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
+#import <UMCommon/UMCommon.h>
+#import <UMAnalytics/MobClick.h>
 
 @implementation AppDelegate
 
@@ -37,6 +39,13 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
+  
+  /*** 友盟相关配置 ***/
+  [UMConfigure initWithAppkey:@"5a6feeac8f4a9d5b0e00018f" channel:@"Default"];
+  [MobClick setScenarioType:E_UM_NORMAL];
+  
+  
+  /**  百度地图 **/
   [BMKMapManager setCoordinateTypeUsedInBaiduMapSDK:BMK_COORDTYPE_BD09LL];
   BMKMapManager* mapManager = [[BMKMapManager alloc] init];
   BOOL flag = [mapManager start:@"0iEbSOxBzKS4WrqkAkOGuNjHqU8LNlKc" generalDelegate:nil];
