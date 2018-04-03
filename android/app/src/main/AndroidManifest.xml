@@ -32,11 +32,12 @@
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme">
 
-      <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="GMs8Q4SgYGFn1VHbUEZKyCR4rpTwrybw" />
+      <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="GMs8Q4SgYGFn1VHbUEZKyCR4rpTwrybw" />
 
-        <activity
+      <meta-data android:name="UMENG_APPKEY" android:value="5a6fee46f29d984005000039" />
+      <meta-data android:name="UMENG_CHANNEL" android:value="Default" />
+
+      <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

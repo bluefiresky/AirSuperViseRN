@@ -3,6 +3,8 @@ package com.zcbl.airport;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 import com.zcbl.airport.modules.ModuleManagerPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.github.yamill.orientation.OrientationPackage;
@@ -52,5 +54,13 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    initUMAnalytics();
+  }
+
+  private void initUMAnalytics(){
+    UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null);
+    MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_DUM_NORMAL);
+//    UMConfigure.setLogEnabled(true);
+//    UMConfigure.setEncryptEnabled(true);
   }
 }

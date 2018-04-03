@@ -22,18 +22,16 @@ const PhotoW = PhotoViewW - 20;
 
 const ExamineStatus = {'1':{color:'rgb(255, 176, 91)', text:'待审核'}, '2':{color:'rgb(42, 215, 143)', text:'预审核通过'}, '9':{color:'red', text:'审核不通过'}}
 const CertificateTypes = {
-  '1':'申请证件办理的函件',
-  '2':'组织筹建及运营情况说明',
-  '3':'拟申请证件人员情况报告',
-  '4':'与机场管理机构签订的合同及安全协议',
-  '5':'航空公司申请的首都机场座位运营基地的复函',
-  '6':'企业法人营业执照及副本',
-  '7':'营业许可证',
-  '8':'航空运营人云行许可证',
-  '9':'本单位制定的通行证管理规定',
-  '10':'与机场管理机构签订的房屋租赁合同',
-  '11':'与已办证甲方签订的合同',
-  '12':'其他申请资料'
+  '1':'申请办理首都机场控制区通行证函件（包括:申请函，组织筹建、保卫机构设置及运营情况说明，拟申请办证人员及区域情况报告，并加盖申请单位公章）',
+  '2':'与机场管理机构签订的合同及安全协议（包括但不限于服务结算协议、房屋租赁合同等，原件及复印件，加盖申请单位公章）',
+  '3':'企业法人营业执照及副本（原件及复印件，加盖申请单位公章）',
+  '4':'营业许可证（原件及复印件，加盖申请单位公章）',
+  '5':'航空运营人许可证（原件及复印件，加盖申请单位公章）',
+  '6':'航线批复许可（原件及复印件，加盖申请单位公章）',
+  '7':'合约商与甲方签订的合同（原件及复印件，加盖申请单位公章）',
+  '8':'本单位制定的通行证管理规定（加盖申请单位公章）',
+  '9':'空防安全承诺书（加盖申请单位公章）',
+  '10':'其他说明材料'
 };
 
 class APAirMerchantCheckDetailView extends Component {
@@ -58,7 +56,7 @@ class APAirMerchantCheckDetailView extends Component {
             let certificateTypeLabel = '';
             for(let i=0; i<certificateTypes.length; i++){
               let c = certificateTypes[i];
-              certificateTypeLabel += (c + '. ' + CertificateTypes[c] + '\n');
+              certificateTypeLabel += (c + '. ' + CertificateTypes[c] + '\n\n');
             }
             let certificatePhotoList = [];
             if(certificatePhotos){
